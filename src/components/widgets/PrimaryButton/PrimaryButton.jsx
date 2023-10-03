@@ -1,11 +1,12 @@
 import React from 'react';
 import Button from '@mui/material/Button';
 
-function PrimaryButton({ text }) {
+function PrimaryButton({ text, onClick }) {
   return (
     <>
       <Button
         variant="contained"
+        onClick={onClick}
         sx={{
           background: '#2187FF',
           fontWeight: 100,
