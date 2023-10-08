@@ -19,7 +19,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.16.0",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^5.0.1",
     "styled-components": "^5.3.11",
     "web-vitals": "^2.1.4"
   },
@@ -56,14 +56,14 @@
     "@storybook/addon-links": "^7.4.5",
     "@storybook/addon-onboarding": "^1.0.8",
     "@storybook/blocks": "^7.4.5",
-    "@storybook/preset-create-react-app": "^7.4.5",
+    "@storybook/preset-create-react-app": "^4.1.0",
     "@storybook/react": "^7.4.5",
     "@storybook/react-webpack5": "^7.4.5",
     "@storybook/testing-library": "^0.2.1",
     "babel-plugin-named-exports-order": "^0.0.2",
     "eslint-plugin-storybook": "^0.6.14",
     "prop-types": "^15.8.1",
-    "storybook": "^7.4.5",
+    "storybook": "^7.4.6",
     "webpack": "^5.88.2"
   }
 }
