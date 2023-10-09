@@ -40,10 +40,10 @@ function TargetAreaWidget({ cancerType, result }) {
         selectedImage = ColonImage;
         break;
       case 'Heart Cancer':
-        selectedImage = HeartImage; // Assuming you have a HeartImage variable
+        selectedImage = HeartImage;
         break;
       case 'Lung Cancer':
-        selectedImage = LungImage; // Assuming you have a LungImage variable
+        selectedImage = LungImage;
         break;
       default:
         selectedImage = ImageNotFound;
