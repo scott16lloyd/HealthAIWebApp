@@ -9,5 +9,6 @@ export default {
 export const Default = {
   args: {
     text: 'Primary Button',
+    color: '#2187FF',
   },
 };
