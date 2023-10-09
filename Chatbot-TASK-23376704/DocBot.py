@@ -1,4 +1,5 @@
-# This is the API (using flask) used to host responses and requests
+# #
+#This is the API (using flask) used to host responses and requests
 # Must be kept running in order to send and recieve data from chatbot
 # Currently cannot read from dataset but will be implemented later (unless other methods)
 # Uses DocBot_Requests to communicate from API to user and vice versa
