@@ -1,9 +1,12 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './routes/Home';
-import SignInPage from './routes/SignInPage';
 import LandingPage from './routes/LandingPage';
 import DocBotPage from './routes/DocBotPage';
+import Help from './routes/Help';
+import About from './routes/About';
+import LoginPage from '../src/routes/LoginPage';
+import SignUp from '../src/routes/SignUp';
 
 function main() {
   return (
@@ -11,9 +14,12 @@ function main() {
       <div>
         <Routes>
           <Route index element={<LandingPage />} />
-          <Route path="/signIn" element={<SignInPage />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/home" element={<Home />} />
           <Route path="/docBot" element={<DocBotPage />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/help" element={<Help />} />
+          <Route path="/signUp" element={<SignUp />} />
         </Routes>
       </div>
     </Router>

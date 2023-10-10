@@ -1,6 +1,7 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import { Button, Typography } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 function TopNavigationBar({ aboutNav, helpNav }) {
   return (
@@ -30,7 +31,6 @@ function TopNavigationBar({ aboutNav, helpNav }) {
         }}
       >
         <Button
-          onClick={aboutNav}
           variant="text"
           size="large"
           sx={{
@@ -39,11 +39,12 @@ function TopNavigationBar({ aboutNav, helpNav }) {
             margin: '0.5rem',
             textTransform: 'none',
           }}
+          component={Link}
+          to="/about"
         >
           About
         </Button>
         <Button
-          onClick={helpNav}
           variant="text"
           size="large"
           sx={{
@@ -52,6 +53,8 @@ function TopNavigationBar({ aboutNav, helpNav }) {
             margin: '0.5rem',
             textTransform: 'none',
           }}
+          component={Link}
+          to="/help"
         >
           Help
         </Button>
