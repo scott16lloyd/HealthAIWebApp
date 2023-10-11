@@ -4,9 +4,6 @@ import BackButton from '../components/widgets/BackButton/BackButton';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import PrimaryButton from '../components/widgets/PrimaryButton/PrimaryButton';
-
-
-
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 
@@ -26,11 +23,13 @@ function LandingPage() {
     backdropFilter: 'blur(1.5px)',
   };
 
+  // small text in header of page
   const mandatoryStyle = {
     color: 'red',
     fontFamily: 'Roboto, sans-serif',
   };
 
+  // to display padding between sign up and mandatory
   const spaceStyle = {
     marginRight: '10px',
   };
@@ -38,9 +37,9 @@ function LandingPage() {
   return (
     <>
       <TopNavigationBar />
-      <BackButton />
+      <BackButton /> {/** Backbutton */}
       <Container>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center' }}> {/** Header of the page */}
           <Typography variant="h4" align="left" gutterBottom>
             Sign Up
           </Typography>
@@ -49,14 +48,14 @@ function LandingPage() {
             Mandatory *
           </Typography>
         </div>
-        <Stack direction="row" spacing={2} justifyContent="center">
+        <Stack direction="row" spacing={2} justifyContent="center"> {/** Stacking textfields in 4, 4, 2 + 1 button */}
       
           <div style={columnStyle}>
             <TextField
               label="Forename"
               variant="filled" 
               style={inputStyle}
-              required
+              required 
               InputProps={{ disableUnderline: true }} 
             />
               <TextField
@@ -81,7 +80,6 @@ function LandingPage() {
               required
               InputProps={{ disableUnderline: true }} 
             />
-          
           </div>
 
           <div style={columnStyle}>
@@ -116,10 +114,8 @@ function LandingPage() {
               required
               InputProps={{ disableUnderline: true }} 
             />
-          
-          
-          
           </div>
+
           <div style={columnStyle}>
             <TextField
               label="Office Address"
@@ -135,11 +131,7 @@ function LandingPage() {
               required
               InputProps={{ disableUnderline: true }} 
             />
-            <PrimaryButton />
-           
-
-
-          
+            <PrimaryButton /> {/** Sign Up Button */}
           </div>
         </Stack>
       </Container>
