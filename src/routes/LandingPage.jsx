@@ -18,7 +18,7 @@ function LandingPage() {
           justifyContent: 'space-between',
         }}
       >
-        <img alt="Doctor" src={Doctor} style={{ height: '100%' }}></img>
+        <img alt="Doctor" src={Doctor} style={{ maxHeight: '700px' }}></img> {/* Adjust the maxHeight */}
         <Box
           sx={{
             display: 'flex',
