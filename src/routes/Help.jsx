@@ -1,7 +1,37 @@
 import React from 'react';
+import TopNavigationBar from '../components/widgets/TopNavigationBar/TopNavigationBar';
+import BackButton from '../components/widgets/BackButton/BackButton';
+import TextField from '@mui/material/TextField';
+import Stack from '@mui/material/Stack';
+import PrimaryButton from '../components/widgets/PrimaryButton/PrimaryButton';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
 
-function Help() {
-  return <div>Help</div>;
+function LandingPage() {
+  // Small text in the header of the page
+  const mandatoryStyle = {
+    color: 'red',
+    fontFamily: 'Roboto, sans-serif',
+  };
+
+  const helpTextStyle = {
+    paddingLeft: '16px', // Adjust the padding value as needed
+  };
+
+  return (
+    <>
+      <TopNavigationBar />
+      <Container>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          {/** Header of the page */}
+          <BackButton /> {/** Backbutton */}
+          <Typography variant="h4" align="left" gutterBottom style={helpTextStyle}>
+            Help
+          </Typography>
+        </div>
+      </Container>
+    </>
+  );
 }
 
-export default Help;
+export default LandingPage;
