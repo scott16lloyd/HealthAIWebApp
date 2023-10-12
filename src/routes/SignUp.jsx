@@ -9,31 +9,51 @@ import Typography from '@mui/material/Typography';
 import { auth } from '../firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
+import AlertBox from '../components/widgets/AlertBox/AlertBox';
 
 function LandingPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
+  const [errorMessage, setErrorMessage] = useState('');
+  const [inputError, setInputError] = useState(false);
   const [inputValues, setInputValues] = useState({
     forename: '',
     middleName: '',
     surname: '',
+    email: '',
     telephone: '',
     officeTelephone: '',
     gpIdNumber: '',
     personalAddress: '',
     officeAddress: '',
+    password: '',
   });
 
   const handleInputChange = (field) => (event) => {
+    const value = event.target.value;
     setInputValues({
       ...inputValues,
-      [field]: event.target.value,
+      [field]: value,
+    });
+    setInputError({
+      ...inputError,
+      [field]: value.trim() === '',
     });
   };
+
   const createAccount = (e) => {
     e.preventDefault();
+
+    if (!password) {
+      setInputError((prevErrors) => ({
+        ...prevErrors,
+        password: true,
+      }));
+      return;
+    }
+
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         console.log(userCredential);
@@ -41,6 +61,11 @@ function LandingPage() {
       })
       .catch((error) => {
         console.log(error);
+        if (error.code === 'auth/email-already-in-use') {
+          setErrorMessage('Email is already in use.');
+        } else {
+          setErrorMessage('An error occurred. Please try again.');
+        }
       });
   };
 
@@ -78,8 +103,15 @@ function LandingPage() {
   return (
     <>
       <TopNavigationBar />
+      <AlertBox
+        message={errorMessage}
+        severity={'error'}
+        onClose={() => setErrorMessage('')}
+      />
       <Container>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div
+          style={{ display: 'flex', alignItems: 'center', marginTop: '1rem' }}
+        >
           {' '}
           {/** Header of the page */}
           <BackButton style={backButtonStyle} />
@@ -103,6 +135,10 @@ function LandingPage() {
               InputProps={{ disableUnderline: true }}
               value={inputValues.forename}
               onChange={handleInputChange('forename')}
+              error={inputError['forename']}
+              helperText={
+                inputError['forename'] ? 'Forename cannot be blank' : ''
+              }
             />
             <TextField
               label="Middle Name"
@@ -121,6 +157,10 @@ function LandingPage() {
               InputProps={{ disableUnderline: true }}
               value={inputValues.surname}
               onChange={handleInputChange('surname')}
+              error={inputError['surname']}
+              helperText={
+                inputError['surname'] ? 'Surname cannot be blank' : ''
+              }
             />
 
             <TextField
@@ -129,8 +169,13 @@ function LandingPage() {
               style={inputStyle}
               required
               InputProps={{ disableUnderline: true }}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={inputValues.email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                handleInputChange('email')(e);
+              }}
+              error={inputError['email']}
+              helperText={inputError['email'] ? 'Email cannot be blank' : ''}
             />
           </div>
           <div style={columnStyle}>
@@ -142,15 +187,10 @@ function LandingPage() {
               InputProps={{ disableUnderline: true }}
               value={inputValues.telephone}
               onChange={handleInputChange('telephone')}
-            />
-            <TextField
-              label="Office Telephone"
-              variant="filled"
-              style={inputStyle}
-              required
-              InputProps={{ disableUnderline: true }}
-              value={inputValues.officeTelephone}
-              onChange={handleInputChange('officeTelephone')}
+              error={inputError['telephone']}
+              helperText={
+                inputError['telephone'] ? 'Phone cannot be blank' : ''
+              }
             />
 
             <TextField
@@ -161,6 +201,10 @@ function LandingPage() {
               InputProps={{ disableUnderline: true }}
               value={inputValues.gpIdNumber}
               onChange={handleInputChange('gpIdNumber')}
+              error={inputError['gpIdNumber']}
+              helperText={
+                inputError['gpIdNumber'] ? 'GP ID Number cannot be blank' : ''
+              }
             />
 
             <TextField
@@ -171,6 +215,12 @@ function LandingPage() {
               InputProps={{ disableUnderline: true }}
               value={inputValues.personalAddress}
               onChange={handleInputChange('personalAddress')}
+              error={inputError['personalAddress']}
+              helperText={
+                inputError['personalAddress']
+                  ? 'Personal address cannot be blank'
+                  : ''
+              }
             />
           </div>
           <div style={columnStyle}>
@@ -182,6 +232,12 @@ function LandingPage() {
               InputProps={{ disableUnderline: true }}
               value={inputValues.officeAddress}
               onChange={handleInputChange('officeAddress')}
+              error={inputError['officeAddress']}
+              helperText={
+                inputError['officeAddress']
+                  ? 'Office address cannot be blank'
+                  : ''
+              }
             />
             <TextField
               label="Password"
@@ -190,8 +246,15 @@ function LandingPage() {
               style={inputStyle}
               required
               InputProps={{ disableUnderline: true }}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={inputValues.password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                handleInputChange('password')(e);
+              }}
+              error={inputError['password']}
+              helperText={
+                inputError['password'] ? 'Password cannot be blank' : ''
+              }
             />
             <PrimaryButton text={'Sign Up'} action={createAccount} />{' '}
             {/** Sign Up Button */}
