@@ -75,7 +75,7 @@ function SignInPage() {
         <div
           style={{ display: 'flex', alignItems: 'center', marginTop: '1rem' }}
         >
-          <BackButton style={backButtonStyle} />
+          <BackButton style={backButtonStyle} goBackPath={'/'} />
           <Typography variant="h4" align="left">
             Login
           </Typography>
@@ -94,7 +94,7 @@ function SignInPage() {
               type="email"
               style={inputStyle}
               required
-              InputProps={{ disableUnderline: true }}
+              InputProps={{ disableUnderline: true, autoComplete: 'email' }}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -112,24 +112,6 @@ function SignInPage() {
           </div>
         </Stack>
       </Container>
-      {/* <div>
-        <form onSubmit={signIn}>
-          <h1>Log In</h1>
-          <input
-            type="email"
-            placeholder="Enter email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          ></input>
-          <input
-            type="password"
-            placeholder="Enter password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          ></input>
-          <button type="submit">Log In</button>
-        </form>
-      </div> */}
     </>
   );
 }
