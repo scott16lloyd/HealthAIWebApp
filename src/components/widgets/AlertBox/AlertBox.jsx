@@ -1,11 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Collapse from '@mui/material/Collapse';
 
-function AlertBox({ severity, message }) {
-  const [open, setOpen] = React.useState(true);
+function AlertBox({ severity, message, onClose }) {
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (message) {
+      setOpen(true);
+    } else {
+      setOpen(false);
+    }
+  }, [message]);
 
   return (
     <Collapse in={open}>
@@ -18,6 +26,7 @@ function AlertBox({ severity, message }) {
             size="small"
             onClick={() => {
               setOpen(false);
+              onClose();
             }}
           >
             <CloseIcon fontSize="inherit" />

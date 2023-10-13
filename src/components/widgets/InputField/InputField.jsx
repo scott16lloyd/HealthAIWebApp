@@ -7,7 +7,7 @@ function InputField({ placeholderText }) {
       placeholder="Type in here…"
       sx={{
         '& input::placeholder': {
-          paddingLeft: '5px', // Adjust the padding as needed
+          paddingLeft: '5px', 
         },
       }}
     />
