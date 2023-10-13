@@ -43,8 +43,87 @@ function LandingPage() {
     });
   };
 
+  // Format validation
+  const isNameValid = (name) => {
+    const nameRegex = /^[A-Za-z\s]+$/;
+    return nameRegex.test(name);
+  };
+  const isPhoneNumberValid = (telephone) => {
+    const phoneRegex = /^\d{10}$/; // For a 10-digit phone number
+    return phoneRegex.test(telephone);
+  };
+  const isEmailValid = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+  const isGPIDValid = (gpIdNumber) => {
+    const gpIDRegex = /^\d{10}$/; // Matches exactly 10 digits
+    return gpIDRegex.test(gpIdNumber);
+  };
+  const isAddressValid = (address) => {
+    const addressRegex = /^[a-zA-Z0-9\s,.'-]+$/;
+    return addressRegex.test(address);
+  };
+
   const createAccount = (e) => {
     e.preventDefault();
+
+    const isForenameInputValid = isNameValid(inputValues.forename);
+    const isSurnameInputValid = isNameValid(inputValues.surname);
+    const isEmailAddressInputValid = isEmailValid(inputValues.email);
+    const isPhoneNumberInputValid = isPhoneNumberValid(inputValues.telephone);
+    const isGPIDInputValid = isGPIDValid(inputValues.gpIdNumber);
+    const isPersonalAddressInputValid = isAddressValid(
+      inputValues.personalAddress
+    );
+    const isOfficeAddressInputValid = isAddressValid(inputValues.officeAddress);
+
+    if (!isForenameInputValid) {
+      setErrorMessage('Please enter a valid name.');
+      return;
+    } else if (!isSurnameInputValid) {
+      setErrorMessage('Please enter a valid surname.');
+      return;
+    } else if (!isEmailAddressInputValid) {
+      setErrorMessage('Please enter a valid email.');
+      return;
+    } else if (!isPhoneNumberInputValid) {
+      setErrorMessage('Please enter a valid phone number. e.g. 0831234567');
+      return;
+    } else if (!isGPIDInputValid) {
+      setErrorMessage('GPID must be 10 numerical digits in length.');
+      return;
+    } else if (!isPersonalAddressInputValid) {
+      setErrorMessage('Please enter a valid personal address.');
+      return;
+    } else if (!isOfficeAddressInputValid) {
+      setErrorMessage('Please enter a valid office address.');
+      return;
+    }
+
+    // Check if any required fields are empty
+    const requiredFields = [
+      'forename',
+      'surname',
+      'email',
+      'telephone',
+      'gpIdNumber',
+      'personalAddress',
+      'officeAddress',
+      'password',
+    ];
+    const hasEmptyField = requiredFields.some((field) => !inputValues[field]);
+    if (hasEmptyField) {
+      setInputError((prevErrors) => ({
+        ...prevErrors,
+        ...requiredFields.reduce((acc, field) => {
+          acc[field] = !inputValues[field];
+          return acc;
+        }, {}),
+      }));
+      setErrorMessage('Please fill in all required fields.');
+      return;
+    }
 
     if (!password) {
       setInputError((prevErrors) => ({
@@ -63,6 +142,8 @@ function LandingPage() {
         console.log(error);
         if (error.code === 'auth/email-already-in-use') {
           setErrorMessage('Email is already in use.');
+        } else if (error.code === 'auth/weak-password') {
+          setErrorMessage('Password should be at least 6 characters');
         } else {
           setErrorMessage('An error occurred. Please try again.');
         }
