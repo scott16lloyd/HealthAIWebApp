@@ -1,10 +1,135 @@
-import React from 'react';
-import SignIn from '../components/auth/SignIn';
+import React, { useState } from 'react';
+import { auth } from '../firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
+import TopNavigationBar from '../components/widgets/TopNavigationBar/TopNavigationBar';
+import AlertBox from '../components/widgets/AlertBox/AlertBox';
+import { Container, Typography, Stack, TextField } from '@mui/material';
+import BackButton from '../components/widgets/BackButton/BackButton';
+import PrimaryButton from '../components/widgets/PrimaryButton/PrimaryButton';
 
 function SignInPage() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const signIn = (e) => {
+    e.preventDefault();
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        console.log(userCredential);
+        navigate('/home');
+      })
+      .catch((error) => {
+        console.log(error);
+        if (error.code === 'auth/invalid-login-credentials') {
+          setErrorMessage('Invalid login credentials.');
+        } else if (error.code === 'auth/invalid-email') {
+          setErrorMessage('Invalid email.');
+        } else {
+          setErrorMessage('An error occurred. Please try again.');
+        }
+      });
+  };
+
+  // Styling
+  const backButtonStyle = {
+    marginRight: 'auto',
+  };
+
+  const spaceStyle = {
+    marginRight: '10px',
+  };
+
+  const mandatoryStyle = {
+    color: 'red',
+    fontFamily: 'Roboto, sans-serif',
+  };
+
+  const columnStyle = {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  };
+
+  const inputStyle = {
+    margin: '20px 40px',
+    width: '100%',
+    borderRadius: '11px',
+    background:
+      'linear-gradient(93deg, rgba(217, 217, 217, 0.40) 17.46%, rgba(217, 217, 217, 0.10) 82.78%)',
+    boxShadow: '2px 2px 4px 0px rgba(0, 0, 0, 0.10)',
+    backdropFilter: 'blur(1.5px)',
+  };
+
   return (
     <>
-      <SignIn />
+      <TopNavigationBar />
+      <AlertBox
+        message={errorMessage}
+        severity={'error'}
+        onClose={() => setErrorMessage('')}
+      />
+      <Container>
+        <div
+          style={{ display: 'flex', alignItems: 'center', marginTop: '1rem' }}
+        >
+          <BackButton style={backButtonStyle} />
+          <Typography variant="h4" align="left">
+            Login
+          </Typography>
+          <span style={spaceStyle}></span>
+          <Typography variant="h7" align="left" style={mandatoryStyle}>
+            Mandatory *
+          </Typography>
+        </div>
+        <Stack direction="row" spacing={2} justifyContent="center">
+          {' '}
+          {/** Stacking textfields in 4, 4, 2 + 1 button */}
+          <div style={columnStyle}>
+            <TextField
+              label="Email"
+              variant="filled"
+              type="email"
+              style={inputStyle}
+              required
+              InputProps={{ disableUnderline: true }}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <TextField
+              label="Password"
+              variant="filled"
+              type="password"
+              style={inputStyle}
+              required
+              InputProps={{ disableUnderline: true }}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <PrimaryButton text={'Login'} type="submit" action={signIn} />{' '}
+          </div>
+        </Stack>
+      </Container>
+      {/* <div>
+        <form onSubmit={signIn}>
+          <h1>Log In</h1>
+          <input
+            type="email"
+            placeholder="Enter email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          ></input>
+          <input
+            type="password"
+            placeholder="Enter password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          ></input>
+          <button type="submit">Log In</button>
+        </form>
+      </div> */}
     </>
   );
 }
