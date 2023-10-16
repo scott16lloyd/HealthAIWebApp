@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import TopNavigationBar from '../components/widgets/TopNavigationBar/TopNavigationBar';
+import { TextField } from '@mui/material';
+import Grid from '@mui/material/Grid';
 
 const defaultButtonStyle = {
   width: '252px',
   height: '62px',
-  flexShrink: 0,
+  flexShrink: 1,
   borderRadius: '11px',
   background: 'linear-gradient(93deg, rgba(217, 217, 217, 0.40) 17.46%, rgba(217, 217, 217, 0.10) 82.78%)',
   boxShadow: '2px 2px 4px 0px rgba(0, 0, 0, 0.10)',
@@ -20,13 +22,6 @@ const defaultButtonStyle = {
   fontWeight: 300,
   lineHeight: '12px',
   letterSpacing: '0.15px',
-  fontFeatureSettings: 'clig off, liga off',
-};
-
-const columnStyle = {
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
 };
 
 const inputStyle = {
@@ -44,12 +39,8 @@ const activeButtonStyle = {
 };
 
 const headerStyle = {
-  display: 'flex',
-  width: '439px',
-  height: '57px',
-  flexDirection: 'column',
-  justifyContent: 'flex-end',
-  flexShrink: 0,
+  width: '100%',
+  height: '0px',
   color: '#000',
   fontFamily: 'Roboto, sans-serif',
   fontSize: '45px',
@@ -57,7 +48,6 @@ const headerStyle = {
   fontWeight: 300,
   lineHeight: '12px',
   letterSpacing: '0.15px',
-  fontFeatureSettings: 'clig off, liga off',
 };
 
 function Button({ buttonName, activeButton, setActiveButton }) {
@@ -80,7 +70,7 @@ function Home() {
   const [activeButton, setActiveButton] = useState(null);
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center' }}>
+    <div style={{ display: 'flex', alignItems: 'left' }}>
       <div>
         <TopNavigationBar />
         <Button buttonName="View Patients" activeButton={activeButton} setActiveButton={setActiveButton} /><br></br>
@@ -94,13 +84,75 @@ function Home() {
         
           </div>
         )}
-        
-  {activeButton === 'Add Patients' && (
-    <div style={{ ...headerStyle }}>
-      <p>Add Patients</p>
-      
-    </div>
-  )}
+        {activeButton === 'Add Patients' && (
+  <div>
+    <Grid container spacing={1} style={headerStyle}>
+      <Grid >
+        <p style={headerStyle}>Add Patients</p>
+        <Grid container spacing={2} direction="column" alignItems="left">
+          <Grid item>
+            <TextField
+              label="Forename"
+              variant="filled"
+              style={inputStyle}
+              required
+              InputProps={{ disableUnderline: true }}
+            />
+          </Grid>
+          <Grid item>
+            <TextField
+              label="Forename"
+              variant="filled"
+              style={inputStyle}
+              required
+              InputProps={{ disableUnderline: true }}
+            />
+          </Grid>
+          <Grid item>
+            <TextField
+              label="Forename"
+              variant="filled"
+              style={inputStyle}
+              required
+              InputProps={{ disableUnderline: true }}
+            />
+          </Grid>
+        </Grid>
+      </Grid>
+      <Grid >
+        <Grid container spacing={1} direction="column" alignItems="left">
+          <Grid item>
+            <TextField
+              label="Forename"
+              variant="filled"
+              style={inputStyle}
+              required
+              InputProps={{ disableUnderline: true }}
+            />
+          </Grid>
+          <Grid item>
+            <TextField
+              label="Forename"
+              variant="filled"
+              style={inputStyle}
+              required
+              InputProps={{ disableUnderline: true }}
+            />
+          </Grid>
+          <Grid item>
+            <TextField
+              label="Forename"
+              variant="filled"
+              style={inputStyle}
+              required
+              InputProps={{ disableUnderline: true }}
+            />
+          </Grid>
+        </Grid>
+      </Grid>
+    </Grid>
+  </div>
+)}
 
 
 {activeButton === 'View Profile' && (
