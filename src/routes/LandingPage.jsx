@@ -4,6 +4,7 @@ import Doctor from '../images/doctorImage.png';
 import { Box, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import PrimaryButton from '../components/widgets/PrimaryButton/PrimaryButton';
+import Footer from '../components/widgets/Footer/Footer';
 
 function LandingPage() {
   return (
@@ -58,7 +59,9 @@ function LandingPage() {
           />
         </Box>
       </div>
+      <Footer />
     </>
+    
   );
 }
 
