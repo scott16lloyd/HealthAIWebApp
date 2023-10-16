@@ -4,6 +4,7 @@ import { Container, Typography, Grid, Paper } from '@mui/material';
 // Import the LandingPage component
 import LandingPage from './LandingPage'; // Adjust the path to the LandingPage component
 import TopNavigationBar from '../components/widgets/TopNavigationBar/TopNavigationBar';
+import Footer from '../components/widgets/Footer/Footer';
 import BackButton from '../components/widgets/BackButton/BackButton';
 
 const messageBoxStyle = {
@@ -15,18 +16,18 @@ const messageBoxStyle = {
 };
 
 const aboutUsHeaderStyle = {
-  paddingLeft: '20px', // Adjust the padding value as needed
+  paddingLeft: '20px', 
 };
 
 const teamImageStyle = {
-  width: '75%', // Adjust the width as needed
-  height: '30%', // Adjust the height as needed
+  width: '75%', 
+  height: '30%', 
 };
 
 function AboutUsPage() {
   return (
     <>
-      {/* Include the LandingPage component */}
+      
       <TopNavigationBar />
 
       <Container maxWidth="lg">
@@ -89,6 +90,8 @@ function AboutUsPage() {
           </Grid>
         </Grid>
       </Container>
+      <br></br>
+      <Footer />
     </>
   );
 }

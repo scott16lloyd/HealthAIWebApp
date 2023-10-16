@@ -58,8 +58,9 @@ function LandingPage() {
           />
         </Box>
       </div>
-      
+      <Footer />
     </>
+    
   );
 }
 

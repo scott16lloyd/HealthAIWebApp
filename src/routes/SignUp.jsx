@@ -5,6 +5,7 @@ import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import PrimaryButton from '../components/widgets/PrimaryButton/PrimaryButton';
 import Container from '@mui/material/Container';
+import Footer from '../components/widgets/Footer/Footer';
 import Typography from '@mui/material/Typography';
 
 function LandingPage() {
@@ -135,6 +136,7 @@ function LandingPage() {
           </div>
         </Stack>
       </Container>
+      <Footer />
     </>
   );
 }
