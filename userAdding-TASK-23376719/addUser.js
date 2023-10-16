@@ -1,21 +1,23 @@
-const firebaseConfig = {
-    apiKey: "AIzaSyAHFVjJjJeM_Soz2lsJOEIwSBiLWOS_RY0",
-  authDomain: "healthai-40b47.firebaseapp.com",
-  databaseURL: "https://healthai-40b47-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "healthai-40b47",
-  storageBucket: "healthai-40b47.appspot.com",
-  messagingSenderId: "493505764604",
-  appId: "1:493505764604:web:2decb83a82f453f0398b79",
-  measurementId: "G-YDS75RSZME"
-};
+import { firebaseConfig } from "../src/firebase";
+//const firebaseConfig = {
+//    apiKey: "AIzaSyAHFVjJjJeM_Soz2lsJOEIwSBiLWOS_RY0",
+// authDomain: "healthai-40b47.firebaseapp.com",
+//  databaseURL: "https://healthai-40b47-default-rtdb.europe-west1.firebasedatabase.app",
+//  projectId: "healthai-40b47",
+//  storageBucket: "healthai-40b47.appspot.com",
+//  messagingSenderId: "493505764604",
+//  appId: "1:493505764604:web:2decb83a82f453f0398b79",
+//  measurementId: "G-YDS75RSZME"
+//};
 
 //to initilize firebase
 firebase.initializeApp(firebaseConfig);
 
 //create reference to database
-var userForm = firebase.database().ref("userForm");
+var userForm = firebase.database().ref("signUp");
 
-document.getElementById("usersForm").addEventListener("signUp", signUpForm)
+//possible need to change "signUpForm" function.git
+document.getElementById("signUp").addEventListener("signUp", signUpForm)
 
 function signUpForm(e){
     //need more info on sign up page
