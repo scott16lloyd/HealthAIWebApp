@@ -1,6 +1,6 @@
 import React from 'react';
 import { Input, Button } from '@mui/material';
-import { MailOutline, LinkedIn, Twitter } from '@mui/icons-material'; // Import Material-UI icons
+import { MailOutline, LinkedIn, Twitter } from '@mui/icons-material'; 
 
 const Footer = () => {
   const footerStyle = {

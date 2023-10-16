@@ -1,8 +1,7 @@
 import React from 'react';
 import { Container, Typography, Grid, Paper } from '@mui/material';
 
-// Import the LandingPage component
-import LandingPage from './LandingPage'; // Adjust the path to the LandingPage component
+import LandingPage from './LandingPage'; 
 import TopNavigationBar from '../components/widgets/TopNavigationBar/TopNavigationBar';
 import Footer from '../components/widgets/Footer/Footer';
 import BackButton from '../components/widgets/BackButton/BackButton';
