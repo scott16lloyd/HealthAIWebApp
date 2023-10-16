@@ -10,6 +10,8 @@ import { auth } from '../firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import AlertBox from '../components/widgets/AlertBox/AlertBox';
+import SocialMediaSignInButton from '../components/widgets/SocialMediaSignInButton/SocialMediaSignInButton';
+import { display } from '@mui/system';
 
 function LandingPage() {
   const [email, setEmail] = useState('');
@@ -181,6 +183,13 @@ function LandingPage() {
     marginRight: 'auto',
   };
 
+  const buttonContainerStyle = {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  };
+
   return (
     <>
       <TopNavigationBar />
@@ -205,7 +214,6 @@ function LandingPage() {
           </Typography>
         </div>
         <Stack direction="row" spacing={2} justifyContent="center">
-          {' '}
           {/** Stacking textfields in 4, 4, 2 + 1 button */}
           <div style={columnStyle}>
             <TextField
@@ -337,10 +345,13 @@ function LandingPage() {
                 inputError['password'] ? 'Password cannot be blank' : ''
               }
             />
-            <PrimaryButton text={'Sign Up'} action={createAccount} />{' '}
             {/** Sign Up Button */}
           </div>
         </Stack>
+        <div style={buttonContainerStyle}>
+          <SocialMediaSignInButton socialPlatform={'google'} />
+          <PrimaryButton text={'Sign Up'} action={createAccount} />{' '}
+        </div>
       </Container>
     </>
   );

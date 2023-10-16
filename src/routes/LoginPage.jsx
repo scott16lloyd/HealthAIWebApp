@@ -7,6 +7,7 @@ import AlertBox from '../components/widgets/AlertBox/AlertBox';
 import { Container, Typography, Stack, TextField } from '@mui/material';
 import BackButton from '../components/widgets/BackButton/BackButton';
 import PrimaryButton from '../components/widgets/PrimaryButton/PrimaryButton';
+import SocialMediaSignInButton from '../components/widgets/SocialMediaSignInButton/SocialMediaSignInButton';
 
 function SignInPage() {
   const [email, setEmail] = useState('');
@@ -63,6 +64,13 @@ function SignInPage() {
     backdropFilter: 'blur(1.5px)',
   };
 
+  const socialButtonContainerStyle = {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+  };
+
   return (
     <>
       <TopNavigationBar />
@@ -111,6 +119,9 @@ function SignInPage() {
             <PrimaryButton text={'Login'} type="submit" action={signIn} />{' '}
           </div>
         </Stack>
+        <div style={socialButtonContainerStyle}>
+          <SocialMediaSignInButton socialPlatform={'google'} />
+        </div>
       </Container>
     </>
   );

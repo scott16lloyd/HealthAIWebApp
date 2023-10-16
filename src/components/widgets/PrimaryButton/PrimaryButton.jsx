@@ -8,7 +8,6 @@ function PrimaryButton({ text, to, color, action }) {
     height: '50px',
     flexShrink: 0,
     margin: '0.8rem',
-    background: color,
     fontSize: 24,
     fontWeight: 100,
     textTransform: 'none',
