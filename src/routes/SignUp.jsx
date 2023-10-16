@@ -11,7 +11,6 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import AlertBox from '../components/widgets/AlertBox/AlertBox';
 import SocialMediaSignInButton from '../components/widgets/SocialMediaSignInButton/SocialMediaSignInButton';
-import { display } from '@mui/system';
 
 function LandingPage() {
   const [email, setEmail] = useState('');
@@ -139,6 +138,7 @@ function LandingPage() {
       .then((userCredential) => {
         console.log(userCredential);
         navigate('/home');
+        console.log(inputValues);
       })
       .catch((error) => {
         console.log(error);
@@ -349,7 +349,6 @@ function LandingPage() {
           </div>
         </Stack>
         <div style={buttonContainerStyle}>
-          <SocialMediaSignInButton socialPlatform={'google'} />
           <PrimaryButton text={'Sign Up'} action={createAccount} />{' '}
         </div>
       </Container>
