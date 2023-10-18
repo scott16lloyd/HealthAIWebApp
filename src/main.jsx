@@ -6,24 +6,27 @@ import DocBotPage from './routes/DocBotPage';
 import Help from './routes/Help';
 import About from './routes/About';
 import LoginPage from '../src/routes/LoginPage';
-import SignUp from '../src/routes/SignUp';
+import SignUpPage from './routes/SignUpPage';
 import ProtectedRoute from './routes/ProtectedRoute';
+import { AuthContextProvider } from './components/auth/AuthContext';
 
 function main() {
   return (
-    <Router>
-      <div>
-        <Routes>
-          <Route index element={<LandingPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/home" element={<ProtectedRoute component={Home} />} />
-          <Route path="/docBot" element={<DocBotPage />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/help" element={<Help />} />
-          <Route path="/signUp" element={<SignUp />} />
-        </Routes>
-      </div>
-    </Router>
+    <AuthContextProvider>
+      <Router>
+        <div>
+          <Routes>
+            <Route index element={<LandingPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/home" element={<ProtectedRoute component={Home} />} />
+            <Route path="/docBot" element={<DocBotPage />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/help" element={<Help />} />
+            <Route path="/signUp" element={<SignUpPage />} />
+          </Routes>
+        </div>
+      </Router>
+    </AuthContextProvider>
   );
 }
 

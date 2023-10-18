@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { auth } from '../firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
@@ -8,18 +8,22 @@ import { Container, Typography, Stack, TextField } from '@mui/material';
 import BackButton from '../components/widgets/BackButton/BackButton';
 import PrimaryButton from '../components/widgets/PrimaryButton/PrimaryButton';
 import SocialMediaSignInButton from '../components/widgets/SocialMediaSignInButton/SocialMediaSignInButton';
+import { UserAuth } from '../components/auth/AuthContext';
 
 function SignInPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState('');
+  const { googleSignIn, user } = UserAuth();
 
   const signIn = (e) => {
     e.preventDefault();
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        console.log(userCredential);
+      .then(() => {
+        // Successful sign-in
+        console.log('Sign-in successful');
+        // Navigate to home or do other actions upon successful sign-in
         navigate('/home');
       })
       .catch((error) => {
@@ -33,6 +37,20 @@ function SignInPage() {
         }
       });
   };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      await googleSignIn();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (user != null) {
+      navigate('/home');
+    }
+  });
 
   // Styling
   const backButtonStyle = {
@@ -120,7 +138,10 @@ function SignInPage() {
           </div>
         </Stack>
         <div style={socialButtonContainerStyle}>
-          <SocialMediaSignInButton socialPlatform={'google'} />
+          <SocialMediaSignInButton
+            socialPlatform={'google'}
+            action={handleGoogleSignIn}
+          />
         </div>
       </Container>
     </>
