@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState } from 'react';
 import TopNavigationBar from '../components/widgets/TopNavigationBar/TopNavigationBar';
 import { TextField } from '@mui/material';
@@ -66,105 +67,26 @@ function Button({ buttonName, activeButton, setActiveButton }) {
     </div>
   );
 }
+=======
+import React from 'react';
+import { UserAuth } from '../components/auth/AuthContext';
+>>>>>>> 979b8ffedccd39071df3b316b39b86c0ebea707c
 
 function Home() {
-  const [activeButton, setActiveButton] = useState(null);
+  const { user, logOut } = UserAuth();
 
+  const handleSignOut = async () => {
+    try {
+      await logOut();
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
-    <div style={{ display: 'flex', alignItems: 'left' }}>
-      <div>
-        <TopNavigationBar />
-        <Button buttonName="View Patients" activeButton={activeButton} setActiveButton={setActiveButton} /><br></br>
-        <Button buttonName="Add Patients" activeButton={activeButton} setActiveButton={setActiveButton} /><br></br>
-        <Button buttonName="View Profile" activeButton={activeButton} setActiveButton={setActiveButton} />
-      </div>
-      <div>
-        {activeButton === 'View Patients' && (
-          <div style={headerStyle}>
-            <p>Viewing Patients</p>
-        
-          </div>
-        )}
-        {activeButton === 'Add Patients' && (
-  <div>
-    <Grid container spacing={1} style={headerStyle}>
-      <Grid >
-        <p style={headerStyle}>Add Patients</p>
-        <Grid container spacing={2} direction="column" alignItems="left">
-          <Grid item>
-            <TextField
-              label="Forename"
-              variant="filled"
-              style={inputStyle}
-              required
-              InputProps={{ disableUnderline: true }}
-            />
-          </Grid>
-          <Grid item>
-            <TextField
-              label="Forename"
-              variant="filled"
-              style={inputStyle}
-              required
-              InputProps={{ disableUnderline: true }}
-            />
-          </Grid>
-          <Grid item>
-            <TextField
-              label="Forename"
-              variant="filled"
-              style={inputStyle}
-              required
-              InputProps={{ disableUnderline: true }}
-            />
-          </Grid>
-        </Grid>
-      </Grid>
-      <Grid >
-        <Grid container spacing={1} direction="column" alignItems="left">
-          <Grid item>
-            <TextField
-              label="Forename"
-              variant="filled"
-              style={inputStyle}
-              required
-              InputProps={{ disableUnderline: true }}
-            />
-          </Grid>
-          <Grid item>
-            <TextField
-              label="Forename"
-              variant="filled"
-              style={inputStyle}
-              required
-              InputProps={{ disableUnderline: true }}
-            />
-          </Grid>
-          <Grid item>
-            <TextField
-              label="Forename"
-              variant="filled"
-              style={inputStyle}
-              required
-              InputProps={{ disableUnderline: true }}
-            />
-          </Grid>
-        </Grid>
-      </Grid>
-    </Grid>
-  </div>
-)}
-
-
-{activeButton === 'View Profile' && (
-  <div style={headerStyle}>
-    <p>View Profile</p>
-   
-  </div>
-)}
-
-      </div>
-    </div>
+    <>
+      <h1>Home</h1>
+      {user ? <button onClick={handleSignOut}>Logout</button> : null}
+    </>
   );
 }
 
