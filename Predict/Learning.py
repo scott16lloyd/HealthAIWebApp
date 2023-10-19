@@ -1,4 +1,3 @@
-# Import necessary libraries
 import pyrebase
 import pandas as pd
 import numpy as np
