@@ -349,7 +349,11 @@ function SignUpPage() {
           </div>
         </Stack>
         <div style={buttonContainerStyle}>
-          <PrimaryButton text={'Sign Up'} action={createAccount} />{' '}
+          <PrimaryButton
+            text={'Sign Up'}
+            action={createAccount}
+            state={'active'}
+          />{' '}
         </div>
       </Container>
       <Footer />

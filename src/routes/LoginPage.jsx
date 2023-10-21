@@ -134,7 +134,12 @@ function SignInPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <PrimaryButton text={'Login'} type="submit" action={signIn} />{' '}
+            <PrimaryButton
+              text={'Login'}
+              type="submit"
+              action={signIn}
+              state={'active'}
+            />{' '}
           </div>
         </Stack>
         <div style={socialButtonContainerStyle}>
