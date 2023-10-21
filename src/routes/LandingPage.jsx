@@ -50,18 +50,19 @@ function LandingPage() {
             to="/signUp"
             text={'Sign Up'}
             color={'rgba(217,217,217,0.4)'}
+            state={'active'}
           />
           <PrimaryButton
             component={Link}
             to="/login"
             text={'Login'}
             color={'rgba(217,217,217,0.4)'}
+            state={'active'}
           />
         </Box>
       </div>
       <Footer />
     </>
-    
   );
 }
 
