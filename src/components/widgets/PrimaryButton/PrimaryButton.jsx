@@ -7,15 +7,6 @@ function PrimaryButton({ text, to, color, action, state }) {
     'linear-gradient(120deg, rgba(38, 85, 255, 0.80) 26.35%, rgba(0, 117, 255, 0.60) 83.58%)';
   const unactiveColor =
     'linear-gradient(93deg, rgba(217, 217, 217, 0.40) 17.46%, rgba(217, 217, 217, 0.10) 82.78%)';
-  let backgroundColor = '';
-  let textColor = '';
-
-  // Select backgroung color based on button state
-  if (state === 'active') {
-    backgroundColor = activeColor;
-  } else if (state === 'unactive') {
-    backgroundColor = unactiveColor;
-  }
 
   const getBackgroundColor = () => {
     return state === 'active' ? activeColor : unactiveColor;

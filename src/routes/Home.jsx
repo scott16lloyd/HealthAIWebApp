@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { UserAuth } from '../components/auth/AuthContext';
 import TopNavigationBar from '../components/widgets/TopNavigationBar/TopNavigationBar';
 import PrimaryButton from '../components/widgets/PrimaryButton/PrimaryButton';
+import ViewAllPatients from './ViewAllPatients';
 
 function Home() {
   // Manage state of button, including default state
@@ -29,6 +30,11 @@ function Home() {
     margin: '2rem',
   };
 
+  const outerWrapperStyle = {
+    display: 'flex',
+    flexDirection: 'row',
+  };
+
   // Define user related objects
   const { user, logOut } = UserAuth();
 
@@ -43,22 +49,27 @@ function Home() {
     <>
       <TopNavigationBar />
       {user ? <button onClick={handleSignOut}>Logout</button> : null}
-      <div style={buttonColumnStyle}>
-        <PrimaryButton
-          text={'View Patients'}
-          state={buttonStates.viewPatients}
-          action={() => handleButtonClick('viewPatients')}
-        />
-        <PrimaryButton
-          text={'Add Patient'}
-          state={buttonStates.addPatient}
-          action={() => handleButtonClick('addPatient')}
-        />
-        <PrimaryButton
-          text={'View Profile'}
-          state={buttonStates.viewProfile}
-          action={() => handleButtonClick('viewProfile')}
-        />
+      <div style={outerWrapperStyle}>
+        <div style={buttonColumnStyle}>
+          <PrimaryButton
+            text={'View Patients'}
+            state={buttonStates.viewPatients}
+            action={() => handleButtonClick('viewPatients')}
+          />
+          <PrimaryButton
+            text={'Add Patient'}
+            state={buttonStates.addPatient}
+            action={() => handleButtonClick('addPatient')}
+          />
+          <PrimaryButton
+            text={'View Profile'}
+            state={buttonStates.viewProfile}
+            action={() => handleButtonClick('viewProfile')}
+          />
+        </div>
+        <div>
+          <ViewAllPatients />
+        </div>
       </div>
     </>
   );
