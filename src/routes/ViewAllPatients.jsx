@@ -64,7 +64,7 @@ function ViewAllPatients() {
       </div>
       <div style={dataContainerStyle}>
         <Grid container spacing={2}>
-          {Array.from({ length: 12 }).map((_, index) => (
+          {Array.from({ length: 9 }).map((_, index) => (
             <Grid item xs={4} key={index}>
               <PatientOverviewWidget name="John Doe" id={12345} />
             </Grid>
