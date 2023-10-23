@@ -35,9 +35,15 @@ function Home() {
     flexDirection: 'row',
   };
 
+  const displayContainer = {
+    width: '75%',
+    paddingLeft: '4rem',
+    paddingRight: '4rem',
+    paddingTop: '1rem',
+  };
+
   // Define user related objects
   const { user, logOut } = UserAuth();
-  const [activeButton, setActiveButton] = useState(null);
 
   const handleSignOut = async () => {
     try {
@@ -69,7 +75,7 @@ function Home() {
             action={() => handleButtonClick('viewProfile')}
           />
         </div>
-        <div>
+        <div style={displayContainer}>
           <ViewAllPatients />
         </div>
       </div>

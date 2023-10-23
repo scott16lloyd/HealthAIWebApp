@@ -4,13 +4,11 @@ import Autocomplete from '@mui/material/Autocomplete';
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
 
-const SearchBar = () => {
-  const options = ['Option 1', 'Option 2', 'Option 3'];
-
+const SearchBar = (data) => {
   return (
     <Autocomplete
       freeSolo
-      options={options}
+      options={data ? ['No patients available'] : [data]}
       renderInput={(params) => (
         <TextField
           {...params}
@@ -26,8 +24,12 @@ const SearchBar = () => {
             ),
             sx: {
               '& .MuiInputBase-input': { boxShadow: 'none' },
+              width: '100%',
+              minWidth: '600px',
             },
           }}
+          // Disables autofilling from Google Chrome
+          name={`random_${Math.random()}`}
         />
       )}
     />
