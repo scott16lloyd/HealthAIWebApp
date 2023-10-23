@@ -37,6 +37,7 @@ function Home() {
 
   // Define user related objects
   const { user, logOut } = UserAuth();
+  const [activeButton, setActiveButton] = useState(null);
 
   const handleSignOut = async () => {
     try {
@@ -45,6 +46,7 @@ function Home() {
       console.log(error);
     }
   };
+
   return (
     <>
       <TopNavigationBar />
@@ -74,5 +76,4 @@ function Home() {
     </>
   );
 }
-
 export default Home;
