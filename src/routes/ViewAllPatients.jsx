@@ -6,19 +6,23 @@ import Grid from '@mui/system/Unstable_Grid/Grid';
 
 function ViewAllPatients() {
   const doctorID = '1234567890';
-  const apiUrl = `'https://healthai-40b47-default-rtdb.europe-west1.firebasedatabase.app/patients.json?auth=Lv0Ps3n1nkNuSjvIolRnRhCC1UMnasT4njYp4gVJorderBy="doctor"&equalTo"${doctorID}`;
+  const apiUrl = `https://healthai-40b47-default-rtdb.europe-west1.firebasedatabase.app/patients.json?Authorization=Bearerhttps&orderBy="Doctor"&equalTo="${doctorID}"`;
+
   const [patientsData, setPatientsData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Fetch doctor's patient data
   const fetchData = async () => {
     try {
       const response = await fetch(apiUrl);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-      console.log(response);
       const data = await response.json();
-      setPatientsData(data);
+      const patientsArray = Object.keys(data).map((key) => data[key]);
+      setPatientsData(patientsArray);
+      console.log(patientsData);
+      console.log(patientsArray);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -30,6 +34,7 @@ function ViewAllPatients() {
     fetchData();
   }, []); // Fetch data when the component mounts
 
+  // Styling
   const titleStyle = {
     fontFamily: 'Roboto, sans-serif',
     fontSize: '40px',
@@ -60,16 +65,23 @@ function ViewAllPatients() {
         <Typography varient="h1" style={titleStyle}>
           View Patients
         </Typography>
-        <SearchBar />
+        <SearchBar options={patientsData.map((patient) => patient.Name)} />
       </div>
       <div style={dataContainerStyle}>
-        <Grid container spacing={2}>
-          {Array.from({ length: 12 }).map((_, index) => (
-            <Grid item xs={4} key={index}>
-              <PatientOverviewWidget name="John Doe" id={12345} />
-            </Grid>
-          ))}
-        </Grid>
+        {patientsData.length === 0 ? (
+          <p>No patients available</p>
+        ) : (
+          <Grid container spacing={2}>
+            {patientsData.map((patient, index) => (
+              <Grid item xs={4} key={index}>
+                <PatientOverviewWidget
+                  name={patient.Name}
+                  id={patient.PatientID}
+                />
+              </Grid>
+            ))}
+          </Grid>
+        )}
       </div>
     </>
   );
