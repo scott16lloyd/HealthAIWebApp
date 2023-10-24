@@ -25,7 +25,7 @@ function stringToColor(string) {
 }
 
 function stringAvatar(name) {
-  if (name !== '') {
+  if (name && typeof name === 'string') {
     return {
       sx: {
         bgcolor: stringToColor(name),
