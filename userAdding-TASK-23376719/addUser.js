@@ -1,33 +1,50 @@
-import { firebaseConfig } from "../src/firebase";
-//const firebaseConfig = {
-//    apiKey: "AIzaSyAHFVjJjJeM_Soz2lsJOEIwSBiLWOS_RY0",
-// authDomain: "healthai-40b47.firebaseapp.com",
-//  databaseURL: "https://healthai-40b47-default-rtdb.europe-west1.firebasedatabase.app",
-//  projectId: "healthai-40b47",
-//  storageBucket: "healthai-40b47.appspot.com",
-//  messagingSenderId: "493505764604",
-//  appId: "1:493505764604:web:2decb83a82f453f0398b79",
-//  measurementId: "G-YDS75RSZME"
-//};
+// Require the Firebase module
+const firebase = require('firebase/app');
+require('firebase/database');
 
-//to initilize firebase
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  databaseURL: "YOUR_DATABASE_URL",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+
+// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-//create reference to database
-var userForm = firebase.database().ref("signUp");
-
-//possible need to change "signUpForm" function.git
-document.getElementById("signUp").addEventListener("signUp", signUpForm)
-
-function signUpForm(e){
-    //need more info on sign up page
-    //e.preventDefault();
-    var name = getElementVar('');
-}
-
-const getElementVal = (id) => {
+// Now you can use Firebase services, like the Realtime Database
+const database = firebase.database;
+  
+  // Function to add a new doctor to the database
+  function addDoctor() {
+    const name = getElementVal('Name');
+    const doctorID = getElementVal('DoctorID');
+  
+    const doctorData = {
+      Name: name,
+      DoctorID: doctorID,
+    };
+  
+    // Push the doctor data to the 'doctors' node in the database
+    const newRef = database.ref('doctors').push(doctorData);
+  
+    // Log the reference to the new doctor
+    console.log('New doctor reference:', newRef.key);
+  }
+  
+  /* Event listener for the signup form
+  document.getElementById("signUp").addEventListener("submit", function (e) {
+    e.preventDefault();
+    addDoctor();
+  });
+  
+  // Function to get element values by ID
+  function getElementVal(id) {
     return document.getElementById(id).value;
-}
+  }*/
 
 
 
