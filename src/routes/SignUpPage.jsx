@@ -136,7 +136,7 @@ function SignUpPage() {
     }
     const addUserInfoToFirebase = (userInfo) => {
         const dbRef = ref(database);
-        const newUserInfoRef = push(dbRef);
+        const newUserInfoRef = push(dbRef, 'doctors');
         newUserInfoRef.set(userInfo);
       };
 
