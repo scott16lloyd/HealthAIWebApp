@@ -34,12 +34,15 @@ lung_cancer_df['LUNG_CANCER'] = lung_cancer_df['LUNG_CANCER'].map({'NO': 0, 'YES
 X = lung_cancer_df.drop('LUNG_CANCER', axis=1)
 y = lung_cancer_df['LUNG_CANCER']  
 
-# Handle missing values
+# Handle missing values - by adding values based on the mean
 imputer = SimpleImputer(strategy='mean')
 X_imputed = imputer.fit_transform(X)
 
+
+
 # Split data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X_imputed, y, test_size=0.3, random_state=42)
+
 
 
 
@@ -54,6 +57,7 @@ accuracy = accuracy_score(y_test, y_pred)
 
 print("Accuracy:", accuracy)
 print("Model training successful")
+
 
 # Making a test patient with random data
 age = np.random.randint(30, 80)
@@ -97,7 +101,7 @@ patient_probability = model.predict_proba(patient_df)
 if patient_prediction[0] == 1:
     result = "High risk - probability of Lung Cancer: {:.2f}%.".format(patient_probability[0][1] * 100)
 else:
-    result = "Low risk - probability of Lung Cancer: {:.2f}%.".format(patient_probability[0][0] * 100)
+    result = "Low risk - probability of Lung Cancer: {:.2f}%.".format(patient_probability[0][1] * 100)
 
 
 print("\nPatient Data:")
