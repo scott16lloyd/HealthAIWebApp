@@ -4,11 +4,13 @@ import Autocomplete from '@mui/material/Autocomplete';
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
 
-const SearchBar = (data) => {
+const SearchBar = (props) => {
+  const { options } = props;
+  console.log(options);
   return (
     <Autocomplete
       freeSolo
-      options={data ? ['No patients available'] : [data]}
+      options={options}
       renderInput={(params) => (
         <TextField
           {...params}
