@@ -48,7 +48,6 @@ model = RandomForestClassifier()
 model.fit(X_train, y_train)
 
 
-
 y_pred = model.predict(X_test)
 
 accuracy = accuracy_score(y_test, y_pred)
@@ -96,9 +95,9 @@ patient_prediction = model.predict(patient_df)
 patient_probability = model.predict_proba(patient_df)
 
 if patient_prediction[0] == 1:
-    result = "High risk - probability of {:.2f}%.".format(patient_probability[0][1] * 100)
+    result = "High risk - probability of Lung Cancer: {:.2f}%.".format(patient_probability[0][1] * 100)
 else:
-    result = "Low risk - probability of {:.2f}%.".format(patient_probability[0][0] * 100)
+    result = "Low risk - probability of Lung Cancer: {:.2f}%.".format(patient_probability[0][0] * 100)
 
 
 print("\nPatient Data:")
