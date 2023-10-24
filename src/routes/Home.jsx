@@ -3,6 +3,7 @@ import { UserAuth } from '../components/auth/AuthContext';
 import TopNavigationBar from '../components/widgets/TopNavigationBar/TopNavigationBar';
 import PrimaryButton from '../components/widgets/PrimaryButton/PrimaryButton';
 import ViewAllPatients from './ViewAllPatients';
+import ViewProfile from './ViewProfile';
 
 function Home() {
   // Manage state of button, including default state
@@ -77,6 +78,7 @@ function Home() {
         </div>
         <div style={displayContainer}>
           {buttonStates.viewPatients === 'active' && <ViewAllPatients />}
+          {buttonStates.viewProfile === 'active' && <ViewProfile />}
         </div>
       </div>
     </>
