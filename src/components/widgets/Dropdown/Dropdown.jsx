@@ -1,13 +1,10 @@
 import React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-function Dropdown() {
+function Dropdown({ title, data }) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -19,9 +16,12 @@ function Dropdown() {
   };
 
   const buttonStyles = {
+    display: 'flex',
+    justifyContent: 'space-between',
+    height: '5rem',
     background: '#D9D9D9',
     fontWeight: 500,
-    fontSize: '18px',
+    fontSize: '28px',
     color: 'black',
     textTransform: 'none',
     borderRadius: '0.4rem',
@@ -29,14 +29,21 @@ function Dropdown() {
       background: '#b3b3b3',
     },
   };
+
+  const buttonContainerStyle = {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '80%',
+    gap: '1rem',
+  };
   return (
-    <div>
+    <div style={buttonContainerStyle}>
       <Button
         variant="contained"
         onClick={handleClickOpen}
         style={buttonStyles}
       >
-        View Office Details
+        {title}
         <ArrowForwardIosIcon sx={{ paddingLeft: '0.3rem' }} />
       </Button>
       <Dialog
@@ -45,35 +52,13 @@ function Dropdown() {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        {/* EDIT: Loop over array instead */}
         <DialogContent>
-          <DialogActions>
-            <IconButton
-              aria-label="close"
-              color="inherit"
-              size="small"
-              onClick={handleClose}
-            >
-              <CloseIcon fontSize="inherit" />
-            </IconButton>
-          </DialogActions>
           <DialogContentText id="alert-dialog-description">
-            Name: Dr. John Doe Telephone
-          </DialogContentText>
-          <DialogContentText id="alert-dialog-description">
-            Age: 29
-          </DialogContentText>
-          <DialogContentText id="alert-dialog-description">
-            Sex: male
-          </DialogContentText>
-          <DialogContentText id="alert-dialog-description">
-            GP ID: 1G145P33
-          </DialogContentText>
-          <DialogContentText id="alert-dialog-description">
-            Address: 348 Thorne St. Zion, IL 60099
-          </DialogContentText>
-          <DialogContentText id="alert-dialog-description">
-            No: +353 878562210
+            {Object.entries(data).map(([key, value]) => (
+              <div key={key}>
+                {key}: {value}
+              </div>
+            ))}
           </DialogContentText>
         </DialogContent>
       </Dialog>
