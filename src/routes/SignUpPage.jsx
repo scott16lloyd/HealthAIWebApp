@@ -157,6 +157,9 @@ function SignUpPage() {
           personalAddress: inputValues.personalAddress,
           officeAddress: inputValues.officeAddress,
         };
+
+        addUserInfoToFirebase(userInfo);
+
       })
       .catch((error) => {
         console.log(error);
@@ -170,7 +173,6 @@ function SignUpPage() {
       });
   };
 
-  addUserInfoToFirebase(userInfo);
   
 
   const columnStyle = {
