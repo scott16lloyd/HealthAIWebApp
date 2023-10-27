@@ -1,16 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
 
-const SearchBar = (props) => {
-  const { options } = props;
+const SearchBar = ({ options, onSearch }) => {
+  const [inputValue, setInputValue] = useState('');
+
+  const handleSearch = (value) => {
+    setInputValue(value);
+    onSearch(value);
+  };
   console.log(options);
   return (
     <Autocomplete
       freeSolo
       options={options}
+      inputValue={inputValue}
+      onInputChange={(_, value) => handleSearch(value)}
       renderInput={(params) => (
         <TextField
           {...params}

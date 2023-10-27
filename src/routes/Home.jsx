@@ -4,6 +4,7 @@ import TopNavigationBar from '../components/widgets/TopNavigationBar/TopNavigati
 import PrimaryButton from '../components/widgets/PrimaryButton/PrimaryButton';
 import ViewAllPatients from './ViewAllPatients';
 import ViewProfile from './ViewProfile';
+import Loader from '../components/Loader';
 
 function Home() {
   // Manage state of button, including default state
@@ -76,8 +77,11 @@ function Home() {
             action={() => handleButtonClick('viewProfile')}
           />
         </div>
+        <Loader />
         <div style={displayContainer}>
-          {buttonStates.viewPatients === 'active' && <ViewAllPatients />}
+          {buttonStates.viewPatients === 'active' && (
+            <ViewAllPatients id="1234567890" />
+          )}
           {buttonStates.viewProfile === 'active' && <ViewProfile />}
         </div>
       </div>

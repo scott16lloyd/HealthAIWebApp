@@ -4,12 +4,22 @@ import SearchBar from '../components/widgets/SearchBar/SearchBar';
 import PatientOverviewWidget from '../components/widgets/PatientOverviewWidget/PatientOverviewWidget';
 import Grid from '@mui/system/Unstable_Grid/Grid';
 
-function ViewAllPatients() {
-  const doctorID = '1234567890';
+function ViewAllPatients(id) {
+  const doctorID = id;
   const apiUrl = `https://healthai-40b47-default-rtdb.europe-west1.firebasedatabase.app/patients.json?Authorization=Bearerhttps&orderBy="Doctor"&equalTo="${doctorID}"`;
 
+  // State
   const [patientsData, setPatientsData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [search, setSearch] = useState('');
+
+  const handleSearch = (value) => {
+    setSearch(value);
+  };
+
+  const filteredPatientsData = patientsData.filter((patient) =>
+    patient.Name.toLowerCase().includes(search.toLowerCase())
+  );
 
   // Fetch doctor's patient data
   const fetchData = async () => {
@@ -30,9 +40,10 @@ function ViewAllPatients() {
     }
   };
 
+  // Fetch data when the component mounts
   useEffect(() => {
     fetchData();
-  }, []); // Fetch data when the component mounts
+  }, []);
 
   // Styling
   const titleStyle = {
@@ -65,14 +76,17 @@ function ViewAllPatients() {
         <Typography varient="h1" style={titleStyle}>
           View Patients
         </Typography>
-        <SearchBar options={patientsData.map((patient) => patient.Name)} />
+        <SearchBar
+          options={patientsData.map((patient) => patient.Name)}
+          onSearch={handleSearch}
+        />
       </div>
       <div style={dataContainerStyle}>
-        {patientsData.length === 0 ? (
+        {filteredPatientsData.length === 0 ? (
           <p>No patients available</p>
         ) : (
           <Grid container spacing={2}>
-            {patientsData.map((patient, index) => (
+            {filteredPatientsData.map((patient, index) => (
               <Grid item xs={4} key={index}>
                 <PatientOverviewWidget
                   name={patient.Name}
