@@ -7,6 +7,7 @@ import Help from './routes/Help';
 import About from './routes/About';
 import LoginPage from '../src/routes/LoginPage';
 import SignUpPage from './routes/SignUpPage';
+import PatientDetails from './routes/PatientDetails';
 import ProtectedRoute from './routes/ProtectedRoute';
 import { AuthContextProvider } from './components/auth/AuthContext';
 
@@ -22,6 +23,7 @@ function main() {
             <Route path="/docBot" element={<DocBotPage />} />
             <Route path="/about" element={<About />} />
             <Route path="/help" element={<Help />} />
+            <Route path='/details' element={<PatientDetails />} />
             <Route path="/signUp" element={<SignUpPage />} />
           </Routes>
         </div>
