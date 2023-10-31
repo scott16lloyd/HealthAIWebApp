@@ -3,6 +3,7 @@ import { UserAuth } from '../components/auth/AuthContext';
 import TopNavigationBar from '../components/widgets/TopNavigationBar/TopNavigationBar';
 import PrimaryButton from '../components/widgets/PrimaryButton/PrimaryButton';
 import ViewAllPatients from './ViewAllPatients';
+import AddPatient from './AddPatient';
 import ViewProfile from './ViewProfile';
 
 function Home() {
@@ -78,6 +79,7 @@ function Home() {
         </div>
         <div style={displayContainer}>
           {buttonStates.viewPatients === 'active' && <ViewAllPatients />}
+          {buttonStates.addPatient === 'active' && <AddPatient />}
           {buttonStates.viewProfile === 'active' && <ViewProfile />}
         </div>
       </div>
