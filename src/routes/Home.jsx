@@ -5,6 +5,7 @@ import PrimaryButton from '../components/widgets/PrimaryButton/PrimaryButton';
 import ViewAllPatients from './ViewAllPatients';
 import AddPatient from './AddPatient';
 import ViewProfile from './ViewProfile';
+import Footer from '../components/widgets/Footer/Footer';
 
 function Home() {
   // Manage state of button, including default state
@@ -82,6 +83,10 @@ function Home() {
           {buttonStates.addPatient === 'active' && <AddPatient />}
           {buttonStates.viewProfile === 'active' && <ViewProfile />}
         </div>
+      </div>
+      < Footer />
+      <div>
+        
       </div>
     </>
   );

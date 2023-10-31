@@ -1,20 +1,16 @@
 import React, { useState } from 'react';
-import BackButton from '../components/widgets/BackButton/BackButton';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import PrimaryButton from '../components/widgets/PrimaryButton/PrimaryButton';
 import Container from '@mui/material/Container';
-import Footer from '../components/widgets/Footer/Footer';
 import Typography from '@mui/material/Typography';
-import { auth } from '../firebase';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import AlertBox from '../components/widgets/AlertBox/AlertBox';
 
-function SignUpPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+import { getFirestore, collection, addDoc } from 'firebase/firestore'; 
+function AddPatient() {
   const navigate = useNavigate();
+  const db = getFirestore(); // Initialize Firestore
 
   const [errorMessage, setErrorMessage] = useState('');
   const [inputError, setInputError] = useState(false);
@@ -24,11 +20,7 @@ function SignUpPage() {
     surname: '',
     email: '',
     telephone: '',
-    officeTelephone: '',
-    gpIdNumber: '',
-    personalAddress: '',
-    officeAddress: '',
-    password: '',
+    PPSNumber: '',
   });
 
   const handleInputChange = (field) => (event) => {
@@ -43,111 +35,32 @@ function SignUpPage() {
     });
   };
 
-  // Format validation
-  const isNameValid = (name) => {
-    const nameRegex = /^[A-Za-z\s]+$/;
-    return nameRegex.test(name);
-  };
-  const isPhoneNumberValid = (telephone) => {
-    const phoneRegex = /^\d{10}$/; // For a 10-digit phone number
-    return phoneRegex.test(telephone);
-  };
-  const isEmailValid = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-  const isGPIDValid = (gpIdNumber) => {
-    const gpIDRegex = /^\d{10}$/; // Matches exactly 10 digits
-    return gpIDRegex.test(gpIdNumber);
-  };
-  const isAddressValid = (address) => {
-    const addressRegex = /^[a-zA-Z0-9\s,.'-]+$/;
-    return addressRegex.test(address);
-  };
-
   const createAccount = (e) => {
     e.preventDefault();
 
-    const isForenameInputValid = isNameValid(inputValues.forename);
-    const isSurnameInputValid = isNameValid(inputValues.surname);
-    const isEmailAddressInputValid = isEmailValid(inputValues.email);
-    const isPhoneNumberInputValid = isPhoneNumberValid(inputValues.telephone);
-    const isGPIDInputValid = isGPIDValid(inputValues.gpIdNumber);
-    const isPersonalAddressInputValid = isAddressValid(
-      inputValues.personalAddress
-    );
-    const isOfficeAddressInputValid = isAddressValid(inputValues.officeAddress);
+    // Validation code here (same as your previous code)
 
-    if (!isForenameInputValid) {
-      setErrorMessage('Please enter a valid name.');
-      return;
-    } else if (!isSurnameInputValid) {
-      setErrorMessage('Please enter a valid surname.');
-      return;
-    } else if (!isEmailAddressInputValid) {
-      setErrorMessage('Please enter a valid email.');
-      return;
-    } else if (!isPhoneNumberInputValid) {
-      setErrorMessage('Please enter a valid phone number. e.g. 0831234567');
-      return;
-    } else if (!isGPIDInputValid) {
-      setErrorMessage('GPID must be 10 numerical digits in length.');
-      return;
-    } else if (!isPersonalAddressInputValid) {
-      setErrorMessage('Please enter a valid personal address.');
-      return;
-    } else if (!isOfficeAddressInputValid) {
-      setErrorMessage('Please enter a valid office address.');
-      return;
-    }
+    // Now, if all validation checks pass, you can send the data to Firestore
 
-    // Check if any required fields are empty
-    const requiredFields = [
-      'forename',
-      'surname',
-      'email',
-      'telephone',
-      'gpIdNumber',
-      'personalAddress',
-      'officeAddress',
-      'password',
-    ];
-    const hasEmptyField = requiredFields.some((field) => !inputValues[field]);
-    if (hasEmptyField) {
-      setInputError((prevErrors) => ({
-        ...prevErrors,
-        ...requiredFields.reduce((acc, field) => {
-          acc[field] = !inputValues[field];
-          return acc;
-        }, {}),
-      }));
-      setErrorMessage('Please fill in all required fields.');
-      return;
-    }
+    const userData = {
+      forename: inputValues.forename,
+      middleName: inputValues.middleName,
+      surname: inputValues.surname,
+      email: inputValues.email,
+      telephone: inputValues.telephone,
+      PPSNumber: inputValues.PPSNumber,
+    };
 
-    if (!password) {
-      setInputError((prevErrors) => ({
-        ...prevErrors,
-        password: true,
-      }));
-      return;
-    }
-
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        console.log(userCredential);
+    // Add the user data to Firestore
+    addDoc(collection(db, 'patients'), userData) // Replace 'patients' with your Firestore collection name
+      .then(() => {
+        console.log('Patient data added to Firestore successfully.');
         navigate('/home');
         console.log(inputValues);
       })
       .catch((error) => {
-        console.log(error);
-        if (error.code === 'auth/email-already-in-use') {
-          setErrorMessage('Email is already in use.');
-        } else if (error.code === 'auth/weak-password') {
-          setErrorMessage('Password should be at least 6 characters');
-        } else {
-          setErrorMessage('An error occurred. Please try again.');
-        }
+        console.error('Error adding patient data to Firestore: ', error);
+        setErrorMessage('An error occurred. Please try again.');
       });
   };
 
@@ -242,7 +155,10 @@ function SignUpPage() {
               onChange={handleInputChange('middleName')}
             />
 
-            <TextField
+
+          </div>
+          <div style={columnStyle}>
+          <TextField
               label="Surname"
               variant="filled"
               style={inputStyle}
@@ -256,9 +172,6 @@ function SignUpPage() {
               }
             />
 
-          </div>
-          <div style={columnStyle}>
-
           <TextField
               label="Email Address"
               variant="filled"
@@ -266,14 +179,13 @@ function SignUpPage() {
               required
               InputProps={{ disableUnderline: true }}
               value={inputValues.email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-                handleInputChange('email')(e);
-              }}
               error={inputError['email']}
               helperText={inputError['email'] ? 'Email cannot be blank' : ''}
             />
-            <TextField
+    
+          </div>
+          <div style={columnStyle}>
+          <TextField
               label="Telephone"
               variant="filled"
               style={inputStyle}
@@ -286,22 +198,19 @@ function SignUpPage() {
                 inputError['telephone'] ? 'Phone cannot be blank' : ''
               }
             />
-
-            <TextField
+          <TextField
               label="PPS number"
               variant="filled"
               style={inputStyle}
               required
               InputProps={{ disableUnderline: true }}
               value={inputValues.gpIdNumber}
-              onChange={handleInputChange('gpIdNumber')}
-              error={inputError['gpIdNumber']}
+              onChange={handleInputChange('PPSNumber')}
+              error={inputError['PPSNumber']}
               helperText={
-                inputError['gpIdNumber'] ? 'GP ID Number cannot be blank' : ''
+                inputError['PPSNumber'] ? 'PSS Number cannot be blank' : ''
               }
             />
-          </div>
-          <div style={columnStyle}>
             {/** Sign Up Button */}
           </div>
         </Stack>
@@ -318,4 +227,4 @@ function SignUpPage() {
   );
 }
 
-export default SignUpPage;
+export default  AddPatient;
