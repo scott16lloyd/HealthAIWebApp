@@ -315,9 +315,7 @@ function SignUpPage() {
       </Container>
 
     </>
-    
   );
-  <Footer />
 }
 
 export default SignUpPage;
