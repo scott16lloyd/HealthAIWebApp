@@ -5,7 +5,7 @@ import LandingPage from './routes/LandingPage';
 import DocBotPage from './routes/DocBotPage';
 import Help from './routes/Help';
 import About from './routes/About';
-import LoginPage from '../src/routes/LoginPage';
+import LoginPage from './routes/LoginPage';
 import SignUpPage from './routes/SignUpPage';
 import PatientDetails from './routes/PatientDetails';
 import ProtectedRoute from './routes/ProtectedRoute';
@@ -23,7 +23,7 @@ function main() {
             <Route path="/docBot" element={<DocBotPage />} />
             <Route path="/about" element={<About />} />
             <Route path="/help" element={<Help />} />
-            <Route path='/details' element={<PatientDetails />} />
+            <Route path="/details" element={<PatientDetails />} />
             <Route path="/signUp" element={<SignUpPage />} />
           </Routes>
         </div>
