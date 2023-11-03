@@ -31,6 +31,7 @@ function ViewProfile() {
   };
   return (
     <>
+    
       <Typography varient="h1" style={titleStyle}>
         Viewing full details for {name}
       </Typography>

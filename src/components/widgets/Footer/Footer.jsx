@@ -103,11 +103,4 @@ const Footer = () => {
     </footer>
   );
 };
-
-const linkStyle = {
-  textDecoration: 'none',
-  display: 'flex',
-  alignItems: 'center',
-};
-
 export default Footer;
