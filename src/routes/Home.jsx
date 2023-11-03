@@ -36,6 +36,7 @@ function Home() {
   const outerWrapperStyle = {
     display: 'flex',
     flexDirection: 'row',
+    marginBottom: '9rem',
   };
 
   const displayContainer = {
@@ -84,10 +85,8 @@ function Home() {
           {buttonStates.viewProfile === 'active' && <ViewProfile />}
         </div>
       </div>
-      < Footer />
-      <div>
-        
-      </div>
+      <Footer />
+      <div></div>
     </>
   );
 }
