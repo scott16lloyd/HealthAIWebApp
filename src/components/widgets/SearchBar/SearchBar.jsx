@@ -1,16 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
 
-const SearchBar = (props) => {
-  const { options } = props;
-  console.log(options);
+const SearchBar = ({ options, onSearch }) => {
+  const [inputValue, setInputValue] = useState('');
+
+  const handleSearch = (value) => {
+    setInputValue(value);
+    onSearch(value);
+  };
+
   return (
     <Autocomplete
       freeSolo
       options={options}
+      inputValue={inputValue}
+      onInputChange={(_, value) => handleSearch(value)}
       renderInput={(params) => (
         <TextField
           {...params}
@@ -30,7 +37,6 @@ const SearchBar = (props) => {
               minWidth: '600px',
             },
           }}
-          // Disables autofilling from Google Chrome
           name={`random_${Math.random()}`}
         />
       )}

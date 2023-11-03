@@ -6,10 +6,20 @@ import Grid from '@mui/system/Unstable_Grid/Grid';
 
 function ViewAllPatients() {
   const doctorID = '1234567890';
-  const apiUrl = `https://healthai-40b47-default-rtdb.europe-west1.firebasedatabase.app/patients.json?Authorization=Bearerhttps&orderBy="Doctor"&equalTo="${doctorID}"`;
+  const apiUrl = `https://healthai-40b47-default-rtdb.europe-west1.firebasedatabase.app/patients.json?Authorization=Bearerhttps&orderBy=%22doctor%22&equalTo="1234567890"`;
 
   const [patientsData, setPatientsData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [search, setSearch] = useState('');
+
+  const handleSearch = (value) => {
+    setSearch(value);
+  };
+
+  const filteredPatientsData = patientsData.filter((patient) => {
+    const patient_name = patient.first_name + ' ' + patient.last_name;
+    return patient_name.toLowerCase().includes(search.toLowerCase());
+  });
 
   // Fetch doctor's patient data
   const fetchData = async () => {
@@ -33,6 +43,10 @@ function ViewAllPatients() {
   useEffect(() => {
     fetchData();
   }, []); // Fetch data when the component mounts
+
+  useEffect(() => {
+    console.log('Updated patientsData:', patientsData);
+  }, [patientsData]);
 
   // Styling
   const titleStyle = {
@@ -59,24 +73,36 @@ function ViewAllPatients() {
     overflowY: 'auto',
     overflowX: 'hidden',
   };
+
   return (
     <>
       <div style={topBarStyle}>
         <Typography varient="h1" style={titleStyle}>
           View Patients
         </Typography>
-        <SearchBar options={patientsData.map((patient) => patient.Name)} />
+        {isLoading ? (
+          <p>Loading...</p> // You can replace this with a loading indicator
+        ) : (
+          <SearchBar
+            options={patientsData.map(
+              (patient) => `${patient.first_name} ${patient.last_name}`
+            )}
+            onSearch={handleSearch}
+          />
+        )}
       </div>
       <div style={dataContainerStyle}>
-        {patientsData.length === 0 ? (
+        {isLoading ? (
+          <p>Loading...</p> // You can replace this with a loading indicator
+        ) : patientsData.length === 0 ? (
           <p>No patients available</p>
         ) : (
           <Grid container spacing={2}>
-            {patientsData.map((patient, index) => (
+            {filteredPatientsData.map((patient, index) => (
               <Grid item xs={4} key={index}>
                 <PatientOverviewWidget
-                  name={patient.Name}
-                  id={patient.PatientID}
+                  name={`${patient.first_name} ${patient.last_name}`}
+                  id={patient.patID}
                 />
               </Grid>
             ))}
