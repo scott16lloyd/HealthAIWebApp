@@ -6,7 +6,7 @@ import Grid from '@mui/system/Unstable_Grid/Grid';
 
 function ViewAllPatients() {
   const doctorID = '1234567890';
-  const apiUrl = `https://healthai-40b47-default-rtdb.europe-west1.firebasedatabase.app/patients.json?Authorization=Bearerhttps&orderBy="Doctor"&equalTo="${doctorID}"`;
+  const apiUrl = `https://healthai-40b47-default-rtdb.europe-west1.firebasedatabase.app/patients.json?Authorization=Bearerhttps&orderBy=%22doctor%22&equalTo="${doctorID}"`;
 
   const [patientsData, setPatientsData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -15,7 +15,6 @@ function ViewAllPatients() {
   const fetchData = async () => {
     try {
       const response = await fetch(apiUrl);
-      console.log(response);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -66,7 +65,9 @@ function ViewAllPatients() {
         <Typography varient="h1" style={titleStyle}>
           View Patients
         </Typography>
-        <SearchBar options={patientsData.map((patient) => patient.Name)} />
+        <SearchBar
+          options={patientsData.map((patient) => patient.first_name)}
+        />
       </div>
       <div style={dataContainerStyle}>
         {patientsData.length === 0 ? (
@@ -76,8 +77,8 @@ function ViewAllPatients() {
             {patientsData.map((patient, index) => (
               <Grid item xs={4} key={index}>
                 <PatientOverviewWidget
-                  name={patient.Name}
-                  id={patient.PatientID}
+                  name={patient.first_name}
+                  id={patient.patID}
                 />
               </Grid>
             ))}
