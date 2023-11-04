@@ -6,6 +6,7 @@ import ViewAllPatients from './ViewAllPatients';
 import AddPatient from './AddPatient';
 import ViewProfile from './ViewProfile';
 import Footer from '../components/widgets/Footer/Footer';
+import UserProfile from '../components/widgets/UserProfile/UserProfile';
 
 function Home() {
   // Manage state of button, including default state
@@ -46,12 +47,22 @@ function Home() {
     paddingTop: '1rem',
   };
 
+  const topBarWrapper = {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingRight: '2rem',
+  };
+
   // Define user related objects
   const { user, logOut } = UserAuth();
+  console.log(user.displayName);
 
   const handleSignOut = async () => {
     try {
       await logOut();
+      console.log('sign out sucessful');
     } catch (error) {
       console.log(error);
     }
@@ -59,8 +70,12 @@ function Home() {
 
   return (
     <>
-      <TopNavigationBar />
-      {user ? <button onClick={handleSignOut}>Logout</button> : null}
+      <div style={topBarWrapper}>
+        <TopNavigationBar />
+        {user ? (
+          <UserProfile name={user.displayName} logoutAction={handleSignOut} />
+        ) : null}
+      </div>
       <div style={outerWrapperStyle}>
         <div style={buttonColumnStyle}>
           <PrimaryButton

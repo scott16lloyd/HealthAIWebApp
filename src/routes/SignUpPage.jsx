@@ -8,7 +8,7 @@ import Container from '@mui/material/Container';
 import Footer from '../components/widgets/Footer/Footer';
 import Typography from '@mui/material/Typography';
 import { auth } from '../firebase';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import AlertBox from '../components/widgets/AlertBox/AlertBox';
 
@@ -136,9 +136,15 @@ function SignUpPage() {
 
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
+        const user = userCredential.user;
         console.log(userCredential);
         navigate('/home');
-        console.log(inputValues);
+        // Set the display name for the user
+        const displayName = inputValues.forename + ' ' + inputValues.surname;
+
+        updateProfile(user, {
+          displayName: displayName,
+        });
       })
       .catch((error) => {
         console.log(error);
