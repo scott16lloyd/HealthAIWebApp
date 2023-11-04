@@ -7,5 +7,5 @@ export default {
 };
 
 export const Default = {
-  args: {},
+  args: { name: 'Scott Lloyd' },
 };
