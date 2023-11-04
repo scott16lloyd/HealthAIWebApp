@@ -4,7 +4,7 @@ import TopNavigationBar from '../components/widgets/TopNavigationBar/TopNavigati
 import PrimaryButton from '../components/widgets/PrimaryButton/PrimaryButton';
 import ViewAllPatients from './ViewAllPatients';
 import AddPatient from './AddPatient';
-import ViewProfile from './ViewProfile';
+import { useNavigate } from 'react-router-dom';
 import Footer from '../components/widgets/Footer/Footer';
 import UserProfile from '../components/widgets/UserProfile/UserProfile';
 
@@ -16,6 +16,8 @@ function Home() {
     viewProfile: 'unactive',
   });
 
+  const navigate = useNavigate();
+
   const handleButtonClick = (buttonKey) => {
     const newButtonStates = {
       viewPatients: 'unactive',
@@ -24,6 +26,10 @@ function Home() {
       [buttonKey]: 'active',
     };
     setButtonStates(newButtonStates);
+  };
+
+  const handleViewProfile = () => {
+    navigate('/viewProfile');
   };
 
   const buttonColumnStyle = {
@@ -56,25 +62,14 @@ function Home() {
   };
 
   // Define user related objects
-  const { user, logOut } = UserAuth();
+  const { user } = UserAuth();
   console.log(user.displayName);
-
-  const handleSignOut = async () => {
-    try {
-      await logOut();
-      console.log('sign out sucessful');
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   return (
     <>
       <div style={topBarWrapper}>
         <TopNavigationBar />
-        {user ? (
-          <UserProfile name={user.displayName} logoutAction={handleSignOut} />
-        ) : null}
+        {user ? <UserProfile /> : null}
       </div>
       <div style={outerWrapperStyle}>
         <div style={buttonColumnStyle}>
@@ -90,14 +85,13 @@ function Home() {
           />
           <PrimaryButton
             text={'View Profile'}
-            state={buttonStates.viewProfile}
-            action={() => handleButtonClick('viewProfile')}
+            // state={buttonStates.viewProfile}
+            action={() => handleViewProfile}
           />
         </div>
         <div style={displayContainer}>
           {buttonStates.viewPatients === 'active' && <ViewAllPatients />}
           {buttonStates.addPatient === 'active' && <AddPatient />}
-          {buttonStates.viewProfile === 'active' && <ViewProfile />}
         </div>
       </div>
       <Footer />

@@ -3,13 +3,14 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './routes/Home';
 import LandingPage from './routes/LandingPage';
 import DocBotPage from './routes/DocBotPage';
-import Help from './routes/Help';
+import HelpPage from './routes/HelpPage';
 import About from './routes/About';
 import LoginPage from './routes/LoginPage';
 import SignUpPage from './routes/SignUpPage';
 import PatientDetails from './routes/PatientDetails';
 import ProtectedRoute from './routes/ProtectedRoute';
 import { AuthContextProvider } from './components/auth/AuthContext';
+import ViewProfile from './routes/ViewProfile';
 
 function main() {
   return (
@@ -22,9 +23,10 @@ function main() {
             <Route path="/home" element={<ProtectedRoute component={Home} />} />
             <Route path="/docBot" element={<DocBotPage />} />
             <Route path="/about" element={<About />} />
-            <Route path="/help" element={<Help />} />
+            <Route path="/help" element={<HelpPage />} />
             <Route path="/details" element={<PatientDetails />} />
             <Route path="/signUp" element={<SignUpPage />} />
+            <Route path="/viewProfile" element={<ViewProfile />} />
           </Routes>
         </div>
       </Router>

@@ -1,6 +1,10 @@
 import React from 'react';
+import { UserAuth } from '../components/auth/AuthContext';
+import UserProfile from '../components/widgets/UserProfile/UserProfile';
 import { Typography } from '@mui/material';
 import Dropdown from '../components/widgets/Dropdown/Dropdown';
+import BackButton from '../components/widgets/BackButton/BackButton';
+import TopNavigationBar from '../components/widgets/TopNavigationBar/TopNavigationBar';
 function ViewProfile() {
   // Sample data
   const doctorDetails = {
@@ -29,14 +33,47 @@ function ViewProfile() {
     gap: '1rem',
     paddingTop: '2rem',
   };
+
+  const topBarWrapper = {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingRight: '2rem',
+  };
+
+  const mainWrapper = {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '80%',
+    paddingLeft: '20rem',
+    paddingTop: '5rem',
+  };
+
+  const titleWrapper = {
+    display: 'flex',
+    flexDirection: 'row',
+    padding: '1rem',
+  };
+
+  const { user } = UserAuth();
   return (
     <>
-      <Typography varient="h1" style={titleStyle}>
-        Viewing full details for {name}
-      </Typography>
-      <div style={dropdownContainerStyle}>
-        <Dropdown title={'View Doctor Details'} data={doctorDetails} />
-        <Dropdown title={'View Assigned Patients'} data={assignedPatients} />
+      <div style={topBarWrapper}>
+        <TopNavigationBar />
+        {user ? <UserProfile /> : null}
+      </div>
+      <div style={mainWrapper}>
+        <div style={titleWrapper}>
+          <BackButton goBackPath={'/home'} />
+          <Typography varient="h1" style={titleStyle}>
+            Viewing full details for {name}
+          </Typography>
+        </div>
+        <div style={dropdownContainerStyle}>
+          <Dropdown title={'View Doctor Details'} data={doctorDetails} />
+          <Dropdown title={'View Assigned Patients'} data={assignedPatients} />
+        </div>
       </div>
     </>
   );
