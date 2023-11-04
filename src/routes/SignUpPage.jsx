@@ -11,6 +11,8 @@ import { auth } from '../firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import AlertBox from '../components/widgets/AlertBox/AlertBox';
+import { ref, push, database } from '../firebase';
+import { child, set } from '@firebase/database';
 
 function SignUpPage() {
   const [email, setEmail] = useState('');
@@ -134,11 +136,33 @@ function SignUpPage() {
       return;
     }
 
+    //Function to push user info to database under 
+    const addUserInfoToFirebase = (userInfo, uid) => {
+      const dbRef = ref(database, 'doctors'); //pushes to doctor db
+      console.log(dbRef);
+      set(child(dbRef, uid), userInfo); //sets info in db to given user info
+    };
+
+
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         console.log(userCredential);
         navigate('/home');
         console.log(inputValues);
+        //Creates const userInfo
+        const userInfo = {
+          forename: inputValues.forename,
+          middleName: inputValues.middleName,
+          surname: inputValues.surname,
+          email: inputValues.email,
+          telephone: inputValues.telephone,
+          gpIdNumber: inputValues.gpIdNumber,
+          personalAddress: inputValues.personalAddress,
+          officeAddress: inputValues.officeAddress,
+        };
+
+        //pushes userInfo to firebase database
+        addUserInfoToFirebase(userInfo, userCredential.user.uid);
       })
       .catch((error) => {
         console.log(error);
