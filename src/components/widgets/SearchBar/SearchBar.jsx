@@ -11,7 +11,6 @@ const SearchBar = ({ options, onSearch }) => {
     setInputValue(value);
     onSearch(value);
   };
-  console.log(options);
   return (
     <Autocomplete
       freeSolo
@@ -37,7 +36,6 @@ const SearchBar = ({ options, onSearch }) => {
               minWidth: '600px',
             },
           }}
-          // Disables autofilling from Google Chrome
           name={`random_${Math.random()}`}
         />
       )}

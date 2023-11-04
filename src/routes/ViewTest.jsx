@@ -4,25 +4,14 @@ import SearchBar from '../components/widgets/SearchBar/SearchBar';
 import PatientOverviewWidget from '../components/widgets/PatientOverviewWidget/PatientOverviewWidget';
 import Grid from '@mui/system/Unstable_Grid/Grid';
 
-function ViewAllPatients() {
+function ViewTest() {
   const doctorID = '1234567890';
-  const apiUrl = `https://healthai-40b47-default-rtdb.europe-west1.firebasedatabase.app/patients.json?Authorization=Bearerhttps&orderBy=%22doctor%22&equalTo="1234567890"`;
+  const apiUrl = `https://healthai-40b47-default-rtdb.europe-west1.firebasedatabase.app/patients.json?Authorization=Bearerhttps&orderBy="Doctor"&equalTo="${doctorID}"`;
 
-  // State
   const [patientsData, setPatientsData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [search, setSearch] = useState('');
 
-  const handleSearch = (value) => {
-    setSearch(value);
-  };
-
-  const filteredPatientsData = patientsData.filter((patient) => {
-    const patient_name = patient.first_name + ' ' + patient.last_name;
-    return patient_name.toLowerCase().includes(search.toLowerCase());
-  });
-
-  // Fetch doctor's patient data
+  // Fetch patients test result data 
   const fetchData = async () => {
     try {
       const response = await fetch(apiUrl);
@@ -41,14 +30,9 @@ function ViewAllPatients() {
     }
   };
 
-  // Fetch data when the component mounts
   useEffect(() => {
     fetchData();
-  }, []);
-
-  useEffect(() => {
-    console.log('Updated patientsData:', patientsData);
-  }, [patientsData]);
+  }, []); // Fetch data when the component mounts
 
   // Styling
   const titleStyle = {
@@ -75,36 +59,23 @@ function ViewAllPatients() {
     overflowY: 'auto',
     overflowX: 'hidden',
   };
-
   return (
     <>
       <div style={topBarStyle}>
         <Typography varient="h1" style={titleStyle}>
-          View Patients
+          View Test Results
         </Typography>
-        {isLoading ? (
-          <p>Loading...</p> // You can replace this with a loading indicator
-        ) : (
-          <SearchBar
-            options={patientsData.map(
-              (patient) => `${patient.first_name} ${patient.last_name}`
-            )}
-            onSearch={handleSearch}
-          />
-        )}
       </div>
       <div style={dataContainerStyle}>
-        {isLoading ? (
-          <p>Loading...</p> // You can replace this with a loading indicator
-        ) : patientsData.length === 0 ? (
-          <p>No patients available</p>
+        {patientsData.length === 0 ? (
+          <p>No test results available</p>
         ) : (
           <Grid container spacing={2}>
-            {filteredPatientsData.map((patient, index) => (
+            {patientsData.map((patient, index) => (
               <Grid item xs={4} key={index}>
                 <PatientOverviewWidget
-                  name={`${patient.first_name} ${patient.last_name}`}
-                  id={patient.patID}
+                  name={patient.Name}
+                  id={patient.PatientID}
                 />
               </Grid>
             ))}
@@ -115,4 +86,4 @@ function ViewAllPatients() {
   );
 }
 
-export default ViewAllPatients;
+export default ViewTest;

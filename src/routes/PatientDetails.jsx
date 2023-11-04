@@ -2,24 +2,23 @@ import React, { useState } from 'react';
 import { UserAuth } from '../components/auth/AuthContext';
 import TopNavigationBar from '../components/widgets/TopNavigationBar/TopNavigationBar';
 import PrimaryButton from '../components/widgets/PrimaryButton/PrimaryButton';
-import ViewAllPatients from './ViewAllPatients';
-import AddPatient from './AddPatient';
-import ViewProfile from './ViewProfile';
+import ViewPatientDetails from './ViewPatientDetails';
+import ViewTest from './ViewTest';
+import BackButton from '../components/widgets/BackButton/BackButton';
 import Footer from '../components/widgets/Footer/Footer';
+import PatientOverviewWidget from '../components/widgets/PatientOverviewWidget/PatientOverviewWidget';
 
-function Home() {
-  // Manage state of button, including default state
+function PatientDetails() {
+  // Manage state of buttons, including default state
   const [buttonStates, setButtonStates] = useState({
-    viewPatients: 'active',
-    addPatient: 'unactive',
-    viewProfile: 'unactive',
+    viewPatientDetails: 'active',
+    viewTest: 'unactive', // Use "viewTest" as the state key
   });
 
   const handleButtonClick = (buttonKey) => {
     const newButtonStates = {
-      viewPatients: 'unactive',
-      addPatient: 'unactive',
-      viewProfile: 'unactive',
+      viewPatientDetails: 'unactive',
+      viewTest: 'unactive',
       [buttonKey]: 'active',
     };
     setButtonStates(newButtonStates);
@@ -36,7 +35,6 @@ function Home() {
   const outerWrapperStyle = {
     display: 'flex',
     flexDirection: 'row',
-    marginBottom: '9rem',
   };
 
   const displayContainer = {
@@ -46,7 +44,7 @@ function Home() {
     paddingTop: '1rem',
   };
 
-  // Define user related objects
+  // Define user-related objects
   const { user, logOut } = UserAuth();
 
   const handleSignOut = async () => {
@@ -61,34 +59,33 @@ function Home() {
     <>
       <TopNavigationBar />
       {user ? <button onClick={handleSignOut}>Logout</button> : null}
+      <BackButton/>
       <div style={outerWrapperStyle}>
-        <div style={buttonColumnStyle}>
+
+        <div style={buttonColumnStyle}> 
+        <PatientOverviewWidget/>
           <PrimaryButton
-            text={'View Patients'}
-            state={buttonStates.viewPatients}
-            action={() => handleButtonClick('viewPatients')}
+            text={'View Details'}
+            state={buttonStates.viewPatientDetails}
+            action={() => handleButtonClick('viewPatientDetails')}
           />
           <PrimaryButton
-            text={'Add Patient'}
-            state={buttonStates.addPatient}
-            action={() => handleButtonClick('addPatient')}
-          />
-          <PrimaryButton
-            text={'View Profile'}
-            state={buttonStates.viewProfile}
-            action={() => handleButtonClick('viewProfile')}
+            text={'View Tests'}
+            state={buttonStates.viewTest} // Use "viewTest" as the state key
+            action={() => handleButtonClick('viewTest')}
           />
         </div>
-        <Loader />
         <div style={displayContainer}>
-          {buttonStates.viewPatients === 'active' && <ViewAllPatients />}
-          {buttonStates.addPatient === 'active' && <AddPatient />}
-          {buttonStates.viewProfile === 'active' && <ViewProfile />}
+          {buttonStates.viewPatientDetails === 'active' && <ViewPatientDetails />}
+          {buttonStates.viewTest === 'active' && <ViewTest />}
         </div>
       </div>
       <Footer />
-      <div></div>
+      <div>
+        
+      </div>
     </>
   );
 }
-export default Home;
+
+export default PatientDetails;
