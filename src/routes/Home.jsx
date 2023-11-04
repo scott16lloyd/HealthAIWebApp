@@ -79,7 +79,6 @@ function Home() {
             action={() => handleButtonClick('viewProfile')}
           />
         </div>
-        <Loader />
         <div style={displayContainer}>
           {buttonStates.viewPatients === 'active' && <ViewAllPatients />}
           {buttonStates.addPatient === 'active' && <AddPatient />}
