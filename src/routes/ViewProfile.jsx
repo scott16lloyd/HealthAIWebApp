@@ -5,6 +5,10 @@ import { Typography } from '@mui/material';
 import Dropdown from '../components/widgets/Dropdown/Dropdown';
 import BackButton from '../components/widgets/BackButton/BackButton';
 import TopNavigationBar from '../components/widgets/TopNavigationBar/TopNavigationBar';
+import { database } from '../firebase';
+import { ref } from '../firebase';
+import 'firebase/database';
+
 function ViewProfile() {
   const id = '5';
   const apiURL = `https://healthai-40b47-default-rtdb.europe-west1.firebasedatabase.app/doctors.json?Authorization=Bearer Lv0Ps3n1nkNuSjvIolRnRhCC1UMnasT4njYp4gVJ&orderBy="docID"&equalTo=${id}`;
@@ -14,6 +18,19 @@ function ViewProfile() {
   const [isLoading, setIsLoading] = useState(true);
 
   const assignedPatients = ['Tom', 'John', 'Sean', 'Paul'];
+
+  const uid = 'g2wnqB4iOFYMlIMESBCPzB7Qwix1';
+  const userRef = ref(`/users/${uid}`);
+
+  userRef
+    .once('value')
+    .then((snapshot) => {
+      const userData = snapshot.val();
+      console.log(userData);
+    })
+    .catch((error) => {
+      console.error('Error accessing user data:', error);
+    });
 
   const fetchData = async () => {
     try {
@@ -85,7 +102,7 @@ function ViewProfile() {
   };
 
   const { user } = UserAuth();
-  console.log(user);
+  console.log(user.gpIdNumber);
   return (
     <>
       <div style={topBarWrapper}>
