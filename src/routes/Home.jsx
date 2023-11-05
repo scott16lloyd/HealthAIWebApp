@@ -28,10 +28,6 @@ function Home() {
     setButtonStates(newButtonStates);
   };
 
-  const handleViewProfile = () => {
-    navigate('/viewProfile');
-  };
-
   const buttonColumnStyle = {
     display: 'flex',
     flexDirection: 'column',
@@ -63,7 +59,6 @@ function Home() {
 
   // Define user related objects
   const { user } = UserAuth();
-  console.log(user.displayName);
 
   return (
     <>
@@ -83,11 +78,7 @@ function Home() {
             state={buttonStates.addPatient}
             action={() => handleButtonClick('addPatient')}
           />
-          <PrimaryButton
-            text={'View Profile'}
-            // state={buttonStates.viewProfile}
-            action={() => handleViewProfile}
-          />
+          <PrimaryButton text={'View Profile'} to={'/viewProfile'} />
         </div>
         <div style={displayContainer}>
           {buttonStates.viewPatients === 'active' && <ViewAllPatients />}
