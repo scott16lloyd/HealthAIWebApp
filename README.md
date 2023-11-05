@@ -10,6 +10,6 @@ Once a **doctor** has successfully registered with our application, they can log
 
 ### Security
 
-**Doctors** ***MUST*** provide details such as **GP ID**, **Office Address** and **Office Telephone** to confirm they are a registered practitioner. Otherwise, a user cannot be created and use of our applicatin will not be granted. 
+**Doctors** ***MUST*** provide details such as **GP ID**, **Office Address** and **Office Telephone** to confirm they are a registered practitioner. Otherwise, a user cannot be created and use of our application will not be granted. 
 
 Our application also ensures that **doctors** have access to ***only*** their own **patients**, preventing **doctors** from viewing the **patients** of other **doctors**
