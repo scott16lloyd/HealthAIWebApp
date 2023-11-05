@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Avatar, Typography } from '@mui/material';
+import { Card, Avatar, Typography, ButtonBase } from '@mui/material';
 
 function stringToColor(string) {
   if (string) {
@@ -54,31 +54,48 @@ function PatientOverviewWidget({ name, id }) {
     height: '100%',
   };
 
+  const buttonStyle
+
   return (
-    <Card
-      size="md"
-      variant="outlined"
-      sx={{
-        width: 320,
-        height: 150,
-        borderRadius: 5,
-        backgroundColor: '#F9F9F9',
-        display: 'flex',
-      }}
-    >
-      <div style={avatarContainerStyles}>
-        <Avatar
-          style={{ height: '80px', width: '80px', fontSize: '2rem' }}
-          variant="outlined"
-          alt="Default Profile Image"
-          {...stringAvatar(name)}
-        />
-      </div>
-      <div style={textContainerStyles}>
-        <Typography sx={{ fontSize: '2rem' }}>{name}</Typography>
-        <Typography sx={{ fontSize: '1.2rem' }}>ID: {id}</Typography>
-      </div>
-    </Card>
+    <ButtonBase sx={{ borderRadius: 5 }}>
+      <Card
+        size="md"
+        variant="outlined"
+        sx={{
+          width: 320,
+          height: 150,
+          borderRadius: 5,
+          backgroundColor: '#F9F9F9',
+          display: 'flex',
+        }}
+      >
+        <div style={avatarContainerStyles}>
+          <Avatar
+            style={{ height: '80px', width: '80px', fontSize: '2rem' }}
+            variant="outlined"
+            alt="Default Profile Image"
+            {...stringAvatar(name)}
+          />
+        </div>
+        <div style={textContainerStyles}>
+          <Typography
+            sx={{
+              fontSize: '2rem',
+            }}
+            style={{ textAlign: 'left' }}
+          >
+            {name}
+          </Typography>
+          <Typography
+            sx={{
+              fontSize: '1.2rem',
+            }}
+          >
+            ID: {id}
+          </Typography>
+        </div>
+      </Card>
+    </ButtonBase>
   );
 }
 
