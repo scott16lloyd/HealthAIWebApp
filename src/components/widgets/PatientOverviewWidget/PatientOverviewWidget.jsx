@@ -54,10 +54,12 @@ function PatientOverviewWidget({ name, id }) {
     height: '100%',
   };
 
-  const buttonStyle
-
   return (
-    <ButtonBase sx={{ borderRadius: 5 }}>
+    <ButtonBase
+      sx={{
+        borderRadius: 5,
+      }}
+    >
       <Card
         size="md"
         variant="outlined"
@@ -67,6 +69,14 @@ function PatientOverviewWidget({ name, id }) {
           borderRadius: 5,
           backgroundColor: '#F9F9F9',
           display: 'flex',
+          transition: '0.3s', // Optional: Add a transition for smooth hover effect
+          '&:hover': {
+            backgroundColor: 'rgba(0, 0, 0, 0.1)',
+          },
+        }}
+        style={{
+          boxShadow: '2px 2px 4px 0px rgba(0, 0, 0, 0.10)',
+          backdropFilter: 'blur(1.5px)',
         }}
       >
         <div style={avatarContainerStyles}>

@@ -11,6 +11,7 @@ import PatientDetails from './routes/PatientDetails';
 import ProtectedRoute from './routes/ProtectedRoute';
 import { AuthContextProvider } from './components/auth/AuthContext';
 import ViewProfile from './routes/ViewProfile';
+import ViewPatientScreen from './routes/ViewPatientScreen';
 
 function main() {
   return (
@@ -27,6 +28,10 @@ function main() {
             <Route path="/details" element={<PatientDetails />} />
             <Route path="/signUp" element={<SignUpPage />} />
             <Route path="/viewProfile" element={<ViewProfile />} />
+            <Route
+              path="/viewPatientDetails/:patID"
+              element={<ViewPatientScreen />}
+            />
           </Routes>
         </div>
       </Router>

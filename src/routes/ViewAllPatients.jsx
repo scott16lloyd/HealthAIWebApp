@@ -3,9 +3,13 @@ import React, { useEffect, useState } from 'react';
 import SearchBar from '../components/widgets/SearchBar/SearchBar';
 import PatientOverviewWidget from '../components/widgets/PatientOverviewWidget/PatientOverviewWidget';
 import Grid from '@mui/system/Unstable_Grid/Grid';
+import { UserAuth } from '../components/auth/AuthContext';
+import { Link } from 'react-router-dom';
 
 function ViewAllPatients() {
-  const doctorID = '1234567890';
+  const { user } = UserAuth();
+  const doctorID = user.uid;
+  console.log(doctorID);
   const apiUrl = `https://healthai-40b47-default-rtdb.europe-west1.firebasedatabase.app/patients.json?Authorization=Bearerhttps&orderBy=%22doctor%22&equalTo="1234567890"`;
 
   // State
@@ -102,10 +106,12 @@ function ViewAllPatients() {
           <Grid container spacing={2}>
             {filteredPatientsData.map((patient, index) => (
               <Grid item xs={4} key={index}>
-                <PatientOverviewWidget
-                  name={`${patient.first_name} ${patient.last_name}`}
-                  id={patient.patID}
-                />
+                <Link to={`/viewPatientDetails/${patient.patID}`} key={index}>
+                  <PatientOverviewWidget
+                    name={`${patient.first_name} ${patient.last_name}`}
+                    id={patient.patID}
+                  />
+                </Link>
               </Grid>
             ))}
           </Grid>
