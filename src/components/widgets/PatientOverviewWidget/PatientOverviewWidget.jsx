@@ -44,6 +44,7 @@ function PatientOverviewWidget({ name, id }) {
     alignItems: 'center',
     height: '100%',
     width: '40%',
+    paddingLeft: '1rem',
   };
 
   const textContainerStyles = {
@@ -52,6 +53,7 @@ function PatientOverviewWidget({ name, id }) {
     justifyContent: 'center',
     alignItems: 'flex-start',
     height: '100%',
+    paddingLeft: '1rem',
   };
 
   return (
@@ -59,11 +61,18 @@ function PatientOverviewWidget({ name, id }) {
       size="md"
       variant="outlined"
       sx={{
-        width: 320,
+        width: {
+          xs: 160,
+          sm: 200,
+          md: 240,
+          lg: 280,
+          xl: 320,
+        },
         height: 150,
         borderRadius: 5,
         backgroundColor: '#F9F9F9',
         display: 'flex',
+        padding: '0.2rem',
       }}
     >
       <div style={avatarContainerStyles}>
