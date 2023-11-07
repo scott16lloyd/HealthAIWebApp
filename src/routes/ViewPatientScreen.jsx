@@ -9,6 +9,8 @@ import { useParams } from 'react-router-dom';
 import { database } from '../firebase';
 import { ref, get } from 'firebase/database';
 import BackButton from '../components/widgets/BackButton/BackButton';
+import ViewTestResults from './ViewTestResults';
+import ViewFullDetails from './ViewFullDetails';
 
 function ViewPatientScreen() {
   const [isLoading, setIsLoading] = useState(true);
@@ -89,11 +91,14 @@ function ViewPatientScreen() {
     gap: '1rem',
     margin: '2rem',
     paddingTop: '3rem',
+    marginLeft: '5%',
   };
 
   const rightColumnStyle = {
     display: 'flex',
     flexDirection: 'column',
+    width: '50%',
+    marginLeft: '10%',
   };
 
   const outerDivStyle = {
@@ -106,7 +111,6 @@ function ViewPatientScreen() {
     flexDirection: 'row',
     padding: '1rem',
   };
-
   return (
     <>
       <div style={topBarWrapper}>
@@ -137,10 +141,19 @@ function ViewPatientScreen() {
         <div style={rightColumnStyle}>
           <div style={textButtonWrapper}>
             <BackButton />
-            <Typography varient="h1" style={titleStyle}>
-              Viewing Patient Details
-            </Typography>
+            {buttonStates.viewFullDetails === 'active' && (
+              <Typography variant="h1" style={titleStyle}>
+                Viewing Patient Details
+              </Typography>
+            )}
+            {buttonStates.viewTestResults === 'active' && (
+              <Typography variant="h1" style={titleStyle}>
+                Viewing Test History
+              </Typography>
+            )}
           </div>
+          {buttonStates.viewFullDetails === 'active' && <ViewFullDetails />}
+          {buttonStates.viewTestResults === 'active' && <ViewTestResults />}
         </div>
       </div>
     </>

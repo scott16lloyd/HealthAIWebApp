@@ -25,8 +25,8 @@ function TestHistoryWidget({ date }) {
         variant="outlined"
         sx={{
           backgroundColor: 'rgba(217,217,217,0.4)',
-          width: 450,
-          height: 70,
+          width: '100%',
+          height: 85,
           borderRadius: 5,
           paddingX: 2,
           display: 'flex',
@@ -52,8 +52,8 @@ function TestHistoryWidget({ date }) {
               key={index}
               variant="outlined"
               sx={{
-                width: '60px',
-                height: '60px',
+                width: '70px',
+                height: '70px',
                 borderRadius: 4,
                 marginLeft: index !== 0 ? '0.5rem' : 0,
               }}
