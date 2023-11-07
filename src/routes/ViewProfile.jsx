@@ -35,7 +35,6 @@ function ViewProfile() {
         const userSnapshot = await get(userRef);
         if (userSnapshot.exists()) {
           const userData = userSnapshot.val();
-          console.log('USER DATA:', userData);
           const gpIdNumber = userData.gpIdNumber;
           if (userData) {
             setDoctorData({
@@ -160,7 +159,7 @@ function ViewProfile() {
               </Typography>
             ) : (
               <Typography variant="h1" style={titleStyle}>
-                Viewing full details for {user.displayName}
+                Viewing full details for {doctorData.name}
               </Typography>
             )}
           </div>
