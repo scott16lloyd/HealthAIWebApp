@@ -6,12 +6,16 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
 import AlertBox from '../components/widgets/AlertBox/AlertBox';
+import { auth } from '../firebase';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { ref, database } from '../firebase';
+import { child, set } from '@firebase/database';
 
-import { getFirestore, collection, addDoc } from 'firebase/firestore'; 
+
 function AddPatient() {
   const navigate = useNavigate();
-  const db = getFirestore(); // Initialize Firestore
-
+  
+  const [email, setEmail] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [inputError, setInputError] = useState(false);
   const [inputValues, setInputValues] = useState({
@@ -22,6 +26,23 @@ function AddPatient() {
     telephone: '',
     PPSNumber: '',
   });
+
+  const isNameValid = (name) => {
+    const nameRegex = /^[A-Za-z\s]+$/;
+    return nameRegex.test(name);
+  };
+  const isPhoneNumberValid = (telephone) => {
+    const phoneRegex = /^\d{10}$/; // For a 10-digit phone number
+    return phoneRegex.test(telephone);
+  };
+  const isEmailValid = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+  const isPPSValid = (PPS) => {
+    const PPSRegex = /^\d{7}[A-Za-z]$/; // Matches 7 digits followed by 1 letter
+    return PPSRegex.test(PPS);
+  };
 
   const handleInputChange = (field) => (event) => {
     const value = event.target.value;
@@ -35,12 +56,14 @@ function AddPatient() {
     });
   };
 
-  const createAccount = (e) => {
+  const createPatient = (e) => {
     e.preventDefault();
 
-    // Validation code here (same as your previous code)
-
-    // Now, if all validation checks pass, you can send the data to Firestore
+    const isForenameInputValid = isNameValid(inputValues.forename);
+    const isSurnameInputValid = isNameValid(inputValues.surname);
+    const isEmailAddressInputValid = isEmailValid(inputValues.email);
+    const isPhoneNumberInputValid = isPhoneNumberValid(inputValues.telephone);
+    const isPPSInputValid = isPPSValid(inputValues.PPSNumber);
 
     const userData = {
       forename: inputValues.forename,
@@ -51,19 +74,92 @@ function AddPatient() {
       PPSNumber: inputValues.PPSNumber,
     };
 
-    // Add the user data to Firestore
-    addDoc(collection(db, 'patients'), userData) // Replace 'patients' with your Firestore collection name
-      .then(() => {
-        console.log('Patient data added to Firestore successfully.');
-        navigate('/home');
+    if (!isForenameInputValid) {
+      setErrorMessage('Please enter a valid name.');
+      return;
+    } else if (!isSurnameInputValid) {
+      setErrorMessage('Please enter a valid surname.');
+      return;
+    } else if (!isEmailAddressInputValid) {
+      setErrorMessage('Please enter a valid email.');
+      return;
+    } else if (!isPhoneNumberInputValid) {
+      setErrorMessage('Please enter a valid phone number. e.g. 0831234567');
+      return;
+    } else if (!isPPSInputValid) {
+      setErrorMessage('PPS Number must be 7 digits followed by a single letter.');
+      return;
+    }
+
+   //Function to generate random password
+   function randomPasswordGen(number, symbol, length){
+
+    //Functions to create random characters
+    function getRandomChar() {
+      return String.fromCharCode(Math.floor(Math.random() * 26) + 97);
+    }
+    function getRandomNumber() {
+      return String.fromCharCode(Math.floor(Math.random() * 10) + 48);
+    }
+    function getRandomSymbol() {
+      const symbols = "!@#$*";
+      return symbols[Math.floor(Math.random() * symbols.length)];
+    }
+
+    let genPass = "";
+    let variationsCount = [number, symbol].length;
+    console.log(length);
+
+    //Loop runs to create password of desired length
+    for (let i = 0; i < length; i += variationsCount){
+      if (number) {
+        genPass += getRandomNumber();
+      }
+      if (symbol) {
+        genPass += getRandomSymbol();
+      }
+      genPass += getRandomChar();
+    }
+    const finalPass = genPass.slice(0, length);
+    return finalPass;
+  }
+
+  var password = randomPasswordGen(true, false, 15);
+  console.log(password);
+
+  createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        console.log(userCredential);
+        // Set the display name for the user
+        const displayName = inputValues.forename + ' ' + inputValues.surname;
+
+        updateProfile(user, {
+          displayName: displayName,
+        });
         console.log(inputValues);
+
+        //Creates const userInfo
+        const userInfo = {
+          forename: inputValues.forename,
+          middleName: inputValues.middleName,
+          surname: inputValues.surname,
+          email: inputValues.email,
+          telephone: inputValues.telephone,
+          address: inputValues.address,
+          PPSN: inputValues.PPSNumber
+        };
       })
       .catch((error) => {
-        console.error('Error adding patient data to Firestore: ', error);
-        setErrorMessage('An error occurred. Please try again.');
+        console.log(error);
+        if (error.code === 'auth/email-already-in-use') {
+          setErrorMessage('Email is already in use.');
+        } else {
+          // setErrorMessage('An error occurred. Please try again.');
+          // console.log(error);
+        }
       });
-  };
-
+    }
   const columnStyle = {
     display: 'flex',
     flexDirection: 'column',
@@ -179,6 +275,10 @@ function AddPatient() {
               required
               InputProps={{ disableUnderline: true }}
               value={inputValues.email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                handleInputChange('email')(e);
+              }}
               error={inputError['email']}
               helperText={inputError['email'] ? 'Email cannot be blank' : ''}
             />
@@ -217,7 +317,7 @@ function AddPatient() {
         <div style={buttonContainerStyle}>
           <PrimaryButton
             text={'Add Patient'}
-            action={createAccount}
+            action={createPatient}
             state={'active'}
           />{' '}
         </div>
