@@ -127,11 +127,17 @@ function AddPatient() {
   var password = randomPasswordGen(true, false, 15);
   console.log(password);
 
+  const addPatientInfoToFirebase = (userInfo, uid) => {
+    const dbRef = ref(database, 'patients'); //pushes to patient db
+    console.log(dbRef);
+    set(child(dbRef, uid), userInfo); //sets info in db to given user info
+  };
+
   createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
         console.log(userCredential);
-        // Set the display name for the user
+        //Set the display name for the user
         const displayName = inputValues.forename + ' ' + inputValues.surname;
 
         updateProfile(user, {
@@ -147,16 +153,29 @@ function AddPatient() {
           email: inputValues.email,
           telephone: inputValues.telephone,
           address: inputValues.address,
-          PPSN: inputValues.PPSNumber
+          PPSN: inputValues.PPSNumber,
+          doctor: "",
+          address: "",
+          verified: false,
+          gender: "",
+          //check this >> medicalRecords: "",
+          testHistory: "",
+          lungCancerRisk: 0,
+          heartDiseaseRisk: 0,
+          colonCancerRisk: 0,
         };
+
+         //pushes userInfo to firebase database
+         addPatientInfoToFirebase(userInfo, userCredential.user.uid);
+
       })
       .catch((error) => {
         console.log(error);
         if (error.code === 'auth/email-already-in-use') {
           setErrorMessage('Email is already in use.');
         } else {
-          // setErrorMessage('An error occurred. Please try again.');
-          // console.log(error);
+          setErrorMessage('An error occurred. Please try again.');
+          console.log(error);
         }
       });
     }
