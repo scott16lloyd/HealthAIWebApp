@@ -56,7 +56,6 @@ def generate_single_patient_data():
         'Max HR': Max_HR,
         'Heart Disease': -1
     }
-
     patient_data_lung = {
         'AGE': age,
         'GENDER': GENDER_MAPPING[sex],  
@@ -96,6 +95,7 @@ if __name__ == "__main__":
     heart_result = Heart.predict_heart_disease(imputed_heart, heart_model, heart_imputer)  # Use heart_imputer here
     lung_result = Lung.predict_lung_cancer(pd.DataFrame([single_patient_data_lung]), lung_model)
 
+    #Print results
     print("\nColon Cancer Data:")
     print(single_patient_data_colon)
     print("Colon Result:", colon_result)

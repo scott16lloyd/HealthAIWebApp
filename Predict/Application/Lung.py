@@ -47,17 +47,22 @@ print("Lung Accuracy:", accuracy)
 print("Lung Model training successful")
 
 def train_lung_cancer_model(data):
-    # Exclude non-numeric columns from imputation
+    #Exclude non-numeric columns from imputation
     numeric_columns = data.select_dtypes(include=['number'])
     imputer = SimpleImputer(strategy='mean')
+
     X_imputed = imputer.fit_transform(numeric_columns)
+
     model = RandomForestClassifier()
     model.fit(X_imputed, data['LUNG_CANCER'])
+
     return model
 
 def predict_lung_cancer(data, model):
+    
     data['GENDER'] = data['GENDER'].map({'M': 0, 'F': 1})
     numeric_columns = data.select_dtypes(include=['number'])
     prediction = model.predict(numeric_columns)
     probability = model.predict_proba(numeric_columns)
+
     return prediction, probability

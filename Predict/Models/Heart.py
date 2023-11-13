@@ -65,7 +65,7 @@ patient_data = {
     'Chest Pain Type': chest_pain_type,
     'Cholesterol': cholesterol,
     'Max HR': max_hr,
-    'Sex': sex
+    'Sex': sex,
 }
 
 patient_df = pd.DataFrame([patient_data])
@@ -80,7 +80,7 @@ patient_probability = model.predict_proba(patient_df)
 if patient_prediction[0] == 1:
     result = "High risk - Risk of Heart Disease: {:.2f}%.".format(patient_probability[0][1] * 100)
 else:
-    result = "Low risk - Risk of Heart Disease: {:.2f}%.".format(patient_probability[0][1] * 100)
+    result = "Low risk - Risk of Heart Disease: {:.2f}%.".format(patient_probability[0][0] * 100)
 
 print("\nPatient Data:")
 print(patient_df)

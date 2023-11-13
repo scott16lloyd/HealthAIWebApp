@@ -66,7 +66,7 @@ def predict_colon_cancer(data, model, imputer, gender_mapping):
     data['Sex'] = data['Sex'].map(gender_mapping)
     numeric_columns = data.select_dtypes(include=['number'])
 
-    # Impute missing values using the imputer
+    #Impute missing values using the imputer of numeric values
     numeric_columns_imputed = imputer.transform(numeric_columns)
 
     prediction = model.predict(numeric_columns_imputed)

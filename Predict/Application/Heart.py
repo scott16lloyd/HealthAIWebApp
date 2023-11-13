@@ -61,10 +61,10 @@ def train_heart_disease_model(data):
 
 def predict_heart_disease(data, model, imputer):
     
-    # Replace NaN values with the mean
-    data_imputed = pd.DataFrame(imputer.transform(data), columns=data.columns)
-    
-    numeric_columns = data_imputed.select_dtypes(include=['number'])
+    data['Sex'] = data['Sex'].map({'M': 0, 'F': 1})
+
+    numeric_columns = data.select_dtypes(include=['number'])
     prediction = model.predict(numeric_columns)  
     probability = model.predict_proba(numeric_columns)
+
     return prediction, probability
