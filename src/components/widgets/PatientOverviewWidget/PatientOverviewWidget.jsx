@@ -44,6 +44,7 @@ function PatientOverviewWidget({ name, id }) {
     alignItems: 'center',
     height: '100%',
     width: '40%',
+    paddingLeft: '1rem',
   };
 
   const textContainerStyles = {
@@ -52,60 +53,34 @@ function PatientOverviewWidget({ name, id }) {
     justifyContent: 'center',
     alignItems: 'flex-start',
     height: '100%',
+    paddingLeft: '1rem',
   };
 
   return (
-    <ButtonBase
+    <Card
+      size="md"
+      variant="outlined"
       sx={{
+        width: 320,
+        height: 150,
         borderRadius: 5,
+        backgroundColor: '#F9F9F9',
+        display: 'flex',
       }}
     >
-      <Card
-        size="md"
-        variant="outlined"
-        sx={{
-          width: 320,
-          height: 150,
-          borderRadius: 5,
-          backgroundColor: '#F9F9F9',
-          display: 'flex',
-          transition: '0.3s', // Optional: Add a transition for smooth hover effect
-          '&:hover': {
-            backgroundColor: 'rgba(0, 0, 0, 0.1)',
-          },
-        }}
-        style={{
-          boxShadow: '2px 2px 4px 0px rgba(0, 0, 0, 0.10)',
-          backdropFilter: 'blur(1.5px)',
-        }}
-      >
-        <div style={avatarContainerStyles}>
-          <Avatar
-            style={{ height: '80px', width: '80px', fontSize: '2rem' }}
-            variant="outlined"
-            alt="Default Profile Image"
-            {...stringAvatar(name)}
-          />
-        </div>
-        <div style={textContainerStyles}>
-          <Typography
-            sx={{
-              fontSize: '2rem',
-            }}
-            style={{ textAlign: 'left' }}
-          >
-            {name}
-          </Typography>
-          <Typography
-            sx={{
-              fontSize: '1.2rem',
-            }}
-          >
-            ID: {id}
-          </Typography>
-        </div>
-      </Card>
-    </ButtonBase>
+      <div style={avatarContainerStyles}>
+        <Avatar
+          style={{ height: '80px', width: '80px', fontSize: '2rem' }}
+          variant="outlined"
+          alt="Default Profile Image"
+          {...stringAvatar(name)}
+        />
+      </div>
+      <div style={textContainerStyles}>
+        <Typography sx={{ fontSize: '2rem' }}>{name}</Typography>
+        <Typography sx={{ fontSize: '1.2rem' }}>ID: {id}</Typography>
+      </div>
+    </Card>
   );
 }
 
