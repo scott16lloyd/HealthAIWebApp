@@ -3,26 +3,34 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './routes/Home';
 import LandingPage from './routes/LandingPage';
 import DocBotPage from './routes/DocBotPage';
-import Help from './routes/Help';
+import HelpPage from './routes/HelpPage';
 import About from './routes/About';
-import LoginPage from '../src/routes/LoginPage';
-import SignUp from '../src/routes/SignUp';
+import LoginPage from './routes/LoginPage';
+import SignUpPage from './routes/SignUpPage';
+import PatientDetails from './routes/PatientDetails';
+import ProtectedRoute from './routes/ProtectedRoute';
+import { AuthContextProvider } from './components/auth/AuthContext';
+import ViewProfile from './routes/ViewProfile';
 
 function main() {
   return (
-    <Router>
-      <div>
-        <Routes>
-          <Route index element={<LandingPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/docBot" element={<DocBotPage />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/help" element={<Help />} />
-          <Route path="/signUp" element={<SignUp />} />
-        </Routes>
-      </div>
-    </Router>
+    <AuthContextProvider>
+      <Router>
+        <div>
+          <Routes>
+            <Route index element={<LandingPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/home" element={<ProtectedRoute component={Home} />} />
+            <Route path="/docBot" element={<DocBotPage />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/help" element={<HelpPage />} />
+            <Route path="/details" element={<PatientDetails />} />
+            <Route path="/signUp" element={<SignUpPage />} />
+            <Route path="/viewProfile" element={<ViewProfile />} />
+          </Routes>
+        </div>
+      </Router>
+    </AuthContextProvider>
   );
 }
 

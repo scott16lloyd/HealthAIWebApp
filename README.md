@@ -1,70 +1,15 @@
-# Getting Started with Create React App
+# Application Description
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The **HealthAI Web Application** allows **doctors** to view their **patients** and all of their details with ease using our custom designed interface. **Doctors** will see their **patients** displayed in a *list* format, and from there can select the desired **patient** to view their info in more detail.
 
-## Available Scripts
+## Logging In/Signing Up
 
-In the project directory, you can run:
+**Doctors** must first sign up, requiring them to confirm information such as their **GP ID**, **Office Address** and **Office Telephone** to ensure only registered **doctors** can access this material.
 
-### `npm start`
+Once a **doctor** has successfully registered with our application, they can login by using the email and password they provided, or alternatively by using the "***Continue With Google***" option, assuming their login details are registered with Chrome.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Security
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+**Doctors** ***MUST*** provide details such as **GP ID**, **Office Address** and **Office Telephone** to confirm they are a registered practitioner. Otherwise, a user cannot be created and use of our application will not be granted. 
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Our application also ensures that **doctors** have access to ***only*** their own **patients**, preventing **doctors** from viewing the **patients** of other **doctors**

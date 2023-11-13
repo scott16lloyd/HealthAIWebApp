@@ -4,6 +4,7 @@ import Doctor from '../images/doctorImage.png';
 import { Box, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import PrimaryButton from '../components/widgets/PrimaryButton/PrimaryButton';
+import Footer from '../components/widgets/Footer/Footer';
 
 function LandingPage() {
   return (
@@ -18,7 +19,8 @@ function LandingPage() {
           justifyContent: 'space-between',
         }}
       >
-        <img alt="Doctor" src={Doctor} style={{ height: '100%' }}></img>
+        <img alt="Doctor" src={Doctor} style={{ maxHeight: '700px' }}></img>{' '}
+        {/* Adjust the maxHeight */}
         <Box
           sx={{
             display: 'flex',
@@ -48,15 +50,18 @@ function LandingPage() {
             to="/signUp"
             text={'Sign Up'}
             color={'rgba(217,217,217,0.4)'}
+            state={'active'}
           />
           <PrimaryButton
             component={Link}
             to="/login"
             text={'Login'}
             color={'rgba(217,217,217,0.4)'}
+            state={'active'}
           />
         </Box>
       </div>
+      <Footer />
     </>
   );
 }
