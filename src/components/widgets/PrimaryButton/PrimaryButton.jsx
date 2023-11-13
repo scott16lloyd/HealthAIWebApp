@@ -17,7 +17,7 @@ function PrimaryButton({ text, to, color, action, state }) {
   };
 
   const buttonStyle = {
-    width: '210px',
+    width: '240px',
     height: '50px',
     flexShrink: 0,
     margin: '0.8rem',

@@ -18,6 +18,7 @@ function ViewProfile() {
   // Log the current user
   const { user } = UserAuth();
   console.log(user);
+  console.log(user.displayName);
 
   // Get the current user's UID
   const userUid = user.uid;
@@ -34,11 +35,10 @@ function ViewProfile() {
         const userSnapshot = await get(userRef);
         if (userSnapshot.exists()) {
           const userData = userSnapshot.val();
-          console.log(userData);
           const gpIdNumber = userData.gpIdNumber;
           if (userData) {
             setDoctorData({
-              name: `${userData.forename} ${userData.surname}`,
+              name: `${user.displayName}`,
               gpID: `${userData.gpIdNumber}`,
               address: `${userData.officeAddress}`,
               phoneNumber: `${userData.telephone}`,

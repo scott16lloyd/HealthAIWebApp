@@ -11,7 +11,7 @@ function ViewTest() {
   const [patientsData, setPatientsData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch patients test result data 
+  // Fetch patients test result data
   const fetchData = async () => {
     try {
       const response = await fetch(apiUrl);

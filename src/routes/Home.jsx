@@ -59,6 +59,7 @@ function Home() {
 
   // Define user related objects
   const { user } = UserAuth();
+  console.log(user.displayName);
 
   return (
     <>

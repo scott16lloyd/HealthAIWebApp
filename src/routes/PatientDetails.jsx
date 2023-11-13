@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { UserAuth } from '../components/auth/AuthContext';
 import TopNavigationBar from '../components/widgets/TopNavigationBar/TopNavigationBar';
 import PrimaryButton from '../components/widgets/PrimaryButton/PrimaryButton';
-import ViewPatientDetails from './ViewPatientDetails';
+import ViewPatientDetails from './ViewPatientScreen';
 import ViewTest from './ViewTest';
 import BackButton from '../components/widgets/BackButton/BackButton';
 import Footer from '../components/widgets/Footer/Footer';
@@ -59,11 +59,10 @@ function PatientDetails() {
     <>
       <TopNavigationBar />
       {user ? <button onClick={handleSignOut}>Logout</button> : null}
-      <BackButton/>
+      <BackButton />
       <div style={outerWrapperStyle}>
-
-        <div style={buttonColumnStyle}> 
-        <PatientOverviewWidget/>
+        <div style={buttonColumnStyle}>
+          <PatientOverviewWidget />
           <PrimaryButton
             text={'View Details'}
             state={buttonStates.viewPatientDetails}
@@ -76,14 +75,14 @@ function PatientDetails() {
           />
         </div>
         <div style={displayContainer}>
-          {buttonStates.viewPatientDetails === 'active' && <ViewPatientDetails />}
+          {buttonStates.viewPatientDetails === 'active' && (
+            <ViewPatientDetails />
+          )}
           {buttonStates.viewTest === 'active' && <ViewTest />}
         </div>
       </div>
       <Footer />
-      <div>
-        
-      </div>
+      <div></div>
     </>
   );
 }
