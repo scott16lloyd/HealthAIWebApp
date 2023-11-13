@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Container, Typography, Grid, Paper } from '@mui/material';
 import UserProfile from '../components/widgets/UserProfile/UserProfile';
 import { UserAuth } from '../components/auth/AuthContext';
+import Photo from '../images/IMG_0405.png';
 import TopNavigationBar from '../components/widgets/TopNavigationBar/TopNavigationBar';
 import Footer from '../components/widgets/Footer/Footer';
 import BackButton from '../components/widgets/BackButton/BackButton';
@@ -18,6 +19,14 @@ const messageBoxStyle = {
 const aboutUsHeaderStyle = {
   paddingLeft: '20px',
 };
+
+const photoStyle = {
+  paddingBottom: '20px',
+  borderRadius: '10px', // Adjust the value for rounded corners
+  width: '100%', // Adjust the width as needed
+  height: 'auto', // Maintains aspect ratio
+  overflow: 'hidden',
+}
 
 const topBarWrapper = {
   display: 'flex',
@@ -97,7 +106,14 @@ function AboutUsPage() {
             </Paper>
           </Grid>
 
+          
+
           <Grid item xs={12} sm={6}>
+            <div style={photoStyle}>
+          <Paper elevation={3}>
+          <img src={Photo} alt="Description" style={{  oheight: 'auto', display: 'block' }} />
+          </Paper>
+          </div>
             <Paper elevation={3} style={messageBoxStyle}>
               <Typography variant="h6">Meet Our Team</Typography>
               <Typography>
@@ -122,6 +138,8 @@ function AboutUsPage() {
                 <a href="https://github.com/SamuelRoche">Sam Roche - GitHub</a>
                 <br></br>
                 Daniel Dennehy - Computer Systems B.Sc Honors
+                <br></br>
+                <a href="https://github.com/daniel-dennehy">Daniel Dennehy - GitHub</a>
               </Typography>
             </Paper>
             <br></br>
@@ -134,6 +152,9 @@ function AboutUsPage() {
                 regulations to ensure a safe and effective healthcare tool.
               </Typography>
             </Paper>
+
+
+            
           </Grid>
         </Grid>
       </Container>
