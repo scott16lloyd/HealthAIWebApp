@@ -1,15 +1,11 @@
 import React from 'react';
+import { Container, Paper } from '@mui/material';
 import TopNavigationBar from '../components/widgets/TopNavigationBar/TopNavigationBar';
 import BackButton from '../components/widgets/BackButton/BackButton';
-import {Container, Paper} from '@mui/material';
 import Footer from '../components/widgets/Footer/Footer';
 import Typography from '@mui/material/Typography';
 
 function HelpPage() {
-  const helpTextStyle = {
-    paddingLeft: '16px', // Adjust the padding value as needed
-  };
-
   const messageBoxStyle = {
     borderRadius: '11px',
     background:
@@ -17,6 +13,7 @@ function HelpPage() {
     boxShadow: '2px 2px 4px 0px rgba(0, 0, 0, 0.10)',
     backdropFilter: 'blur(1.5px)',
     padding: '1rem',
+    marginTop: '20px',
   };
   const aboutUsHeaderStyle = {
     paddingLeft: '20px',
@@ -29,39 +26,75 @@ function HelpPage() {
         <Typography variant="h4" gutterBottom style={aboutUsHeaderStyle}>
           <BackButton goBackPath={'/home'} /> HealthAI FAQ
         </Typography>
-     
-        {/** Help Content */}
-        <Typography variant="body1" style={{ marginTop: '20px' }}>
-          Welcome to our Help Page! We’re here to assist you. Below, you’ll find answers to commonly asked questions and information to guide you through our platform.
+
+        <Typography variant="body1">
+          Welcome to our Help Page! Below are answers to commonly asked questions to guide you through our platform.
         </Typography>
 
-     
-         
-
-        <div style={{ marginTop: '20px' }}>
-        
         <Paper elevation={3} style={messageBoxStyle}>
-  
-          <Typography variant="h5">Contact Support</Typography>
+          <Typography variant="h5">How do I create an account?</Typography>
           <Typography variant="body1">
-            If you can’t find the answers you need in our FAQs, our support team is here to help. You can reach out to us via email or phone.
+            To create an account, click on the 'Sign Up' button and follow the prompts to enter your details and create your login credentials.
           </Typography>
-          </Paper>
-        </div>
-    
+        </Paper>
 
-        {/** Additional information or resources */}
-        <div style={{ marginTop: '20px' }}>
         <Paper elevation={3} style={messageBoxStyle}>
-          <Typography variant="h5">Additional Resources</Typography>
+          <Typography variant="h5">How can I reset my password?</Typography>
           <Typography variant="body1">
-            Explore our blog or knowledge base for more tips, tutorials, and updates on our platform.
+            You can reset your password by clicking 'Forgot Password' on the login page and following the instructions sent to your registered email.
           </Typography>
-          </Paper>
-        </div>
+        </Paper>
+
+        <Paper elevation={3} style={messageBoxStyle}>
+          <Typography variant="h5">What subscriptions are available to Medical Professionals</Typography>
+          <Typography variant="body1">
+            There is no subscription for Medical Professionals, all the features are free.
+          </Typography>
+        </Paper>
+
+        <Paper elevation={3} style={messageBoxStyle}>
+          <Typography variant="h5">How do I contact support?</Typography>
+          <Typography variant="body1">
+            You can contact our support team via email at this link. <a href="mailto:your.email@example.com">
+             Email us
+          </a>
+          </Typography>
+        </Paper>
+
+        <Paper elevation={3} style={messageBoxStyle}>
+          <Typography variant="h5">How do I update my profile information?</Typography>
+          <Typography variant="body1">
+            You can update your profile by navigating to the 'Profile' section after logging in, where you'll find options to edit your information.
+          </Typography>
+        </Paper>
+
+        <Paper elevation={3} style={messageBoxStyle}>
+          <Typography variant="h5">What browsers are supported by our platform?</Typography>
+          <Typography variant="body1">
+            Our platform is optimized for the latest versions of Chrome, Firefox, Safari, bing and Edge. 
+          </Typography>
+        </Paper>
+
+        <Paper elevation={3} style={messageBoxStyle}>
+          <Typography variant="h5">Can I access my account from multiple devices?</Typography>
+          <Typography variant="body1">
+            Yes, you can access your account from multiple devices by logging in using your credentials.
+          </Typography>
+        </Paper>
+
+        <Paper elevation={3} style={messageBoxStyle}>
+          <Typography variant="h5">Is my data secure on the platform?</Typography>
+          <Typography variant="body1">
+            We prioritize data security and use encryption methods to safeguard your information. Your data is kept confidential and secure.
+          </Typography>
+        </Paper>
+
+
+        {/* Add more questions and answers as needed */}
+
       </Container>
-
-      <div></div>
+      <br></br>
+      <Footer />
     </>
   );
 }

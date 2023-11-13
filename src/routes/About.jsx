@@ -22,9 +22,9 @@ const aboutUsHeaderStyle = {
 
 const photoStyle = {
   paddingBottom: '20px',
-  borderRadius: '10px', // Adjust the value for rounded corners
-  width: '100%', // Adjust the width as needed
-  height: 'auto', // Maintains aspect ratio
+  borderRadius: '10px', 
+  width: '100%', 
+  height: 'auto',
   overflow: 'hidden',
 }
 
