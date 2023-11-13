@@ -25,7 +25,7 @@ heart_disease_df = pd.DataFrame.from_dict(heart_disease_data)
 
 heart_disease_df['Sex'] = heart_disease_df['Sex'].map({'M': 0, 'F': 1})
 
-X = heart_disease_df[['Age', 'BP', 'Chest pain type', 'Cholesterol', 'Max HR', 'Sex']]
+X = heart_disease_df.drop('Heart Disease', axis=1)
 y = heart_disease_df['Heart Disease']
 
 # Impute missing values with the mean
@@ -59,12 +59,16 @@ def train_heart_disease_model(data):
     return model, imputer
 
 
-def predict_heart_disease(data, model, imputer):
+def predict_heart_disease(data, model, imputer, gender_mapping):
     
-    data['Sex'] = data['Sex'].map({'M': 0, 'F': 1})
-
+    data['Sex'] = data['Sex'].map(gender_mapping)
     numeric_columns = data.select_dtypes(include=['number'])
-    prediction = model.predict(numeric_columns)  
-    probability = model.predict_proba(numeric_columns)
+    
+    #Impute missing values using the imputer of numeric values
+    numeric_columns_imputed = imputer.transform(numeric_columns)
+
+    
+    prediction = model.predict(numeric_columns_imputed)  
+    probability = model.predict_proba(numeric_columns_imputed)
 
     return prediction, probability

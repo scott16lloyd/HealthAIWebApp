@@ -27,8 +27,8 @@ colon_cancer_df = pd.DataFrame.from_dict(colon_cancer_data)
 colon_cancer_df['Sex'] = colon_cancer_df['Sex'].map({'M': 0, 'F': 1})
 colon_cancer_df['Colon Cancer'] = colon_cancer_df['Colon Cancer'].map({'NO': 0, 'YES': 1})
 
-X = colon_cancer_df.drop('Colon Cancer', axis=1)
-y = colon_cancer_df['Colon Cancer']
+X = colon_cancer_df.drop('Colon Cancer', axis=1) # Features
+y = colon_cancer_df['Colon Cancer'] # Target
 
 # Impute missing values with the mean
 imputer = SimpleImputer(strategy='mean')
@@ -48,7 +48,7 @@ print("Colon Model training successful")
 
 
 
-def train_colon_cancer_model(data, gender_mapping):
+def train_colon_cancer_model(data):
     
     numeric_columns = data.select_dtypes(include=['number'])
 

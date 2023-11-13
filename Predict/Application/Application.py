@@ -6,23 +6,23 @@ import Colon
 import Heart
 import Lung
 
-GENDER_MAPPING = {'M': 0, 'F': 1}
+GENDER_MAPPING = {"M": 0, "F": 1}
 
 # Function to generate random patient data
 def generate_single_patient_data():
     age = np.random.randint(30, 80)
     sex = np.random.choice(['M', 'F'])
-    alcohol = np.random.randint(0, 2)
-    bowel_problems = np.random.randint(0, 2)
-    diabetic = np.random.randint(0, 2)
-    rectal_bleeding = np.random.randint(0, 2)
-    smoking = np.random.randint(0, 2)
-    stomach_cramps = np.random.randint(0, 2)
-    tiredness = np.random.randint(0, 2)
-    weight_loss = np.random.randint(0, 2)
+    alcohol = np.random.randint(0, 1)
+    bowel_problems = np.random.randint(0, 1)
+    diabetic = np.random.randint(0, 1)
+    rectal_bleeding = np.random.randint(0, 1)
+    smoking = np.random.randint(0, 1)
+    stomach_cramps = np.random.randint(0, 1)
+    tiredness = np.random.randint(0, 1)
+    weight_loss = np.random.randint(0, 1)
 
     bp = np.random.randint(80, 200)
-    ChestPain = np.random.randint(1, 2)
+    ChestPain = np.random.randint(0, 1)
     Cholestrol = np.random.randint(100, 300)
     Max_HR = np.random.randint(60, 220)
 
@@ -81,19 +81,15 @@ if __name__ == "__main__":
     imputer = SimpleImputer(strategy='mean')
 
     #Train models
-    colon_model, colon_imputer = Colon.train_colon_cancer_model(pd.DataFrame([single_patient_data_colon]), GENDER_MAPPING)
+    colon_model, colon_imputer = Colon.train_colon_cancer_model(pd.DataFrame([single_patient_data_colon]))
     heart_model, heart_imputer = Heart.train_heart_disease_model(pd.DataFrame([single_patient_data_heart]))
-    lung_model = Lung.train_lung_cancer_model(pd.DataFrame([single_patient_data_lung]))
+    lung_model, lung_imputer = Lung.train_lung_cancer_model(pd.DataFrame([single_patient_data_lung]))
 
-    #Transform the heart disease patient data
-    single_patient_data_heart_imputed = pd.DataFrame([single_patient_data_heart])
-    X_heart = single_patient_data_heart_imputed[['Age', 'BP', 'Chest pain type', 'Cholesterol', 'Max HR', 'Sex']]
-    imputed_heart = pd.DataFrame(heart_imputer.fit_transform(X_heart), columns=X_heart.columns)
 
     #Make predictions for each model with the same patient data
     colon_result = Colon.predict_colon_cancer(pd.DataFrame([single_patient_data_colon]), colon_model, colon_imputer, GENDER_MAPPING)
-    heart_result = Heart.predict_heart_disease(imputed_heart, heart_model, heart_imputer)  # Use heart_imputer here
-    lung_result = Lung.predict_lung_cancer(pd.DataFrame([single_patient_data_lung]), lung_model)
+    heart_result = Heart.predict_heart_disease(pd.DataFrame([single_patient_data_heart]), heart_model, heart_imputer, GENDER_MAPPING)
+    lung_result = Lung.predict_lung_cancer(pd.DataFrame([single_patient_data_lung]), lung_model, lung_imputer, GENDER_MAPPING)
 
     #Print results
     print("\nColon Cancer Data:")
@@ -107,3 +103,6 @@ if __name__ == "__main__":
     print("\nLung Cancer Data:")
     print(single_patient_data_lung)
     print("Lung Result:", lung_result)
+
+
+    
