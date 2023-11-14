@@ -158,15 +158,14 @@ function AddPatient() {
           address: "",
           verified: false,
           gender: "",
-          //check this >> medicalRecords: "",
+          medicalRecords: "",
           testHistory: "",
-          lungCancerRisk: 0,
-          heartDiseaseRisk: 0,
-          colonCancerRisk: 0,
         };
 
          //pushes userInfo to firebase database
          addPatientInfoToFirebase(userInfo, userCredential.user.uid);
+
+         //add email code here
 
       })
       .catch((error) => {
