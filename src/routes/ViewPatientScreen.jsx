@@ -51,8 +51,12 @@ function ViewPatientScreen() {
         const userSnapshot = await get(patientRef);
         if (userSnapshot.exists()) {
           const patientData = userSnapshot.val();
+
+          // Convert object values to an array
+          const patientArray = Object.values(patientData);
+
           // Find the patient with the matching patID
-          const patient = patientData.find(
+          const patient = patientArray.find(
             (patient) => patient.patID === patIDNumber
           );
           setPatient(patient);
