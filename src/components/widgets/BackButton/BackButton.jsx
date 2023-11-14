@@ -22,6 +22,8 @@ function BackButton({ goBackPath }) {
         backgroundColor: '#D9D9D9',
         color: 'black',
         marginRight: '4rem',
+        width: '50px',
+        height: '50px',
       }}
     >
       <ArrowBackIcon />

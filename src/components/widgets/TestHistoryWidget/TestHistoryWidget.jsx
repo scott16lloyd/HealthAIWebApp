@@ -25,8 +25,8 @@ function TestHistoryWidget({ date }) {
         variant="outlined"
         sx={{
           backgroundColor: 'rgba(217,217,217,0.4)',
-          width: '100%',
-          height: 85,
+          width: '900px',
+          height: '100px',
           borderRadius: 5,
           paddingX: 2,
           display: 'flex',
@@ -41,8 +41,8 @@ function TestHistoryWidget({ date }) {
             alignItems: 'flex-start',
           }}
         >
-          <Typography variant="h6">View Test From</Typography>
-          <Typography variant="subtitle1" color={'#2187FF'}>
+          <Typography variant="h5">View Test From</Typography>
+          <Typography variant="h6" color={'#2187FF'}>
             {date}
           </Typography>
         </div>
@@ -52,8 +52,8 @@ function TestHistoryWidget({ date }) {
               key={index}
               variant="outlined"
               sx={{
-                width: '70px',
-                height: '70px',
+                width: '80px',
+                height: '80px',
                 borderRadius: 4,
                 marginLeft: index !== 0 ? '0.5rem' : 0,
               }}

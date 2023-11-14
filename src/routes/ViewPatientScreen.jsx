@@ -144,7 +144,7 @@ function ViewPatientScreen() {
         </div>
         <div style={rightColumnStyle}>
           <div style={textButtonWrapper}>
-            <BackButton />
+            <BackButton goBackPath={'/home'} />
             {buttonStates.viewFullDetails === 'active' && (
               <Typography variant="h1" style={titleStyle}>
                 Viewing Patient Details

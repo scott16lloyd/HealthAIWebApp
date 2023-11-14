@@ -17,7 +17,6 @@ function TargetAreaWidget({ cancerType, result }) {
     } else if (result >= 0 && result < 30) {
       color = 'rgba(0,221,115,0.5)';
     }
-    console.log(color);
     return color;
   }
 
@@ -56,19 +55,20 @@ function TargetAreaWidget({ cancerType, result }) {
       size="md"
       variant="outlined"
       sx={{
-        width: 300,
-        height: 100,
+        width: '80%',
+        height: 110,
         borderRadius: 5,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
+        padding: '1rem',
       }}
     >
       <Card
         variant="outlined"
         sx={{
-          width: '85px',
-          height: '85px',
+          width: '100px',
+          height: '100px',
           borderRadius: 5,
           marginLeft: '0.5rem',
         }}
@@ -83,20 +83,25 @@ function TargetAreaWidget({ cancerType, result }) {
         sx={{
           display: 'flex',
           backgroundColor: '#D9D9D9',
-          height: '40%',
+          height: '50%',
+          width: '50%',
           boxShadow: 'none',
           borderRadius: 3,
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
-        <Typography padding={1}>{cancerType}</Typography>
+        <Typography padding={1} variant="h5">
+          {cancerType}
+        </Typography>
       </Card>
       <Card
         variant="outlined"
         sx={{
           marginRight: '0.5rem',
           borderRadius: '50%',
-          width: '50px',
-          height: '50px',
+          width: '70px',
+          height: '70px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -104,7 +109,7 @@ function TargetAreaWidget({ cancerType, result }) {
           backgroundColor: resultColor(result),
         }}
       >
-        {result}%
+        <Typography variant="h6">{result}%</Typography>
       </Card>
     </Card>
   );
