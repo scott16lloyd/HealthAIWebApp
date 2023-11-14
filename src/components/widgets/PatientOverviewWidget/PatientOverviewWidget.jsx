@@ -68,7 +68,6 @@ function PatientOverviewWidget({ name, id }) {
           xl: 320,
         },
         height: 150,
-        borderRadius: 5,
         backgroundColor: '#F9F9F9',
         display: 'flex',
         padding: '0.2rem',
@@ -95,7 +94,11 @@ function PatientOverviewWidget({ name, id }) {
       >
         <div style={avatarContainerStyles}>
           <Avatar
-            style={{ height: '80px', width: '80px', fontSize: '2rem' }}
+            style={{
+              height: '80px',
+              width: '80px',
+              fontSize: '2rem',
+            }}
             variant="outlined"
             alt="Default Profile Image"
             {...stringAvatar(name)}

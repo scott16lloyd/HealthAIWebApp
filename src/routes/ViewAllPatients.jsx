@@ -78,6 +78,7 @@ function ViewAllPatients() {
     height: '52vh',
     overflowY: 'auto',
     overflowX: 'hidden',
+    paddingTop: '0.1rem',
   };
 
   return (
@@ -106,7 +107,11 @@ function ViewAllPatients() {
           <Grid container spacing={2}>
             {filteredPatientsData.map((patient, index) => (
               <Grid item xs={4} key={index}>
-                <Link to={`/viewPatientDetails/${patient.patID}`} key={index}>
+                <Link
+                  to={`/viewPatientDetails/${patient.patID}`}
+                  key={index}
+                  style={{ textDecoration: 'none' }}
+                >
                   <PatientOverviewWidget
                     name={`${patient.first_name} ${patient.last_name}`}
                     id={patient.patID}
