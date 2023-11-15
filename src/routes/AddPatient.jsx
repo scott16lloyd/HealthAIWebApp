@@ -130,7 +130,6 @@ function AddPatient() {
   }
 
   var randPassword = randomPasswordGen(true, false, 15);
-  console.log(randPassword);
 
   const addPatientInfoToFirebase = (userInfo, uid) => {
     const dbRef = ref(database, 'patients'); //pushes to patient db
