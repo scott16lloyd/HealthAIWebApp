@@ -8,13 +8,19 @@ import { useNavigate } from 'react-router-dom';
 import AlertBox from '../components/widgets/AlertBox/AlertBox';
 import { auth } from '../firebase';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { ref, database } from '../firebase';
+import { ref, database, firebaseConfig } from '../firebase';
 import { child, set } from '@firebase/database';
+import { initializeApp } from 'firebase/app';
+import emailjs from '@emailjs/browser';
+
 
 
 function AddPatient() {
   const navigate = useNavigate();
+  var secondaryApp = initializeApp(firebaseConfig, "Secondary");
   
+
+
   const [email, setEmail] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [inputError, setInputError] = useState(false);
@@ -108,7 +114,6 @@ function AddPatient() {
 
     let genPass = "";
     let variationsCount = [number, symbol].length;
-    console.log(length);
 
     //Loop runs to create password of desired length
     for (let i = 0; i < length; i += variationsCount){
@@ -124,16 +129,17 @@ function AddPatient() {
     return finalPass;
   }
 
-  var password = randomPasswordGen(true, false, 15);
-  console.log(password);
+  var randPassword = randomPasswordGen(true, false, 15);
+  console.log(randPassword);
 
   const addPatientInfoToFirebase = (userInfo, uid) => {
     const dbRef = ref(database, 'patients'); //pushes to patient db
     console.log(dbRef);
     set(child(dbRef, uid), userInfo); //sets info in db to given user info
   };
-
-  createUserWithEmailAndPassword(auth, email, password)
+  //FIX THIS
+  //secondaryApp.auth().createUserWithEmailAndPassword(auth, email, password)
+  createUserWithEmailAndPassword(auth, email, randPassword)
       .then((userCredential) => {
         const user = userCredential.user;
         console.log(userCredential);
@@ -160,13 +166,21 @@ function AddPatient() {
           gender: "",
           medicalRecords: "",
           testHistory: "",
+          insuranceProvider: "",
         };
 
          //pushes userInfo to firebase database
          addPatientInfoToFirebase(userInfo, userCredential.user.uid);
-
-         //add email code here
-
+        
+         //info needed for email
+         const emailInfo ={
+          forename: inputValues.forename,
+          password:randPassword,
+          email: inputValues.email,
+         }
+         //function to send email
+         emailjs.send(process.env.REACT_APP_SERVICE_ID, process.env.REACT_APP_TEMPLATE_ID, emailInfo, process.env.REACT_APP_PUBLIC_KEY);
+        // secondaryApp.auth().signOut();
       })
       .catch((error) => {
         console.log(error);

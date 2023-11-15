@@ -40,5 +40,5 @@ const signInWithGoogle = () => {
     });
 };
 
-export { auth, signInWithGoogle, database, ref, push }; // Export the auth object
+export { auth, signInWithGoogle, database, ref, push, firebaseConfig }; // Export the auth object
 
