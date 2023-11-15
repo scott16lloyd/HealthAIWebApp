@@ -59,22 +59,7 @@ function PatientOverviewWidget({ name, id }) {
   return (
     <ButtonBase
       sx={{
-<<<<<<<<< Temporary merge branch 1
-        width: {
-          xs: 160,
-          sm: 200,
-          md: 240,
-          lg: 280,
-          xl: 320,
-        },
-        height: 150,
-        borderRadius: 5,
-        backgroundColor: '#F9F9F9',
-        display: 'flex',
-        padding: '0.2rem',
-=========
-        borderRadius: 5,
->>>>>>>>> Temporary merge branch 2
+
       }}
     >
       <Card
