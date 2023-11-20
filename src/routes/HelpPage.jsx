@@ -57,7 +57,7 @@ function HelpPage() {
           <Typography variant="h5">How do I contact support?</Typography>
           <Typography variant="body1">
             You can contact our support team via email at this link. <a href="mailto:your.email@example.com">
-             Email us
+             Email us 
           </a>
           </Typography>
         </Paper>
