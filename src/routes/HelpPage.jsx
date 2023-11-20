@@ -45,6 +45,7 @@ function HelpPage() {
           </Typography>
         </Paper>
 
+
         <Paper elevation={3} style={messageBoxStyle}>
           <Typography variant="h5">What subscriptions are available to Medical Professionals</Typography>
           <Typography variant="body1">
