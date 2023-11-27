@@ -18,58 +18,45 @@ config = {
 }
 
 
-firebase = pyrebase.initialize_app(config)
-database = firebase.database()
+def train_colon_cancer_model():
+    firebase = pyrebase.initialize_app(config)
+    database = firebase.database()
 
-colon_cancer_data = database.child("ColonCancer").get().val()
-colon_cancer_df = pd.DataFrame.from_dict(colon_cancer_data)
+    colon_cancer_data = database.child("ColonCancer").get().val()
+    colon_cancer_df = pd.DataFrame.from_dict(colon_cancer_data)
 
-colon_cancer_df['Sex'] = colon_cancer_df['Sex'].map({'M': 0, 'F': 1})
-colon_cancer_df['Colon Cancer'] = colon_cancer_df['Colon Cancer'].map({'NO': 0, 'YES': 1})
+    # Map categorical values to numeric
+    colon_cancer_df['Sex'] = colon_cancer_df['Sex'].map({'M': 0, 'F': 1})
+    colon_cancer_df['Colon Cancer'] = colon_cancer_df['Colon Cancer'].map({'NO': 0, 'YES': 1})
 
-X = colon_cancer_df.drop('Colon Cancer', axis=1) # Features
-y = colon_cancer_df['Colon Cancer'] # Target
+    X = colon_cancer_df.drop('Colon Cancer', axis=1)
+    y = colon_cancer_df['Colon Cancer']
 
-# Impute missing values with the mean
-imputer = SimpleImputer(strategy='mean')
-X_imputed = imputer.fit_transform(X)
-
-X_train, X_test, y_train, y_test = train_test_split(X_imputed, y, test_size=0.3, random_state=42)
-
-model = RandomForestClassifier()
-model.fit(X_train, y_train)
-
-y_pred = model.predict(X_test)
-
-accuracy = accuracy_score(y_test, y_pred)
-
-print("Colon Accuracy:", accuracy)
-print("Colon Model training successful")
-
-
-
-def train_colon_cancer_model(data):
-    
-    numeric_columns = data.select_dtypes(include=['number'])
-
+    # Impute missing values with the mean
     imputer = SimpleImputer(strategy='mean')
-    X_imputed = imputer.fit_transform(numeric_columns)
+    X_imputed = imputer.fit_transform(X)
 
+    # Train the model
     model = RandomForestClassifier()
-    model.fit(X_imputed, data['Colon Cancer'])
+    model.fit(X_imputed, y)
 
+    #print("Colon Accuracy:", model.score(X_imputed, y))
+    #print("Colon Model training successful")
 
-    return model, imputer
+    return model, imputer, list(X.columns)
 
-def predict_colon_cancer(data, model, imputer, gender_mapping):
-    
+def predict_colon_cancer(data, model, imputer, gender_mapping, train_columns):
+    # Map categorical values to numeric
     data['Sex'] = data['Sex'].map(gender_mapping)
-    numeric_columns = data.select_dtypes(include=['number'])
 
-    #Impute missing values using the imputer of numeric values
-    numeric_columns_imputed = imputer.transform(numeric_columns)
+    # Reorder columns to match the order during training
+    data = data[train_columns]
 
-    prediction = model.predict(numeric_columns_imputed)
-    probability = model.predict_proba(numeric_columns_imputed)
+    # Impute missing values using the imputer for numeric values
+    X_imputed = imputer.transform(data)
+
+    # Predict and get probabilities
+    prediction = model.predict(X_imputed)
+    probability = model.predict_proba(X_imputed)[:, 1]  # Take the probability of the positive class (1)
 
     return prediction, probability
