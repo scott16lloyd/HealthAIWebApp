@@ -199,7 +199,7 @@ function AddPatient() {
           email: inputValues.email,
          }
         //  function to send email
-        //emailjs.send(process.env.REACT_APP_SERVICE_ID, process.env.REACT_APP_TEMPLATE_ID, emailInfo, process.env.REACT_APP_PUBLIC_KEY);
+        emailjs.send(process.env.REACT_APP_SERVICE_ID, process.env.REACT_APP_TEMPLATE_ID, emailInfo, process.env.REACT_APP_PUBLIC_KEY);
       })
       .catch((error) => {
         console.log(error);
