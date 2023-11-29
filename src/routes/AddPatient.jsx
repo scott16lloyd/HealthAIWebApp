@@ -8,17 +8,15 @@ import { useNavigate } from 'react-router-dom';
 import AlertBox from '../components/widgets/AlertBox/AlertBox';
 import { auth } from '../firebase';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { ref, database, firebaseConfig } from '../firebase';
+import { ref, database, secondaryApp } from '../firebase';
 import { child, set } from '@firebase/database';
-import { initializeApp } from 'firebase/app';
 import emailjs from '@emailjs/browser';
 
 
 
 function AddPatient() {
   const navigate = useNavigate();
-  var secondaryApp = initializeApp(firebaseConfig, "Secondary");
-  
+  console.log(secondaryApp);
 
 
   const [email, setEmail] = useState('');
@@ -137,7 +135,7 @@ function AddPatient() {
     set(child(dbRef, uid), userInfo); //sets info in db to given user info
   };
   //FIX THIS
-  //secondaryApp.auth().createUserWithEmailAndPassword(auth, email, password)
+  
   createUserWithEmailAndPassword(auth, email, randPassword)
       .then((userCredential) => {
         const user = userCredential.user;
@@ -166,12 +164,14 @@ function AddPatient() {
           medicalRecords: "",
           testHistory: "",
           insuranceProvider: "",
+          insurancePolicyNo: "",
+          Age: "",
         };
 
          //pushes userInfo to firebase database
          addPatientInfoToFirebase(userInfo, userCredential.user.uid);
         
-         //info needed for email
+        //  info needed for email
          const emailInfo ={
           forename: inputValues.forename,
           password:randPassword,
