@@ -19,7 +19,7 @@ function SignInPage() {
   const [errorMessage, setErrorMessage] = useState('');
   const { googleSignIn, user } = UserAuth();
 
-  function verifyDoctor(emailAddress){
+  async function verifyDoctor(emailAddress){
     var docCheck = false;
     const doctorsRef = ref(database, 'doctors');
 
@@ -37,10 +37,14 @@ function SignInPage() {
         return docCheck;
       });
     }  
-  const signIn = (e) => {
+  const signIn = async (e) => {
     e.preventDefault();
-    var verified = verifyDoctor(email);
-    console.log(verified);
+    try{  
+      var verified = await verifyDoctor(email);
+      console.log(verified);
+    } catch(error){
+      console.error("Error check", error);
+    }
     if (verified == true){
       signInWithEmailAndPassword(auth, email, password)
         .then(() => {  
