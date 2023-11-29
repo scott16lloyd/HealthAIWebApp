@@ -71,7 +71,6 @@ function SignInPage() {
       }
       else{
         setErrorMessage('This user is not a doctor, patients please use the mobile app');
-        console.log(email);
       }
     }
   };
