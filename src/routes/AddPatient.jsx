@@ -6,17 +6,25 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
 import AlertBox from '../components/widgets/AlertBox/AlertBox';
-import { auth } from '../firebase';
+import { auth, firebaseConfig } from '../firebase';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { ref, database, secondaryApp } from '../firebase';
+import { ref, database } from '../firebase';
 import { child, set } from '@firebase/database';
+//import serviceAccount from './healthai-40b47-firebase-adminsdk-6kz46-08b22cedfb.json';
+//import { initializeApp } from 'firebase-admin/app';
 import emailjs from '@emailjs/browser';
 
 
 
 function AddPatient() {
   const navigate = useNavigate();
-  console.log(secondaryApp);
+  // var admin = require("firebase-admin");
+  // admin.initializeApp({
+  //   credential: admin.credential.cert(serviceAccount),
+  //   databaseURL: "https://healthai-40b47-default-rtdb.europe-west1.firebasedatabase.app"
+  // });
+
+  // console.log(admin);
 
 
   const [email, setEmail] = useState('');
@@ -139,16 +147,13 @@ function AddPatient() {
   createUserWithEmailAndPassword(auth, email, randPassword)
       .then((userCredential) => {
         const user = userCredential.user;
-        console.log(userCredential);
-        //Set the display name for the user
+
         const displayName = inputValues.forename + ' ' + inputValues.surname;
 
         updateProfile(user, {
           displayName: displayName,
         });
-        console.log(inputValues);
 
-        //Creates const userInfo
         const userInfo = {
           forename: inputValues.forename,
           middleName: inputValues.middleName,
@@ -168,18 +173,16 @@ function AddPatient() {
           Age: "",
         };
 
-         //pushes userInfo to firebase database
-         addPatientInfoToFirebase(userInfo, userCredential.user.uid);
+        addPatientInfoToFirebase(userInfo, userCredential.user.uid);
         
         //  info needed for email
-         const emailInfo ={
+        const emailInfo ={
           forename: inputValues.forename,
           password:randPassword,
           email: inputValues.email,
          }
-         //function to send email
-         emailjs.send(process.env.REACT_APP_SERVICE_ID, process.env.REACT_APP_TEMPLATE_ID, emailInfo, process.env.REACT_APP_PUBLIC_KEY);
-        // secondaryApp.auth().signOut();
+        //  function to send email
+        emailjs.send(process.env.REACT_APP_SERVICE_ID, process.env.REACT_APP_TEMPLATE_ID, emailInfo, process.env.REACT_APP_PUBLIC_KEY);
       })
       .catch((error) => {
         console.log(error);

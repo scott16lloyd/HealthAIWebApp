@@ -22,7 +22,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const secondaryApp = initializeApp(firebaseConfig, "Secondary");
+//const secondaryApp = initializeApp(firebaseConfig, "Secondary");
 const analytics = getAnalytics(app);
 const database = getDatabase(app);
 
@@ -41,5 +41,5 @@ const signInWithGoogle = () => {
     });
 };
 
-export { auth, signInWithGoogle, database, ref, push, firebaseConfig, secondaryApp }; // Export the auth object
+export { auth, signInWithGoogle, database, ref, push, firebaseConfig }; // Export the auth object
 
