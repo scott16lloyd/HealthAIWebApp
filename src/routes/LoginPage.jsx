@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { auth } from '../firebase';
+import { auth, database } from '../firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import TopNavigationBar from '../components/widgets/TopNavigationBar/TopNavigationBar';
@@ -9,6 +9,8 @@ import BackButton from '../components/widgets/BackButton/BackButton';
 import PrimaryButton from '../components/widgets/PrimaryButton/PrimaryButton';
 import SocialMediaSignInButton from '../components/widgets/SocialMediaSignInButton/SocialMediaSignInButton';
 import { UserAuth } from '../components/auth/AuthContext';
+import { ref, child, get } from 'firebase/database';
+
 
 function SignInPage() {
   const [email, setEmail] = useState('');
@@ -17,25 +19,48 @@ function SignInPage() {
   const [errorMessage, setErrorMessage] = useState('');
   const { googleSignIn, user } = UserAuth();
 
+  function verifyDoctor(emailAddress){
+    var docCheck = false;
+    const doctorsRef = ref(database, 'doctors');
+
+    return get(doctorsRef)
+      .then(snapshot => {
+        const doctors = snapshot.val();
+
+        // Check if the email exists in the doctors' database
+        docCheck = Object.values(doctors).some(doctor => doctor.email === emailAddress);
+
+        return docCheck;
+      })
+      .catch(error => {
+        console.error('Error verifying doctor:', error);
+        return docCheck;
+      });
+    }  
   const signIn = (e) => {
     e.preventDefault();
-    signInWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        // Successful sign-in
-        console.log('Sign-in successful');
-        // Navigate to home or do other actions upon successful sign-in
-        navigate('/home');
-      })
-      .catch((error) => {
-        console.log(error);
-        if (error.code === 'auth/invalid-login-credentials') {
-          setErrorMessage('Invalid login credentials.');
-        } else if (error.code === 'auth/invalid-email') {
-          setErrorMessage('Invalid email.');
-        } else {
-          setErrorMessage('An error occurred. Please try again.');
-        }
-      });
+    var verified = verifyDoctor(email);
+    console.log(verified);
+    if (verified == true){
+      signInWithEmailAndPassword(auth, email, password)
+        .then(() => {  
+            // Successful sign-in
+            console.log('Sign-in successful');
+            // Navigate to home or do other actions upon successful sign-in
+            navigate('/home');
+          }
+        )
+        .catch((error) => {
+          console.log(error);
+          if (error.code === 'auth/invalid-login-credentials') {
+            setErrorMessage('Invalid login credentials.');
+          } else if (error.code === 'auth/invalid-email') {
+            setErrorMessage('Invalid email.');
+          } else {
+            setErrorMessage('An error occurred. Please try again.');
+          }
+        });
+    }
   };
 
   const handleGoogleSignIn = async () => {
