@@ -65,6 +65,15 @@ function SignInPage() {
           }
         });
     }
+    else {
+      if(email == ""){
+        setErrorMessage('Please enter a valid email');
+      }
+      else{
+        setErrorMessage('This user is not a doctor, patients please use the mobile app');
+        console.log(email);
+      }
+    }
   };
 
   const handleGoogleSignIn = async () => {
