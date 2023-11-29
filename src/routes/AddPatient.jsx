@@ -7,17 +7,32 @@ import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
 import AlertBox from '../components/widgets/AlertBox/AlertBox';
 import { auth, firebaseConfig } from '../firebase';
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { ref, database } from '../firebase';
-import { child, set } from '@firebase/database';
+import { createUserWithEmailAndPassword, getAuth, updateProfile } from 'firebase/auth';
+import { ref, database} from '../firebase';
+import { child, set, get } from '@firebase/database';
 //import serviceAccount from './healthai-40b47-firebase-adminsdk-6kz46-08b22cedfb.json';
 //import { initializeApp } from 'firebase-admin/app';
 import emailjs from '@emailjs/browser';
+import { initializeApp } from '@firebase/app';
+import { UserAuth } from '../components/auth/AuthContext';
 
-
+//const apiUrl = 'https://healthai-40b47-default-rtdb.europe-west1.firebasedatabase.app/doctors.json?Authorization=Bearer Lv0Ps3n1nkNuSjvIolRnRhCC1UMnasT4njYp4gVJ&orderBy="gpIdNumber"&equalTo="0987654321"';
 
 function AddPatient() {
+  let gpIdNumber;
+  const { user } = UserAuth();
   const navigate = useNavigate();
+  const uid = user.uid;
+  console.log("UID:", uid);
+  const userRef = ref(database, '/doctors/' + uid);
+  get(child(userRef, 'gpIdNumber'))
+  .then(snapshot => {
+    gpIdNumber = snapshot.val();
+    console.log("GPID:", gpIdNumber);
+  })
+  .catch(error => {
+    console.error('Error retrieving gpIdNumber:', error);
+  });
   // var admin = require("firebase-admin");
   // admin.initializeApp({
   //   credential: admin.credential.cert(serviceAccount),
@@ -26,6 +41,8 @@ function AddPatient() {
 
   // console.log(admin);
 
+  const secondaryApp = initializeApp(firebaseConfig, "Secondary");
+  const secondaryAuth = getAuth();
 
   const [email, setEmail] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -162,7 +179,7 @@ function AddPatient() {
           telephone: inputValues.telephone,
           address: inputValues.address,
           PPSN: inputValues.PPSNumber,
-          doctor: "",
+          doctor: gpIdNumber,
           address: "",
           verified: false,
           gender: "",
@@ -182,7 +199,7 @@ function AddPatient() {
           email: inputValues.email,
          }
         //  function to send email
-        emailjs.send(process.env.REACT_APP_SERVICE_ID, process.env.REACT_APP_TEMPLATE_ID, emailInfo, process.env.REACT_APP_PUBLIC_KEY);
+        //emailjs.send(process.env.REACT_APP_SERVICE_ID, process.env.REACT_APP_TEMPLATE_ID, emailInfo, process.env.REACT_APP_PUBLIC_KEY);
       })
       .catch((error) => {
         console.log(error);
