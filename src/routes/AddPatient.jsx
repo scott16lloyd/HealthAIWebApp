@@ -6,12 +6,37 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
 import AlertBox from '../components/widgets/AlertBox/AlertBox';
+import { auth, firebaseConfig } from '../firebase';
+import { createUserWithEmailAndPassword, getAuth, updateProfile } from 'firebase/auth';
+import { ref, database} from '../firebase';
+import { child, set, get } from '@firebase/database';
+import emailjs from '@emailjs/browser';
+import { initializeApp } from '@firebase/app';
+import { UserAuth } from '../components/auth/AuthContext';
 
-import { getFirestore, collection, addDoc } from 'firebase/firestore'; 
+//const apiUrl = 'https://healthai-40b47-default-rtdb.europe-west1.firebasedatabase.app/doctors.json?Authorization=Bearer Lv0Ps3n1nkNuSjvIolRnRhCC1UMnasT4njYp4gVJ&orderBy="gpIdNumber"&equalTo="0987654321"';
+
 function AddPatient() {
+  let gpIdNumber;
+  const { user } = UserAuth();
   const navigate = useNavigate();
-  const db = getFirestore(); // Initialize Firestore
+  const uid = user.uid;
+  console.log("UID:", uid);
+  const userRef = ref(database, '/doctors/' + uid);
+  get(child(userRef, 'gpIdNumber'))
+  .then(snapshot => {
+    gpIdNumber = snapshot.val();
+    console.log("GPID:", gpIdNumber);
+  })
+  .catch(error => {
+    console.error('Error retrieving gpIdNumber:', error);
+  });
+  
+  const [severity, setSeverity] = useState('');
 
+  // Initialize second instance of firebase app
+  const secondaryApp = initializeApp(firebaseConfig, "Secondary");
+  const [email, setEmail] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [inputError, setInputError] = useState(false);
   const [inputValues, setInputValues] = useState({
@@ -22,6 +47,23 @@ function AddPatient() {
     telephone: '',
     PPSNumber: '',
   });
+
+  const isNameValid = (name) => {
+    const nameRegex = /^[A-Za-z\s]+$/;
+    return nameRegex.test(name);
+  };
+  const isPhoneNumberValid = (telephone) => {
+    const phoneRegex = /^\d{10}$/; // For a 10-digit phone number
+    return phoneRegex.test(telephone);
+  };
+  const isEmailValid = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+  const isPPSValid = (PPS) => {
+    const PPSRegex = /^\d{7}[A-Za-z]$/; // Matches 7 digits followed by 1 letter
+    return PPSRegex.test(PPS);
+  };
 
   const handleInputChange = (field) => (event) => {
     const value = event.target.value;
@@ -35,12 +77,14 @@ function AddPatient() {
     });
   };
 
-  const createAccount = (e) => {
+  const createPatient = (e) => {
     e.preventDefault();
 
-    // Validation code here (same as your previous code)
-
-    // Now, if all validation checks pass, you can send the data to Firestore
+    const isForenameInputValid = isNameValid(inputValues.forename);
+    const isSurnameInputValid = isNameValid(inputValues.surname);
+    const isEmailAddressInputValid = isEmailValid(inputValues.email);
+    const isPhoneNumberInputValid = isPhoneNumberValid(inputValues.telephone);
+    const isPPSInputValid = isPPSValid(inputValues.PPSNumber);
 
     const userData = {
       forename: inputValues.forename,
@@ -51,19 +95,137 @@ function AddPatient() {
       PPSNumber: inputValues.PPSNumber,
     };
 
-    // Add the user data to Firestore
-    addDoc(collection(db, 'patients'), userData) // Replace 'patients' with your Firestore collection name
-      .then(() => {
-        console.log('Patient data added to Firestore successfully.');
-        navigate('/home');
-        console.log(inputValues);
+    if (!isForenameInputValid) {
+      setErrorMessage('Please enter a valid name.');
+      setSeverity("error");
+      return;
+    } else if (!isSurnameInputValid) {
+      setErrorMessage('Please enter a valid surname.');
+      setSeverity("error");
+      return;
+    } else if (!isEmailAddressInputValid) {
+      setErrorMessage('Please enter a valid email.');
+      setSeverity("error");
+      return;
+    } else if (!isPhoneNumberInputValid) {
+      setErrorMessage('Please enter a valid phone number. e.g. 0831234567');
+      setSeverity("error");
+      return;
+    } else if (!isPPSInputValid) {
+      setErrorMessage('PPS Number must be 7 digits followed by a single letter.');
+      setSeverity("error");
+      return;
+    }
+
+   //Function to generate random password
+   function randomPasswordGen(number, symbol, length){
+
+    //Functions to create random characters
+    function getRandomChar() {
+      return String.fromCharCode(Math.floor(Math.random() * 26) + 97);
+    }
+    function getRandomNumber() {
+      return String.fromCharCode(Math.floor(Math.random() * 10) + 48);
+    }
+    function getRandomSymbol() {
+      const symbols = "!@#$*";
+      return symbols[Math.floor(Math.random() * symbols.length)];
+    }
+
+    let genPass = "";
+    let variationsCount = [number, symbol].length;
+
+    //Loop runs to create password of desired length
+    for (let i = 0; i < length; i += variationsCount){
+      if (number) {
+        genPass += getRandomNumber();
+      }
+      if (symbol) {
+        genPass += getRandomSymbol();
+      }
+      genPass += getRandomChar();
+    }
+    const finalPass = genPass.slice(0, length);
+    return finalPass;
+  }
+
+  var randPassword = randomPasswordGen(true, false, 15);
+
+  const addPatientInfoToFirebase = (userInfo, uid) => {
+    const dbRef = ref(database, 'patients'); //pushes to patient db
+    console.log(dbRef);
+    set(child(dbRef, uid), userInfo); //sets info in db to given user info
+  };
+  
+  // Use second instance to create user
+  createUserWithEmailAndPassword(getAuth(secondaryApp), email, randPassword)
+      .then((userCredential) => {
+        const user = userCredential.user;
+
+        const displayName = inputValues.forename + ' ' + inputValues.surname;
+
+        updateProfile(user, {
+          displayName: displayName,
+        });
+
+        const userInfo = {
+          forename: inputValues.forename,
+          middleName: inputValues.middleName,
+          surname: inputValues.surname,
+          email: inputValues.email,
+          telephone: inputValues.telephone,
+          address: inputValues.address,
+          PPSN: inputValues.PPSNumber,
+          doctor: gpIdNumber,
+          address: "",
+          verified: false,
+          subscribed: false,
+          gender: "",
+          medicalRecords: "",
+          testHistory: "",
+          insuranceProvider: "",
+          insurancePolicyNo: "",
+          Age: "",
+        };
+
+        addPatientInfoToFirebase(userInfo, userCredential.user.uid);
+        console.log("Patient Created Successfully");
+        
+        //  info needed for email
+        const emailInfo ={
+          forename: inputValues.forename,
+          password:randPassword,
+          email: inputValues.email,
+         }
+        //  function to send email
+        emailjs.send(process.env.REACT_APP_SERVICE_ID, process.env.REACT_APP_TEMPLATE_ID, emailInfo, process.env.REACT_APP_PUBLIC_KEY);
+
+        // Clear Input Fields
+        setInputValues({
+          forename: '',
+          middleName: '',
+          surname: '',
+          email: '',
+          telephone: '',
+          PPSNumber: '',
+        });
+        
+        // Display Success Message
+        setErrorMessage("Patient created successfully");
+        setSeverity("success");
       })
       .catch((error) => {
-        console.error('Error adding patient data to Firestore: ', error);
-        setErrorMessage('An error occurred. Please try again.');
+        console.log(error);
+        if (error.code === 'auth/email-already-in-use') {
+          setErrorMessage('Email is already in use.');
+          setSeverity("error");
+        } else {
+          setErrorMessage('An error occurred. Please try again.');
+          setSeverity("error");
+          console.log(error);
+        }
       });
-  };
-
+    }
   const columnStyle = {
     display: 'flex',
     flexDirection: 'column',
@@ -114,7 +276,7 @@ function AddPatient() {
     <>
       <AlertBox
         message={errorMessage}
-        severity={'error'}
+        severity= {severity}
         onClose={() => setErrorMessage('')}
       />
       <Container>
@@ -179,6 +341,10 @@ function AddPatient() {
               required
               InputProps={{ disableUnderline: true }}
               value={inputValues.email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                handleInputChange('email')(e);
+              }}
               error={inputError['email']}
               helperText={inputError['email'] ? 'Email cannot be blank' : ''}
             />
@@ -204,7 +370,7 @@ function AddPatient() {
               style={inputStyle}
               required
               InputProps={{ disableUnderline: true }}
-              value={inputValues.gpIdNumber}
+              value={inputValues.PPSNumber}
               onChange={handleInputChange('PPSNumber')}
               error={inputError['PPSNumber']}
               helperText={
@@ -217,7 +383,7 @@ function AddPatient() {
         <div style={buttonContainerStyle}>
           <PrimaryButton
             text={'Add Patient'}
-            action={createAccount}
+            action={createPatient}
             state={'active'}
           />{' '}
         </div>
