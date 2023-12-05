@@ -32,9 +32,10 @@ function AddPatient() {
     console.error('Error retrieving gpIdNumber:', error);
   });
   
+  const [severity, setSeverity] = useState('');
+
   // Initialize second instance of firebase app
   const secondaryApp = initializeApp(firebaseConfig, "Secondary");
-
   const [email, setEmail] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [inputError, setInputError] = useState(false);
@@ -96,18 +97,23 @@ function AddPatient() {
 
     if (!isForenameInputValid) {
       setErrorMessage('Please enter a valid name.');
+      setSeverity("error");
       return;
     } else if (!isSurnameInputValid) {
       setErrorMessage('Please enter a valid surname.');
+      setSeverity("error");
       return;
     } else if (!isEmailAddressInputValid) {
       setErrorMessage('Please enter a valid email.');
+      setSeverity("error");
       return;
     } else if (!isPhoneNumberInputValid) {
       setErrorMessage('Please enter a valid phone number. e.g. 0831234567');
+      setSeverity("error");
       return;
     } else if (!isPPSInputValid) {
       setErrorMessage('PPS Number must be 7 digits followed by a single letter.');
+      setSeverity("error");
       return;
     }
 
@@ -205,14 +211,17 @@ function AddPatient() {
         });
         
         // Display Success Message
-        alert("Patient created successfully");
+        setErrorMessage("Patient created successfully");
+        setSeverity("success");
       })
       .catch((error) => {
         console.log(error);
         if (error.code === 'auth/email-already-in-use') {
           setErrorMessage('Email is already in use.');
+          setSeverity("error");
         } else {
           setErrorMessage('An error occurred. Please try again.');
+          setSeverity("error");
           console.log(error);
         }
       });
@@ -267,7 +276,7 @@ function AddPatient() {
     <>
       <AlertBox
         message={errorMessage}
-        severity={'error'}
+        severity= {severity}
         onClose={() => setErrorMessage('')}
       />
       <Container>
