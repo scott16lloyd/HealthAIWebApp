@@ -4,7 +4,7 @@ import TopNavigationBar from '../components/widgets/TopNavigationBar/TopNavigati
 import PrimaryButton from '../components/widgets/PrimaryButton/PrimaryButton';
 import ViewAllPatients from './ViewAllPatients';
 import AddPatient from './AddPatient';
-import ViewProfile from './ViewProfile';
+import { useNavigate } from 'react-router-dom';
 import Footer from '../components/widgets/Footer/Footer';
 import UserProfile from '../components/widgets/UserProfile/UserProfile';
 
@@ -15,6 +15,8 @@ function Home() {
     addPatient: 'unactive',
     viewProfile: 'unactive',
   });
+
+  const navigate = useNavigate();
 
   const handleButtonClick = (buttonKey) => {
     const newButtonStates = {
@@ -56,25 +58,14 @@ function Home() {
   };
 
   // Define user related objects
-  const { user, logOut } = UserAuth();
+  const { user } = UserAuth();
   console.log(user.displayName);
-
-  const handleSignOut = async () => {
-    try {
-      await logOut();
-      console.log('sign out sucessful');
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   return (
     <>
       <div style={topBarWrapper}>
         <TopNavigationBar />
-        {user ? (
-          <UserProfile name={user.displayName} logoutAction={handleSignOut} />
-        ) : null}
+        {user ? <UserProfile /> : null}
       </div>
       <div style={outerWrapperStyle}>
         <div style={buttonColumnStyle}>
@@ -88,16 +79,11 @@ function Home() {
             state={buttonStates.addPatient}
             action={() => handleButtonClick('addPatient')}
           />
-          <PrimaryButton
-            text={'View Profile'}
-            state={buttonStates.viewProfile}
-            action={() => handleButtonClick('viewProfile')}
-          />
+          <PrimaryButton text={'View Profile'} to={'/viewProfile'} />
         </div>
         <div style={displayContainer}>
           {buttonStates.viewPatients === 'active' && <ViewAllPatients />}
           {buttonStates.addPatient === 'active' && <AddPatient />}
-          {buttonStates.viewProfile === 'active' && <ViewProfile />}
         </div>
       </div>
       <Footer />

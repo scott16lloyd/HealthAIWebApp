@@ -47,13 +47,26 @@ function TopNavigationBar({ aboutNav, helpNav }) {
       <div
         style={{ display: 'flex', flexDirection: 'column', margin: '0.5rem' }}
       >
-        <Typography variant="h1" style={healthAIStyle}>
-          <span>Health</span>
-          <span style={{ color: '#268AFF' }}>AI</span>
-        </Typography>
-        <Typography variant="h6" style={developedByStyle}>
-          Developed by SSSD
-        </Typography>
+        <Button
+          variant="text"
+          size="large"
+          sx={{
+            fontSize: 30,
+            boxShadow: 'none',
+            margin: '0.5rem',
+            textTransform: 'none',
+          }}
+          component={Link}
+          to="/home"
+        >
+          <Typography variant="h1" style={healthAIStyle}>
+            <span>Health</span>
+            <span style={{ color: '#268AFF' }}>AI</span>
+          </Typography>
+          <Typography variant="h6" style={developedByStyle}>
+            Developed by SSSD
+          </Typography>
+        </Button>
       </div>
       <div
         style={{

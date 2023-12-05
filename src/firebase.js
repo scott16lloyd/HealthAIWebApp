@@ -42,4 +42,3 @@ const signInWithGoogle = () => {
 };
 
 export { auth, signInWithGoogle, database, ref, push, firebaseConfig }; // Export the auth object
-

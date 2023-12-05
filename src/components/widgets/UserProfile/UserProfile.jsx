@@ -1,4 +1,6 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { UserAuth } from '../../auth/AuthContext';
 import {
   Avatar,
   Tooltip,
@@ -46,9 +48,21 @@ function stringAvatar(name) {
   }
 }
 
-function UserProfile({ name, logoutAction }) {
+function UserProfile() {
+  const { user, logOut } = UserAuth();
+
+  const handleSignOut = async () => {
+    try {
+      await logOut();
+      console.log('sign out sucessful');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const navigate = useNavigate();
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -76,7 +90,7 @@ function UserProfile({ name, logoutAction }) {
           sx={avatarStyling}
           variant="outlined"
           alt="Default Profile Image"
-          {...stringAvatar(name)}
+          {...stringAvatar(user.displayName)}
           onClick={handleClick}
           aria-controls={open ? 'account-menu' : undefined}
           aria-haspopup="true"
@@ -92,11 +106,11 @@ function UserProfile({ name, logoutAction }) {
         transformOrigin={{ horizontal: 'center', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
       >
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={() => navigate('/viewProfile')}>
           <Typography>View Profile</Typography>
         </MenuItem>
         <Divider />
-        <MenuItem onClick={logoutAction}>
+        <MenuItem onClick={handleSignOut}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
