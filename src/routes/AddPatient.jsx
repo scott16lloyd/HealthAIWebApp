@@ -10,8 +10,6 @@ import { auth, firebaseConfig } from '../firebase';
 import { createUserWithEmailAndPassword, getAuth, updateProfile } from 'firebase/auth';
 import { ref, database} from '../firebase';
 import { child, set, get } from '@firebase/database';
-//import serviceAccount from './healthai-40b47-firebase-adminsdk-6kz46-08b22cedfb.json';
-//import { initializeApp } from 'firebase-admin/app';
 import emailjs from '@emailjs/browser';
 import { initializeApp } from '@firebase/app';
 import { UserAuth } from '../components/auth/AuthContext';
@@ -33,16 +31,9 @@ function AddPatient() {
   .catch(error => {
     console.error('Error retrieving gpIdNumber:', error);
   });
-  // var admin = require("firebase-admin");
-  // admin.initializeApp({
-  //   credential: admin.credential.cert(serviceAccount),
-  //   databaseURL: "https://healthai-40b47-default-rtdb.europe-west1.firebasedatabase.app"
-  // });
-
-  // console.log(admin);
-
+  
+  // Initialize second instance of firebase app
   const secondaryApp = initializeApp(firebaseConfig, "Secondary");
-  const secondaryAuth = getAuth();
 
   const [email, setEmail] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -159,9 +150,9 @@ function AddPatient() {
     console.log(dbRef);
     set(child(dbRef, uid), userInfo); //sets info in db to given user info
   };
-  //FIX THIS
   
-  createUserWithEmailAndPassword(auth, email, randPassword)
+  // Use second instance to create user
+  createUserWithEmailAndPassword(getAuth(secondaryApp), email, randPassword)
       .then((userCredential) => {
         const user = userCredential.user;
 
@@ -182,6 +173,7 @@ function AddPatient() {
           doctor: gpIdNumber,
           address: "",
           verified: false,
+          subscribed: false,
           gender: "",
           medicalRecords: "",
           testHistory: "",
@@ -191,6 +183,7 @@ function AddPatient() {
         };
 
         addPatientInfoToFirebase(userInfo, userCredential.user.uid);
+        console.log("Patient Created Successfully");
         
         //  info needed for email
         const emailInfo ={
@@ -199,7 +192,20 @@ function AddPatient() {
           email: inputValues.email,
          }
         //  function to send email
-        emailjs.send(process.env.REACT_APP_SERVICE_ID, process.env.REACT_APP_TEMPLATE_ID, emailInfo, process.env.REACT_APP_PUBLIC_KEY);
+        //emailjs.send(process.env.REACT_APP_SERVICE_ID, process.env.REACT_APP_TEMPLATE_ID, emailInfo, process.env.REACT_APP_PUBLIC_KEY);
+
+        // Clear Input Fields
+        setInputValues({
+          forename: '',
+          middleName: '',
+          surname: '',
+          email: '',
+          telephone: '',
+          PPSNumber: '',
+        });
+        
+        // Display Success Message
+        alert("Patient created successfully");
       })
       .catch((error) => {
         console.log(error);
@@ -355,7 +361,7 @@ function AddPatient() {
               style={inputStyle}
               required
               InputProps={{ disableUnderline: true }}
-              value={inputValues.gpIdNumber}
+              value={inputValues.PPSNumber}
               onChange={handleInputChange('PPSNumber')}
               error={inputError['PPSNumber']}
               helperText={
