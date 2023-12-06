@@ -23,8 +23,7 @@ function ViewFullDetails() {
   };
 
   // Get patient info
-  const { patID } = useParams();
-  const patIDNumber = parseInt(patID, 10);
+  const { PPSN } = useParams();
   const patientRef = ref(database, 'patients');
 
   // Read the data at the reference
@@ -34,11 +33,11 @@ function ViewFullDetails() {
   const generatePatientDetails = () => {
     if (patient) {
       return {
-        Name: `${patient.first_name} ${patient.last_name}`,
-        Gender: `${patient.gender}`,
-        Address: `${patient.home_address}`,
-        'Patient ID': `${patient.patID}`,
-        Phone: `${patient.telephone}`,
+        Name: `${patient.forename} ${patient.surname}` || 'N/A',
+        Gender: `${patient.gender}` || 'N/A',
+        Address: `${patient.address}` || 'N/A',
+        'Patient ID': `${patient.PPSN}` || 'N/A',
+        Phone: `${patient.telephone}` || 'N/A',
       };
     } else {
       // Handle the case when patient is null
@@ -56,8 +55,8 @@ function ViewFullDetails() {
   const generatePatientInsuranceDetails = () => {
     if (patient) {
       return {
-        'Insurance Company': `${patient.insurance_company}`,
-        'Policy Number': `${patient.policy_number}`,
+        'Insurance Company': `${patient.insuranceProvider}` || 'N/A',
+        'Policy Number': `${patient.insurancePolicyNo}` || 'N/A',
       };
     } else {
       return {
@@ -82,9 +81,7 @@ function ViewFullDetails() {
           const patientArray = Object.values(patientData);
 
           // Find the patient with the matching patID
-          const patient = patientArray.find(
-            (patient) => patient.patID === patIDNumber
-          );
+          const patient = patientArray.find((patient) => patient.PPSN === PPSN);
           setPatient(patient);
         } else {
           console.log('No patient data found.');

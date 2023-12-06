@@ -38,8 +38,7 @@ function ViewPatientScreen() {
   const { user } = UserAuth();
 
   // Get patient info
-  const { patID } = useParams();
-  const patIDNumber = parseInt(patID, 10);
+  const { PPSN } = useParams();
   const patientRef = ref(database, 'patients');
 
   // Read the data at the reference
@@ -56,9 +55,7 @@ function ViewPatientScreen() {
           const patientArray = Object.values(patientData);
 
           // Find the patient with the matching patID
-          const patient = patientArray.find(
-            (patient) => patient.patID === patIDNumber
-          );
+          const patient = patientArray.find((patient) => patient.PPSN === PPSN);
           setPatient(patient);
         } else {
           console.log('No patient data found.');
@@ -125,8 +122,8 @@ function ViewPatientScreen() {
         <div style={leftColumnStyle}>
           {patient ? (
             <PatientOverviewWidget
-              name={`${patient.first_name} ${patient.last_name}`}
-              id={patient.patID}
+              name={`${patient.forename} ${patient.surname}`}
+              id={patient.PPSN}
             />
           ) : (
             <div>Loading patient data...</div>

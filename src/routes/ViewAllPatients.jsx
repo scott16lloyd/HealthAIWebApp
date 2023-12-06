@@ -5,15 +5,15 @@ import PatientOverviewWidget from '../components/widgets/PatientOverviewWidget/P
 import Grid from '@mui/system/Unstable_Grid/Grid';
 import { UserAuth } from '../components/auth/AuthContext';
 import { Link } from 'react-router-dom';
+import { database } from '../firebase';
+import { ref, get } from 'firebase/database';
 
 function ViewAllPatients() {
   const { user } = UserAuth();
   const doctorID = user.uid;
-  console.log(doctorID);
-  const apiUrl = `https://healthai-40b47-default-rtdb.europe-west1.firebasedatabase.app/patients.json?Authorization=Bearerhttps&orderBy=%22doctor%22&equalTo="1234567890"`;
 
   // State
-  const [patientsData, setPatientsData] = useState([]);
+  const [doctorsPatients, setDoctorsPatients] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState('');
 
@@ -21,38 +21,51 @@ function ViewAllPatients() {
     setSearch(value);
   };
 
-  const filteredPatientsData = patientsData.filter((patient) => {
-    const patient_name = patient.first_name + ' ' + patient.last_name;
+  const filteredPatientsData = doctorsPatients.filter((patient) => {
+    const patient_name = patient.forename + ' ' + patient.surname;
     return patient_name.toLowerCase().includes(search.toLowerCase());
   });
 
-  // Fetch doctor's patient data
-  const fetchData = async () => {
-    try {
-      const response = await fetch(apiUrl);
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
+  // Get doctors patients
+  const patientsRef = ref(database, 'patients');
+  const doctorsRef = ref(database, 'doctors');
+  useEffect(() => {
+    const fetchDoctorsPatientData = async () => {
+      // Fetch user data
+      try {
+        // Get doctor and patient reference in database
+        const patientsSnapshot = await get(patientsRef);
+        const doctorsSnapshot = await get(doctorsRef);
+        // Check if the reference exists
+        if (patientsSnapshot.exists() && doctorsSnapshot.exists()) {
+          // get raw data objects from the database
+          const patientsData = patientsSnapshot.val();
+          const doctorsData = doctorsSnapshot.val();
+
+          // Convert object values to an array
+          const patientsArray = Object.values(patientsData);
+
+          // Match logged in user with doctor in database
+          const doctor = doctorsData[user.uid];
+
+          // Find the patient with the matching patID
+          const doctorsPatients = patientsArray.filter(
+            (patient) => patient.doctor === doctor.gpIdNumber
+          );
+          setDoctorsPatients(doctorsPatients);
+        } else {
+          console.log('No patient data found.');
+        }
+      } catch (error) {
+        console.error('Error accessing patient data:', error);
+      } finally {
+        // Set isLoading to false after fetching data
+        setIsLoading(false);
       }
-      const data = await response.json();
-      const patientsArray = Object.keys(data).map((key) => data[key]);
-      setPatientsData(patientsArray);
-      console.log(patientsData);
-      console.log(patientsArray);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Fetch data when the component mounts
-  useEffect(() => {
-    fetchData();
+    };
+    // Add a closing brace for the fetchPatientData function
+    fetchDoctorsPatientData();
   }, []);
-
-  useEffect(() => {
-    console.log('Updated patientsData:', patientsData);
-  }, [patientsData]);
 
   // Styling
   const titleStyle = {
@@ -91,8 +104,8 @@ function ViewAllPatients() {
           <p>Loading...</p> // You can replace this with a loading indicator
         ) : (
           <SearchBar
-            options={patientsData.map(
-              (patient) => `${patient.first_name} ${patient.last_name}`
+            options={doctorsPatients.map(
+              (patient) => `${patient.forename} ${patient.surname}`
             )}
             onSearch={handleSearch}
           />
@@ -101,20 +114,20 @@ function ViewAllPatients() {
       <div style={dataContainerStyle}>
         {isLoading ? (
           <p>Loading...</p> // You can replace this with a loading indicator
-        ) : patientsData.length === 0 ? (
+        ) : doctorsPatients.length === 0 ? (
           <p>No patients available</p>
         ) : (
           <Grid container spacing={2}>
             {filteredPatientsData.map((patient, index) => (
               <Grid item xs={4} key={index}>
                 <Link
-                  to={`/viewPatientDetails/${patient.patID}`}
+                  to={`/viewPatientDetails/${patient.PPSN}`}
                   key={index}
                   style={{ textDecoration: 'none' }}
                 >
                   <PatientOverviewWidget
-                    name={`${patient.first_name} ${patient.last_name}`}
-                    id={patient.patID}
+                    name={`${patient.forename} ${patient.surname}`}
+                    id={patient.PPSN}
                   />
                 </Link>
               </Grid>

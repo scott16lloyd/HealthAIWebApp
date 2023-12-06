@@ -31,7 +31,7 @@ function main() {
             <Route path="/signUp" element={<SignUpPage />} />
             <Route path="/viewProfile" element={<ViewProfile />} />
             <Route
-              path="/viewPatientDetails/:patID"
+              path="/viewPatientDetails/:PPSN"
               element={<ViewPatientScreen />}
             />
             <Route
