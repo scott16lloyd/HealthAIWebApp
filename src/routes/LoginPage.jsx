@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { auth } from '../firebase';
+import { auth, database } from '../firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import TopNavigationBar from '../components/widgets/TopNavigationBar/TopNavigationBar';
@@ -9,6 +9,8 @@ import BackButton from '../components/widgets/BackButton/BackButton';
 import PrimaryButton from '../components/widgets/PrimaryButton/PrimaryButton';
 import SocialMediaSignInButton from '../components/widgets/SocialMediaSignInButton/SocialMediaSignInButton';
 import { UserAuth } from '../components/auth/AuthContext';
+import { ref, child, get } from 'firebase/database';
+
 
 function SignInPage() {
   const [email, setEmail] = useState('');
@@ -17,25 +19,73 @@ function SignInPage() {
   const [errorMessage, setErrorMessage] = useState('');
   const { googleSignIn, user } = UserAuth();
 
-  const signIn = (e) => {
-    e.preventDefault();
-    signInWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        // Successful sign-in
-        console.log('Sign-in successful');
-        // Navigate to home or do other actions upon successful sign-in
-        navigate('/home');
+  // Check if entered email is valid
+  const isEmailValid = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  // Code to verify if the user is a doctor or a patient
+  async function verifyDoctor(emailAddress){
+    var docCheck = false;
+    const doctorsRef = ref(database, 'doctors');
+
+    // Function takes in entered email address, before checking it against all users in the doctors database
+    return get(doctorsRef)
+      .then(snapshot => {
+        const doctors = snapshot.val();
+
+        // Check if the email exists in the doctors database
+        // If exists, return true, if not, return false
+        docCheck = Object.values(doctors).some(doctor => doctor.email === emailAddress);
+
+        return docCheck;
       })
-      .catch((error) => {
-        console.log(error);
-        if (error.code === 'auth/invalid-login-credentials') {
-          setErrorMessage('Invalid login credentials.');
-        } else if (error.code === 'auth/invalid-email') {
-          setErrorMessage('Invalid email.');
-        } else {
-          setErrorMessage('An error occurred. Please try again.');
-        }
+      .catch(error => {
+        console.error('Error verifying doctor:', error);
+        return docCheck;
       });
+    }  
+  const signIn = async (e) => {
+    e.preventDefault();
+    try{  
+      // Verify doctor user
+      var verified = await verifyDoctor(email);
+      console.log(verified);
+    } catch(error){
+      console.error("Error check", error);
+    }
+    if (verified == true){
+      // If user is a doctor, sign in
+      signInWithEmailAndPassword(auth, email, password)
+        .then(() => {  
+            // Successful sign-in
+            console.log('Sign-in successful');
+            // Navigate to home or do other actions upon successful sign-in
+            navigate('/home');
+          }
+        )
+        .catch((error) => {
+          console.log(error);
+          if (error.code === 'auth/invalid-login-credentials') {
+            setErrorMessage('Invalid login credentials.');
+          } else if (error.code === 'auth/invalid-email') {
+            setErrorMessage('Invalid email.');
+          } else {
+            setErrorMessage('An error occurred. Please try again.');
+          }
+        });
+    }
+    else {
+      // If email is not valid, give error message
+      if(isEmailValid(email) == false){
+        setErrorMessage('Please enter a valid email');
+      }
+      else{
+        // If user email is not found in the doctor database, give error message
+        setErrorMessage('This user is not a doctor, patients please use the mobile app');
+      }
+    }
   };
 
   const handleGoogleSignIn = async () => {
