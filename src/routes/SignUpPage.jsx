@@ -136,13 +136,12 @@ function SignUpPage() {
       return;
     }
 
-    //Function to push user info to database under 
+    //Function to push user info to database under
     const addUserInfoToFirebase = (userInfo, uid) => {
       const dbRef = ref(database, 'doctors'); //pushes to doctor db
       console.log(dbRef);
       set(child(dbRef, uid), userInfo); //sets info in db to given user info
     };
-
 
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
