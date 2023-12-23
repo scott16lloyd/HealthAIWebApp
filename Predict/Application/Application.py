@@ -157,7 +157,7 @@ if __name__ == "__main__":
 
     #Print results with risk percentage
     print("\nColon Cancer Data:")
-    print("Colon Result (Probability of Positive Class):", colon_result[0])
+    #print("Colon Result (Probability of Positive Class):", colon_result[0])
     print("Colon Risk Percentage:", int(colon_probability[0] * 100))
 
     #Generate patient data for heart model
@@ -194,5 +194,5 @@ if __name__ == "__main__":
 
     #Print results with risk percentage
     print("\nLung Cancer Data:")
-    print("Lung Result (Probability of Positive Class):", lung_result[0])
+    #print("Lung Result (Probability of Positive Class):", lung_result[0])
     print("Lung Risk Percentage:", int(lung_probability[0] * 100))

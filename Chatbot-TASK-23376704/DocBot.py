@@ -1,13 +1,14 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import openai
+import os
 
 app = Flask(__name__)
 CORS(app)  # Initialize CORS to communicate backend to frontend
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 # Connecting to ChatGPT with API Key
-api_key = "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"
+api_key = os.getenv('REACT_APP_CHATBOT_KEY')
 openai.api_key = api_key
 
 
@@ -16,7 +17,7 @@ openai.api_key = api_key
 def start_conversation():
     try:
         # Starting the conversation
-        return jsonify({"message": "Welcome to the Doc-Bot Chat! Please message here."})
+        return jsonify({"message": "Welcome to the Doc-Bot Chat! Please message here. DISCLAIMER: This is an artifical intelligence chat-bot, not professional advice. Seek a professional for relative medical advice."})
     except Exception as e:
         return jsonify({"error": str(e)})
 
