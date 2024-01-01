@@ -11,7 +11,6 @@ import SocialMediaSignInButton from '../components/widgets/SocialMediaSignInButt
 import { UserAuth } from '../components/auth/AuthContext';
 import { ref, child, get } from 'firebase/database';
 
-
 function SignInPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -26,45 +25,46 @@ function SignInPage() {
   };
 
   // Code to verify if the user is a doctor or a patient
-  async function verifyDoctor(emailAddress){
+  async function verifyDoctor(emailAddress) {
     var docCheck = false;
     const doctorsRef = ref(database, 'doctors');
 
     // Function takes in entered email address, before checking it against all users in the doctors database
     return get(doctorsRef)
-      .then(snapshot => {
+      .then((snapshot) => {
         const doctors = snapshot.val();
 
         // Check if the email exists in the doctors database
         // If exists, return true, if not, return false
-        docCheck = Object.values(doctors).some(doctor => doctor.email === emailAddress);
+        docCheck = Object.values(doctors).some(
+          (doctor) => doctor.email === emailAddress
+        );
 
         return docCheck;
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('Error verifying doctor:', error);
         return docCheck;
       });
-    }  
+  }
   const signIn = async (e) => {
     e.preventDefault();
-    try{  
+    try {
       // Verify doctor user
       var verified = await verifyDoctor(email);
       console.log(verified);
-    } catch(error){
-      console.error("Error check", error);
+    } catch (error) {
+      console.error('Error check', error);
     }
-    if (verified == true){
+    if (verified == true) {
       // If user is a doctor, sign in
       signInWithEmailAndPassword(auth, email, password)
-        .then(() => {  
-            // Successful sign-in
-            console.log('Sign-in successful');
-            // Navigate to home or do other actions upon successful sign-in
-            navigate('/home');
-          }
-        )
+        .then(() => {
+          // Successful sign-in
+          console.log('Sign-in successful');
+          // Navigate to home or do other actions upon successful sign-in
+          navigate('/home');
+        })
         .catch((error) => {
           console.log(error);
           if (error.code === 'auth/invalid-login-credentials') {
@@ -75,15 +75,15 @@ function SignInPage() {
             setErrorMessage('An error occurred. Please try again.');
           }
         });
-    }
-    else {
+    } else {
       // If email is not valid, give error message
-      if(isEmailValid(email) == false){
+      if (isEmailValid(email) == false) {
         setErrorMessage('Please enter a valid email');
-      }
-      else{
+      } else {
         // If user email is not found in the doctor database, give error message
-        setErrorMessage('This user is not a doctor, patients please use the mobile app');
+        setErrorMessage(
+          'This user is not a doctor, patients please use the mobile app'
+        );
       }
     }
   };
@@ -120,6 +120,7 @@ function SignInPage() {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    paddingTop: '4rem',
   };
 
   const inputStyle = {
@@ -131,14 +132,6 @@ function SignInPage() {
     boxShadow: '2px 2px 4px 0px rgba(0, 0, 0, 0.10)',
     backdropFilter: 'blur(1.5px)',
   };
-
-  const socialButtonContainerStyle = {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-  };
-
   return (
     <>
       <TopNavigationBar />
@@ -192,12 +185,6 @@ function SignInPage() {
             />{' '}
           </div>
         </Stack>
-        <div style={socialButtonContainerStyle}>
-          <SocialMediaSignInButton
-            socialPlatform={'google'}
-            action={handleGoogleSignIn}
-          />
-        </div>
       </Container>
     </>
   );

@@ -17,11 +17,15 @@ function ViewProfile() {
 
   // Log the current user
   const { user } = UserAuth();
-  console.log(user);
-  console.log(user.displayName);
+  let userUid;
 
   // Get the current user's UID
-  const userUid = user.uid;
+  if (user) {
+    userUid = user.uid;
+  } else {
+    userUid = 0;
+    console.log('No user found');
+  }
 
   // Create a reference to the user's data in the database
   const userRef = ref(database, `doctors/${userUid}`);
@@ -76,7 +80,7 @@ function ViewProfile() {
     if (user) {
       fetchDataAndFilterPatients();
     }
-  }, [user.uid]);
+  }, [userUid]);
 
   const [assignedPatients, setAssignedPatients] = useState([]);
   useEffect(() => {
