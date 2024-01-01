@@ -7,7 +7,7 @@ CORS(app)  # Initialize CORS to communicate backend to frontend
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 # Connecting to ChatGPT with API Key
-api_key = "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"
+api_key = "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"
 openai.api_key = api_key
 
 
