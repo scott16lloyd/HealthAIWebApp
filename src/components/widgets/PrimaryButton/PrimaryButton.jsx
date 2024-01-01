@@ -1,8 +1,9 @@
 import React from 'react';
 import Button from '@mui/material/Button';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function PrimaryButton({ text, to, color, action, state }) {
+  const navigate = useNavigate();
   const activeColor =
     'linear-gradient(120deg, rgba(38, 85, 255, 0.80) 26.35%, rgba(0, 117, 255, 0.60) 83.58%)';
   const unactiveColor =
@@ -34,14 +35,21 @@ function PrimaryButton({ text, to, color, action, state }) {
     },
   };
 
+  const handleClick = (event) => {
+    event.preventDefault();
+    action(event);
+    navigate(to);
+  };
+
   return (
-    <>
-      <Link to={to} style={{ textDecoration: 'none' }}>
-        <Button variant="contained" sx={buttonStyle} onClick={action}>
-          {text}
-        </Button>
-      </Link>
-    </>
+    <Button
+      variant="contained"
+      sx={buttonStyle}
+      onClick={handleClick}
+      type="submit"
+    >
+      {text}
+    </Button>
   );
 }
 

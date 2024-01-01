@@ -153,38 +153,40 @@ function SignInPage() {
             Mandatory *
           </Typography>
         </div>
-        <Stack direction="row" spacing={2} justifyContent="center">
-          {' '}
-          {/** Stacking textfields in 4, 4, 2 + 1 button */}
-          <div style={columnStyle}>
-            <TextField
-              label="Email"
-              variant="filled"
-              type="email"
-              style={inputStyle}
-              required
-              InputProps={{ disableUnderline: true, autoComplete: 'email' }}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <TextField
-              label="Password"
-              variant="filled"
-              type="password"
-              style={inputStyle}
-              required
-              InputProps={{ disableUnderline: true }}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <PrimaryButton
-              text={'Login'}
-              type="submit"
-              action={signIn}
-              state={'active'}
-            />{' '}
-          </div>
-        </Stack>
+        <form onSubmit={signIn}>
+          <Stack direction="row" spacing={2} justifyContent="center">
+            {' '}
+            {/** Stacking textfields in 4, 4, 2 + 1 button */}
+            <div style={columnStyle}>
+              <TextField
+                label="Email"
+                variant="filled"
+                type="email"
+                style={inputStyle}
+                required
+                InputProps={{ disableUnderline: true, autoComplete: 'email' }}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <TextField
+                label="Password"
+                variant="filled"
+                type="password"
+                style={inputStyle}
+                required
+                InputProps={{ disableUnderline: true }}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <PrimaryButton
+                text={'Login'}
+                type="submit"
+                action={(e) => signIn(e)}
+                state={'active'}
+              />{' '}
+            </div>
+          </Stack>
+        </form>
       </Container>
     </>
   );
