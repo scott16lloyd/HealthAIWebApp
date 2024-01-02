@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Typography, Card } from '@mui/material';
 import { UserAuth } from '../components/auth/AuthContext';
 import TopNavigationBar from '../components/widgets/TopNavigationBar/TopNavigationBar';
@@ -10,11 +10,11 @@ import { database } from '../firebase';
 import { ref, get } from 'firebase/database';
 
 function ViewTest() {
-  const [patientsData, setPatientsData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  // Declare and initialize a state variable for medicalRecords
+  const [medicalRecords, setMedicalRecords] = useState(null);
 
   const { PPSN, testDate } = useParams();
-  console.log(PPSN, testDate);
 
   const patientRef = ref(database, 'patients');
 
@@ -31,17 +31,14 @@ function ViewTest() {
         const userSnapshot = await get(patientRef);
         if (userSnapshot.exists()) {
           const patientData = userSnapshot.val();
-          console.log(patientData);
 
           // Filter the patientArray to get the patient with the given PPSN
           const specificPatient = Object.values(patientData).filter(
             (patient) => patient.PPSN === PPSN
           );
-          console.log(specificPatient);
 
           // Access resultHistory from the patient object
           const resultHistory = specificPatient[0].testHistory;
-          console.log(resultHistory);
 
           // Filter resultHistory for the test result with the matching date
           const result = resultHistory[testDate];
@@ -69,9 +66,6 @@ function ViewTest() {
     fetchPatientData();
   }, []);
 
-  // Declare and initialize a useRef hook for medicalRecords
-  const medicalRecordsRef = useRef(null);
-
   useEffect(() => {
     const fetchPatientQuestions = async () => {
       // Fetch user data
@@ -79,31 +73,24 @@ function ViewTest() {
         const userSnapshot = await get(patientRef);
         if (userSnapshot.exists()) {
           const patientData = userSnapshot.val();
-          console.log(patientData);
 
           // Filter the patientArray to get the patient with the given PPSN
           const specificPatient = Object.values(patientData).filter(
             (patient) => patient.PPSN === PPSN
           );
-          console.log(specificPatient);
 
-          // Get medicalRecords from the patient object and assign it to the useRef hook
-          medicalRecordsRef.current =
-            specificPatient[0].medicalRecords[testDate];
-          console.log(medicalRecordsRef.current);
+          // Get medicalRecords from the patient object and assign it to the state variable
+          setMedicalRecords(specificPatient[0].medicalRecords[testDate]);
         }
       } catch (error) {
         console.error('Error accessing patient data:', error);
+      } finally {
+        // Set loading status to false after data has been fetched
+        setIsLoading(false);
       }
     };
     fetchPatientQuestions();
   }, []);
-
-  const medicalRecordsValuesRef = useRef(
-    medicalRecordsRef.current ? Object.values(medicalRecordsRef.current) : []
-  );
-
-  console.log(medicalRecordsValuesRef.current);
 
   const topBarWrapper = {
     display: 'flex',
@@ -162,42 +149,37 @@ function ViewTest() {
 
   const { user } = UserAuth();
 
-  var medicalRecordsValues = medicalRecordsRef.current
-    ? Object.values(medicalRecordsRef.current)
-    : [];
+  let questions = {};
 
-  console.log(medicalRecordsValues);
-
-  var questions = {
-    'Do you smoke regularly': medicalRecordsValues[0] || 'N/A',
-    'Do you consume alcohol often': medicalRecordsValues[9] || 'N/A',
-    'Do you struggle with any other chronic disease?':
-      medicalRecordsValues[10] || 'N/A',
-    'Are you a diabetic?': medicalRecordsValues[11],
-    'Do you feel constant fatigue or tiredness?':
-      medicalRecordsValues[12] || 'N/A',
-    'Have you undergone any unexpected weight loss?':
-      medicalRecordsValues[13] || 'N/A',
-    'What is your current Blood Pressure? (0 if not known)':
-      medicalRecordsValues[14] || 'N/A',
-    'What is your current Heart Rate? (0 if not known)':
-      medicalRecordsValues[15] || 'N/A',
-    'What is your Cholesterol level? (0 if not known)':
-      medicalRecordsValues[16] || 'N/A',
-    'Have you had any stomach cramps?': medicalRecordsValues[1] || 'N/A',
-    'Do you experience significant chest pain on a regular basis?':
-      medicalRecordsValues[2] || 'N/A',
-    'Are your fingertips a bright yellow?': medicalRecordsValues[3] || 'N/A',
-    'Have you experienced a high level of wheezing?':
-      medicalRecordsValues[4] || 'N/A',
-    'Have you been coughing excessively?': medicalRecordsValues[5] || 'N/A',
-    'Have you been experiencing shortness of breath?':
-      medicalRecordsValues[6] || 'N/A',
-    'Have you been experiencing bowel problems?':
-      medicalRecordsValues[7] || 'N/A',
-    'Have you experienced any rectal bleeding?':
-      medicalRecordsValues[8] || 'N/A',
-  };
+  if (medicalRecords) {
+    questions = {
+      'Do you smoke regularly': medicalRecords.Q1 || 'N/A',
+      'Do you consume alcohol often': medicalRecords.Q10 || 'N/A',
+      'Do you struggle with any other chronic disease?':
+        medicalRecords.Q11 || 'N/A',
+      'Are you a diabetic?': medicalRecords.Q12,
+      'Do you feel constant fatigue or tiredness?': medicalRecords.Q13 || 'N/A',
+      'Have you undergone any unexpected weight loss?':
+        medicalRecords.Q14 || 'N/A',
+      'What is your current Blood Pressure? (0 if not known)':
+        medicalRecords.Q15 || 'N/A',
+      'What is your current Heart Rate? (0 if not known)':
+        medicalRecords.Q16 || 'N/A',
+      'What is your Cholesterol level? (0 if not known)':
+        medicalRecords.Q17 || 'N/A',
+      'Have you had any stomach cramps?': medicalRecords.Q2 || 'N/A',
+      'Do you experience significant chest pain on a regular basis?':
+        medicalRecords.Q3 || 'N/A',
+      'Are your fingertips a bright yellow?': medicalRecords.Q4 || 'N/A',
+      'Have you experienced a high level of wheezing?':
+        medicalRecords.Q5 || 'N/A',
+      'Have you been coughing excessively?': medicalRecords.Q6 || 'N/A',
+      'Have you been experiencing shortness of breath?':
+        medicalRecords.Q7 || 'N/A',
+      'Have you been experiencing bowel problems?': medicalRecords.Q8 || 'N/A',
+      'Have you experienced any rectal bleeding?': medicalRecords.Q9 || 'N/A',
+    };
+  }
 
   return (
     <>
@@ -238,15 +220,19 @@ function ViewTest() {
           </div>
         )}
         <div style={rightColumnStyle}>
-          <Card style={questionCardStyle}>
-            {Object.entries(questions).map(([question, answer]) => (
-              <div key={question}>
-                <Typography variant="h5">{question}</Typography>
-                <Typography variant="subtitle1">{answer}</Typography>
-                <hr style={{ margin: '1rem 0', border: '0.5px solid #000' }} />
-              </div>
-            ))}
-          </Card>
+          {!isLoading && medicalRecords && (
+            <Card style={questionCardStyle}>
+              {Object.entries(questions).map(([question, answer]) => (
+                <div key={question}>
+                  <Typography variant="h5">{question}</Typography>
+                  <Typography variant="subtitle1">{answer}</Typography>
+                  <hr
+                    style={{ margin: '1rem 0', border: '0.5px solid #000' }}
+                  />
+                </div>
+              ))}
+            </Card>
+          )}
         </div>
       </div>
     </>
