@@ -37,7 +37,9 @@ function PrimaryButton({ text, to, color, action, state }) {
 
   const handleClick = (event) => {
     event.preventDefault();
-    action(event);
+    if (typeof action === 'function') {
+      action(event);
+    }
     navigate(to);
   };
 
