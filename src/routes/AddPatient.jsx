@@ -46,10 +46,12 @@ function AddPatient() {
     email: '',
     telephone: '',
     PPSNumber: '',
+    gender: '',
+    Age: '',
   });
 
   const isNameValid = (name) => {
-    const nameRegex = /^[A-Za-z\s]+$/;
+    const nameRegex = /^[A-Za-z\s']+$/; // Allow letters, spaces, and single quote
     return nameRegex.test(name);
   };
   const isPhoneNumberValid = (telephone) => {
@@ -64,6 +66,14 @@ function AddPatient() {
     const PPSRegex = /^\d{7}[A-Za-z]$/; // Matches 7 digits followed by 1 letter
     return PPSRegex.test(PPS);
   };
+  const isGenderValid = (gender) => {
+    const genderRegex = /^[MF]$/i; // Matches 'M' or 'F' (case-insensitive)
+    return genderRegex.test(gender);
+  }
+  const isAgeValid = (Age) => {
+    const ageRegex = /^[1-9]\d*$/; // Matches a positive integer
+    return ageRegex.test(Age);
+  }
 
   const handleInputChange = (field) => (event) => {
     const value = event.target.value;
@@ -85,6 +95,8 @@ function AddPatient() {
     const isEmailAddressInputValid = isEmailValid(inputValues.email);
     const isPhoneNumberInputValid = isPhoneNumberValid(inputValues.telephone);
     const isPPSInputValid = isPPSValid(inputValues.PPSNumber);
+    const isGenderInputValid = isGenderValid(inputValues.gender);
+    const isAgeInputValid = isAgeValid(inputValues.Age);
 
     const userData = {
       forename: inputValues.forename,
@@ -93,6 +105,8 @@ function AddPatient() {
       email: inputValues.email,
       telephone: inputValues.telephone,
       PPSNumber: inputValues.PPSNumber,
+      gender: inputValues.gender,
+      Age: inputValues.Age
     };
 
     if (!isForenameInputValid) {
@@ -113,6 +127,14 @@ function AddPatient() {
       return;
     } else if (!isPPSInputValid) {
       setErrorMessage('PPS Number must be 7 digits followed by a single letter.');
+      setSeverity("error");
+      return;
+    } else if (!isGenderInputValid) {
+      setErrorMessage('Gender must be either "M" or "F".');
+      setSeverity("error");
+      return;
+    } else if (!isAgeInputValid) {
+      setErrorMessage('Please enter a valid age. e.g. positive number');
       setSeverity("error");
       return;
     }
@@ -180,12 +202,12 @@ function AddPatient() {
           address: "",
           verified: false,
           subscribed: false,
-          gender: "",
+          gender: inputValues.gender.toUpperCase(),
           medicalRecords: "",
           testHistory: "",
           insuranceProvider: "",
           insurancePolicyNo: "",
-          Age: "",
+          Age: inputValues.Age,
         };
 
         addPatientInfoToFirebase(userInfo, userCredential.user.uid);
@@ -208,6 +230,8 @@ function AddPatient() {
           email: '',
           telephone: '',
           PPSNumber: '',
+          gender: '',
+          Age: ''
         });
         
         // Display Success Message
@@ -379,6 +403,35 @@ function AddPatient() {
             />
             {/** Sign Up Button */}
           </div>
+          <div style={columnStyle}>
+          <TextField
+              label="Gender"
+              variant="filled"
+              style={inputStyle}
+              required
+              InputProps={{ disableUnderline: true }}
+              value={inputValues.gender}
+              onChange={handleInputChange('gender')}
+              error={inputError['gender']}
+              helperText={
+                inputError['gender'] ? 'gender cannot be blank' : ''
+              }
+            />
+            <TextField
+              label="Age"
+              variant="filled"
+              style={inputStyle}
+              required
+              InputProps={{ disableUnderline: true }}
+              value={inputValues.Age}
+              onChange={handleInputChange('Age')}
+              error={inputError['Age']}
+              helperText={
+                inputError['Age'] ? 'Age cannot be blank' : ''
+              }
+            />
+            </div>
+            
         </Stack>
         <div style={buttonContainerStyle}>
           <PrimaryButton
