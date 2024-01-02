@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Typography, Card } from '@mui/material';
 import { UserAuth } from '../components/auth/AuthContext';
 import TopNavigationBar from '../components/widgets/TopNavigationBar/TopNavigationBar';
@@ -10,27 +10,20 @@ import { database } from '../firebase';
 import { ref, get } from 'firebase/database';
 
 function ViewTest() {
-  const doctorID = '1234567890';
-  const apiUrl = `https://healthai-40b47-default-rtdb.europe-west1.firebasedatabase.app/patients.json?Authorization=Bearerhttps&orderBy="Doctor"&equalTo="${doctorID}"`;
-
   const [patientsData, setPatientsData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const { patID, testDate } = useParams();
+  const { PPSN, testDate } = useParams();
+  console.log(PPSN, testDate);
 
-  const patIDNumber = parseInt(patID, 10);
   const patientRef = ref(database, 'patients');
 
-  // Read the data at the reference
-  const [patient, setPatient] = useState(null);
   const [testResult, setTestResult] = useState({
     colonResult: 'N/A',
     heartResult: 'N/A',
     lungResult: 'N/A',
   });
-  console.log(testResult);
-  console.log(testResult.colonResult);
-  console.log(patient);
+
   useEffect(() => {
     const fetchPatientData = async () => {
       // Fetch user data
@@ -38,21 +31,27 @@ function ViewTest() {
         const userSnapshot = await get(patientRef);
         if (userSnapshot.exists()) {
           const patientData = userSnapshot.val();
+          console.log(patientData);
 
-          // Convert object values to an array
-          const patientArray = Object.values(patientData);
-
-          // Find the patient with the matching patID
-          const patient = patientArray.find(
-            (patient) => patient.patID === patIDNumber
+          // Filter the patientArray to get the patient with the given PPSN
+          const specificPatient = Object.values(patientData).filter(
+            (patient) => patient.PPSN === PPSN
           );
-          setPatient(patient);
+          console.log(specificPatient);
 
           // Access resultHistory from the patient object
-          const testResult = patient.resultHistory[testDate];
+          const resultHistory = specificPatient[0].testHistory;
+          console.log(resultHistory);
 
-          if (testResult) {
-            setTestResult(testResult);
+          // Filter resultHistory for the test result with the matching date
+          const result = resultHistory[testDate];
+
+          if (result) {
+            setTestResult({
+              colonResult: result.colonResult || 'N/A',
+              heartResult: result.heartResult || 'N/A',
+              lungResult: result.lungResult || 'N/A',
+            });
           } else {
             console.log(`No test result found for ${testDate}`);
           }
@@ -69,6 +68,42 @@ function ViewTest() {
     // Add a closing brace for the fetchPatientData function
     fetchPatientData();
   }, []);
+
+  // Declare and initialize a useRef hook for medicalRecords
+  const medicalRecordsRef = useRef(null);
+
+  useEffect(() => {
+    const fetchPatientQuestions = async () => {
+      // Fetch user data
+      try {
+        const userSnapshot = await get(patientRef);
+        if (userSnapshot.exists()) {
+          const patientData = userSnapshot.val();
+          console.log(patientData);
+
+          // Filter the patientArray to get the patient with the given PPSN
+          const specificPatient = Object.values(patientData).filter(
+            (patient) => patient.PPSN === PPSN
+          );
+          console.log(specificPatient);
+
+          // Get medicalRecords from the patient object and assign it to the useRef hook
+          medicalRecordsRef.current =
+            specificPatient[0].medicalRecords[testDate];
+          console.log(medicalRecordsRef.current);
+        }
+      } catch (error) {
+        console.error('Error accessing patient data:', error);
+      }
+    };
+    fetchPatientQuestions();
+  }, []);
+
+  const medicalRecordsValuesRef = useRef(
+    medicalRecordsRef.current ? Object.values(medicalRecordsRef.current) : []
+  );
+
+  console.log(medicalRecordsValuesRef.current);
 
   const topBarWrapper = {
     display: 'flex',
@@ -127,17 +162,41 @@ function ViewTest() {
 
   const { user } = UserAuth();
 
+  var medicalRecordsValues = medicalRecordsRef.current
+    ? Object.values(medicalRecordsRef.current)
+    : [];
+
+  console.log(medicalRecordsValues);
+
   var questions = {
-    'Question 1': 'Answer 1',
-    'Question 2': 'Answer 2',
-    'Question 3': 'Answer 3',
-    'Question 4': 'Answer 4',
-    'Question 5': 'Answer 5',
-    'Question 6': 'Answer 6',
-    'Question 7': 'Answer 7',
-    'Question 8': 'Answer 8',
-    'Question 9': 'Answer 9',
-    'Question 10': 'Answer 10',
+    'Do you smoke regularly': medicalRecordsValues[0] || 'N/A',
+    'Do you consume alcohol often': medicalRecordsValues[9] || 'N/A',
+    'Do you struggle with any other chronic disease?':
+      medicalRecordsValues[10] || 'N/A',
+    'Are you a diabetic?': medicalRecordsValues[11],
+    'Do you feel constant fatigue or tiredness?':
+      medicalRecordsValues[12] || 'N/A',
+    'Have you undergone any unexpected weight loss?':
+      medicalRecordsValues[13] || 'N/A',
+    'What is your current Blood Pressure? (0 if not known)':
+      medicalRecordsValues[14] || 'N/A',
+    'What is your current Heart Rate? (0 if not known)':
+      medicalRecordsValues[15] || 'N/A',
+    'What is your Cholesterol level? (0 if not known)':
+      medicalRecordsValues[16] || 'N/A',
+    'Have you had any stomach cramps?': medicalRecordsValues[1] || 'N/A',
+    'Do you experience significant chest pain on a regular basis?':
+      medicalRecordsValues[2] || 'N/A',
+    'Are your fingertips a bright yellow?': medicalRecordsValues[3] || 'N/A',
+    'Have you experienced a high level of wheezing?':
+      medicalRecordsValues[4] || 'N/A',
+    'Have you been coughing excessively?': medicalRecordsValues[5] || 'N/A',
+    'Have you been experiencing shortness of breath?':
+      medicalRecordsValues[6] || 'N/A',
+    'Have you been experiencing bowel problems?':
+      medicalRecordsValues[7] || 'N/A',
+    'Have you experienced any rectal bleeding?':
+      medicalRecordsValues[8] || 'N/A',
   };
 
   return (
@@ -152,7 +211,7 @@ function ViewTest() {
         ) : (
           <div style={leftColumnStyle}>
             <div style={titleWrapper}>
-              <BackButton goBackPath={`/viewPatientDetails/${patID}`} />
+              <BackButton goBackPath={`/viewPatientDetails/${PPSN}`} />
               <Typography variant="h3">View Test From:</Typography>
               <Typography variant="h3" color={'#2187FF'}>
                 {testDate}

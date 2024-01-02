@@ -35,7 +35,7 @@ function main() {
               element={<ViewPatientScreen />}
             />
             <Route
-              path="/viewPatientDetails/:patID/test/:testDate"
+              path="/viewPatientDetails/:PPSN/test/:testDate"
               element={<ViewTest />}
             />
           </Routes>

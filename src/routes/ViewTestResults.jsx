@@ -25,11 +25,13 @@ function ViewTestResults() {
 
         if (userSnapshot.exists() && doctorSnapshot.exists()) {
           const patientData = userSnapshot.val();
+          console.log(patientData);
 
           // Get patient's testHistory based on given PPSN
           const specificPatient = Object.values(patientData).filter(
             (patient) => patient.PPSN === PPSN
           );
+          console.log(specificPatient);
 
           if (specificPatient.length > 0) {
             // Access the resultHistory object and store it in an array
