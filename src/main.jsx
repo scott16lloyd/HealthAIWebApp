@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './routes/Home';
 import LandingPage from './routes/LandingPage';
-import DocBotPage from './routes/DocBotPage';
 import HelpPage from './routes/HelpPage';
 import About from './routes/About';
 import LoginPage from './routes/LoginPage';
@@ -13,7 +12,6 @@ import { AuthContextProvider } from './components/auth/AuthContext';
 import ViewProfile from './routes/ViewProfile';
 import ViewPatientScreen from './routes/ViewPatientScreen';
 import ViewTest from './routes/ViewTest';
-import ViewTestResults from './routes/ViewTestResults';
 
 function main() {
   return (
@@ -24,7 +22,6 @@ function main() {
             <Route index element={<LandingPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/home" element={<ProtectedRoute component={Home} />} />
-            <Route path="/docBot" element={<DocBotPage />} />
             <Route path="/about" element={<About />} />
             <Route path="/help" element={<HelpPage />} />
             <Route path="/details" element={<PatientDetails />} />
@@ -35,7 +32,7 @@ function main() {
               element={<ViewPatientScreen />}
             />
             <Route
-              path="/viewPatientDetails/:patID/test/:testDate"
+              path="/viewPatientDetails/:PPSN/test/:testDate"
               element={<ViewTest />}
             />
           </Routes>

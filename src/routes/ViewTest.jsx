@@ -10,27 +10,20 @@ import { database } from '../firebase';
 import { ref, get } from 'firebase/database';
 
 function ViewTest() {
-  const doctorID = '1234567890';
-  const apiUrl = `https://healthai-40b47-default-rtdb.europe-west1.firebasedatabase.app/patients.json?Authorization=Bearerhttps&orderBy="Doctor"&equalTo="${doctorID}"`;
-
-  const [patientsData, setPatientsData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  // Declare and initialize a state variable for medicalRecords
+  const [medicalRecords, setMedicalRecords] = useState(null);
 
-  const { patID, testDate } = useParams();
+  const { PPSN, testDate } = useParams();
 
-  const patIDNumber = parseInt(patID, 10);
   const patientRef = ref(database, 'patients');
 
-  // Read the data at the reference
-  const [patient, setPatient] = useState(null);
   const [testResult, setTestResult] = useState({
     colonResult: 'N/A',
     heartResult: 'N/A',
     lungResult: 'N/A',
   });
-  console.log(testResult);
-  console.log(testResult.colonResult);
-  console.log(patient);
+
   useEffect(() => {
     const fetchPatientData = async () => {
       // Fetch user data
@@ -39,20 +32,23 @@ function ViewTest() {
         if (userSnapshot.exists()) {
           const patientData = userSnapshot.val();
 
-          // Convert object values to an array
-          const patientArray = Object.values(patientData);
-
-          // Find the patient with the matching patID
-          const patient = patientArray.find(
-            (patient) => patient.patID === patIDNumber
+          // Filter the patientArray to get the patient with the given PPSN
+          const specificPatient = Object.values(patientData).filter(
+            (patient) => patient.PPSN === PPSN
           );
-          setPatient(patient);
 
           // Access resultHistory from the patient object
-          const testResult = patient.resultHistory[testDate];
+          const resultHistory = specificPatient[0].testHistory;
 
-          if (testResult) {
-            setTestResult(testResult);
+          // Filter resultHistory for the test result with the matching date
+          const result = resultHistory[testDate];
+
+          if (result) {
+            setTestResult({
+              colonResult: result.colonResult || 'N/A',
+              heartResult: result.heartResult || 'N/A',
+              lungResult: result.lungResult || 'N/A',
+            });
           } else {
             console.log(`No test result found for ${testDate}`);
           }
@@ -68,6 +64,32 @@ function ViewTest() {
     };
     // Add a closing brace for the fetchPatientData function
     fetchPatientData();
+  }, []);
+
+  useEffect(() => {
+    const fetchPatientQuestions = async () => {
+      // Fetch user data
+      try {
+        const userSnapshot = await get(patientRef);
+        if (userSnapshot.exists()) {
+          const patientData = userSnapshot.val();
+
+          // Filter the patientArray to get the patient with the given PPSN
+          const specificPatient = Object.values(patientData).filter(
+            (patient) => patient.PPSN === PPSN
+          );
+
+          // Get medicalRecords from the patient object and assign it to the state variable
+          setMedicalRecords(specificPatient[0].medicalRecords[testDate]);
+        }
+      } catch (error) {
+        console.error('Error accessing patient data:', error);
+      } finally {
+        // Set loading status to false after data has been fetched
+        setIsLoading(false);
+      }
+    };
+    fetchPatientQuestions();
   }, []);
 
   const topBarWrapper = {
@@ -127,18 +149,37 @@ function ViewTest() {
 
   const { user } = UserAuth();
 
-  var questions = {
-    'Question 1': 'Answer 1',
-    'Question 2': 'Answer 2',
-    'Question 3': 'Answer 3',
-    'Question 4': 'Answer 4',
-    'Question 5': 'Answer 5',
-    'Question 6': 'Answer 6',
-    'Question 7': 'Answer 7',
-    'Question 8': 'Answer 8',
-    'Question 9': 'Answer 9',
-    'Question 10': 'Answer 10',
-  };
+  let questions = {};
+
+  if (medicalRecords) {
+    questions = {
+      'Do you smoke regularly': medicalRecords.Q1 || 'N/A',
+      'Do you consume alcohol often': medicalRecords.Q10 || 'N/A',
+      'Do you struggle with any other chronic disease?':
+        medicalRecords.Q11 || 'N/A',
+      'Are you a diabetic?': medicalRecords.Q12,
+      'Do you feel constant fatigue or tiredness?': medicalRecords.Q13 || 'N/A',
+      'Have you undergone any unexpected weight loss?':
+        medicalRecords.Q14 || 'N/A',
+      'What is your current Blood Pressure? (0 if not known)':
+        medicalRecords.Q15 || 'N/A',
+      'What is your current Heart Rate? (0 if not known)':
+        medicalRecords.Q16 || 'N/A',
+      'What is your Cholesterol level? (0 if not known)':
+        medicalRecords.Q17 || 'N/A',
+      'Have you had any stomach cramps?': medicalRecords.Q2 || 'N/A',
+      'Do you experience significant chest pain on a regular basis?':
+        medicalRecords.Q3 || 'N/A',
+      'Are your fingertips a bright yellow?': medicalRecords.Q4 || 'N/A',
+      'Have you experienced a high level of wheezing?':
+        medicalRecords.Q5 || 'N/A',
+      'Have you been coughing excessively?': medicalRecords.Q6 || 'N/A',
+      'Have you been experiencing shortness of breath?':
+        medicalRecords.Q7 || 'N/A',
+      'Have you been experiencing bowel problems?': medicalRecords.Q8 || 'N/A',
+      'Have you experienced any rectal bleeding?': medicalRecords.Q9 || 'N/A',
+    };
+  }
 
   return (
     <>
@@ -152,7 +193,7 @@ function ViewTest() {
         ) : (
           <div style={leftColumnStyle}>
             <div style={titleWrapper}>
-              <BackButton goBackPath={`/viewPatientDetails/${patID}`} />
+              <BackButton goBackPath={`/viewPatientDetails/${PPSN}`} />
               <Typography variant="h3">View Test From:</Typography>
               <Typography variant="h3" color={'#2187FF'}>
                 {testDate}
@@ -179,15 +220,19 @@ function ViewTest() {
           </div>
         )}
         <div style={rightColumnStyle}>
-          <Card style={questionCardStyle}>
-            {Object.entries(questions).map(([question, answer]) => (
-              <div key={question}>
-                <Typography variant="h5">{question}</Typography>
-                <Typography variant="subtitle1">{answer}</Typography>
-                <hr style={{ margin: '1rem 0', border: '0.5px solid #000' }} />
-              </div>
-            ))}
-          </Card>
+          {!isLoading && medicalRecords && (
+            <Card style={questionCardStyle}>
+              {Object.entries(questions).map(([question, answer]) => (
+                <div key={question}>
+                  <Typography variant="h5">{question}</Typography>
+                  <Typography variant="subtitle1">{answer}</Typography>
+                  <hr
+                    style={{ margin: '1rem 0', border: '0.5px solid #000' }}
+                  />
+                </div>
+              ))}
+            </Card>
+          )}
         </div>
       </div>
     </>

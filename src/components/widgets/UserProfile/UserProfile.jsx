@@ -54,6 +54,7 @@ function UserProfile() {
   const handleSignOut = async () => {
     try {
       await logOut();
+      navigate('/login');
       console.log('sign out sucessful');
     } catch (error) {
       console.log(error);

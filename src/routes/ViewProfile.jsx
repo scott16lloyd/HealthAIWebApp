@@ -17,11 +17,15 @@ function ViewProfile() {
 
   // Log the current user
   const { user } = UserAuth();
-  console.log(user);
-  console.log(user.displayName);
+  let userUid;
 
   // Get the current user's UID
-  const userUid = user.uid;
+  if (user) {
+    userUid = user.uid;
+  } else {
+    userUid = 0;
+    console.log('No user found');
+  }
 
   // Create a reference to the user's data in the database
   const userRef = ref(database, `doctors/${userUid}`);
@@ -43,13 +47,14 @@ function ViewProfile() {
               address: `${userData.officeAddress}`,
               phoneNumber: `${userData.telephone}`,
             });
+          } else {
+            setDoctorData('No data found');
           }
 
           // Fetch patients with the specified gpIdNumber
           const patientsSnapshot = await get(patientsRef);
           if (patientsSnapshot.exists()) {
             const patientsData = patientsSnapshot.val();
-
             // Filter patients by doctor value (gpIdNumber)
             const filteredPatients = Object.values(patientsData).filter(
               (patient) => {
@@ -57,6 +62,7 @@ function ViewProfile() {
               }
             );
             setFilteredPatients(filteredPatients);
+            console.log(filteredPatients);
           } else {
             console.log('No patient data found.');
           }
@@ -71,19 +77,18 @@ function ViewProfile() {
       }
     };
 
-    fetchDataAndFilterPatients();
-  }, []);
+    if (user) {
+      fetchDataAndFilterPatients();
+    }
+  }, [userUid]);
 
-  console.log(doctorData);
-
-  const assignedPatients = [];
+  const [assignedPatients, setAssignedPatients] = useState([]);
   useEffect(() => {
     // Iterate through filteredPatients and extract first_name and last_name
-    filteredPatients.forEach((patient) => {
-      const fullName = `${patient.first_name} ${patient.last_name}`;
-      assignedPatients.push(fullName);
-    });
-    console.log(assignedPatients);
+    const newAssignedPatients = filteredPatients.map(
+      (patient) => `${patient.forename} ${patient.surname}`
+    );
+    setAssignedPatients(newAssignedPatients);
   }, [filteredPatients]);
 
   const titleStyle = {
@@ -157,9 +162,14 @@ function ViewProfile() {
               <Typography variant="h1" style={titleStyle}>
                 Loading...
               </Typography>
+            ) : doctorData ? (
+              <Typography variant="h1" style={titleStyle}>
+                Viewing full details for{' '}
+                {doctorData.name ? doctorData.name : 'No Name Provided'}
+              </Typography>
             ) : (
               <Typography variant="h1" style={titleStyle}>
-                Viewing full details for {doctorData.name}
+                No data available
               </Typography>
             )}
           </div>
@@ -169,11 +179,18 @@ function ViewProfile() {
                 Loading...
               </Typography>
             ) : (
-              <Dropdown title={'View Doctor Details'} data={doctorData} />
+              <Dropdown
+                title={'View Doctor Details'}
+                data={doctorData ? doctorData : ['No doctor data']}
+              />
             )}
             <Dropdown
               title={'View Assigned Patients'}
-              data={assignedPatients}
+              data={
+                assignedPatients.length === 0
+                  ? ['No patients']
+                  : assignedPatients
+              }
             />
           </div>
         </div>

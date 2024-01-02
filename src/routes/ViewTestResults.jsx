@@ -4,17 +4,14 @@ import { Typography } from '@mui/material';
 import { database } from '../firebase';
 import { ref, get } from 'firebase/database';
 import { Link, useParams } from 'react-router-dom';
-import { UserAuth } from '../components/auth/AuthContext';
 
 function ViewTestResults() {
   const [isLoading, setIsLoading] = useState(null);
   const [resultHistory, setResultHistory] = useState([]);
 
-  const { user } = UserAuth();
   const { PPSN } = useParams();
 
   // Create a reference to the user's data in the database
-  // -1 used to get index of patient from patID
   const patientRef = ref(database, `patients`);
   const doctorRef = ref(database, 'doctors');
 
@@ -28,20 +25,17 @@ function ViewTestResults() {
 
         if (userSnapshot.exists() && doctorSnapshot.exists()) {
           const patientData = userSnapshot.val();
-          const doctorData = doctorSnapshot.val();
+          console.log(patientData);
 
-          // Get doctors gpID
-          const currentDoctor = doctorData[user.uid];
-          const gpIdNumber = currentDoctor.gpIdNumber;
-
-          // Filter patients whose doctor matches the current user's UID
-          const filteredPatients = Object.values(patientData).filter(
-            (patient) => patient.doctor === gpIdNumber
+          // Get patient's testHistory based on given PPSN
+          const specificPatient = Object.values(patientData).filter(
+            (patient) => patient.PPSN === PPSN
           );
+          console.log(specificPatient);
 
-          if (filteredPatients.length > 0) {
+          if (specificPatient.length > 0) {
             // Access the resultHistory object and store it in an array
-            const resultHistoryArray = filteredPatients
+            const resultHistoryArray = specificPatient
               .filter((patient) => patient['testHistory'])
               .map((patient) =>
                 Object.entries(patient['testHistory']).map(
@@ -84,6 +78,8 @@ function ViewTestResults() {
     <div style={testWidgetContainer}>
       {isLoading ? (
         <Typography variant="h1">Loading...</Typography>
+      ) : resultHistory.length === 0 ? (
+        <Typography variant="h4">No tests available</Typography>
       ) : (
         resultHistory.map((testResults, index) =>
           testResults.map((testResult, subIndex) => (
