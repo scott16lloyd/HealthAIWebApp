@@ -6,7 +6,11 @@ The **HealthAI Web Application** allows **doctors** to view their **patients** a
 
 **Doctors** must first sign up, requiring them to confirm information such as their **GP ID**, **Office Address** and **Office Telephone** to ensure only registered **doctors** can access this material.
 
-Once a **doctor** has successfully registered with our application, they can login by using the email and password they provided, or alternatively by using the "***Continue With Google***" option, assuming their login details are registered with Chrome.
+Once a **doctor** has successfully registered with our application, they can login by using the email and password they provided.
+
+## Creating New Patients
+
+**Doctors** will create their own **patient**, inputting their patients details into the form found in the *add patient* tab of the website. This will also create a randomly generated password, which will then be emailed to the patient, as well as assign that **patient** to the **doctor** who created it. From there, the patient will log into the mobile app, where upon first login they will fill out a form to fill in the rest of the details required to use the service. 
 
 ### Security
 
