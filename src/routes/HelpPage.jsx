@@ -4,8 +4,11 @@ import TopNavigationBar from '../components/widgets/TopNavigationBar/TopNavigati
 import BackButton from '../components/widgets/BackButton/BackButton';
 import Footer from '../components/widgets/Footer/Footer';
 import Typography from '@mui/material/Typography';
+import UserProfile from '../components/widgets/UserProfile/UserProfile';
+import { UserAuth } from '../components/auth/AuthContext';
 
 function HelpPage() {
+  const { user } = UserAuth();
   const messageBoxStyle = {
     borderRadius: '11px',
     background:
@@ -19,9 +22,20 @@ function HelpPage() {
     paddingLeft: '20px',
   };
 
+  const topBarWrapper = {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingRight: '2rem',
+  };
+
   return (
     <>
-      <TopNavigationBar />
+      <div style={topBarWrapper}>
+        <TopNavigationBar />
+        {user ? <UserProfile /> : null}
+      </div>
       <Container maxWidth="lg">
         <Typography variant="h4" gutterBottom style={aboutUsHeaderStyle}>
           <BackButton goBackPath={'/home'} /> HealthAI FAQ
