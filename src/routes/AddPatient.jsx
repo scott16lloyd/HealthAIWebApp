@@ -13,6 +13,12 @@ import { child, set, get } from '@firebase/database';
 import emailjs from '@emailjs/browser';
 import { initializeApp } from '@firebase/app';
 import { UserAuth } from '../components/auth/AuthContext';
+import {
+  Select,
+  MenuItem,
+  InputLabel,
+  CircularProgress,
+} from '@mui/material';
 
 //const apiUrl = 'https://healthai-40b47-default-rtdb.europe-west1.firebasedatabase.app/doctors.json?Authorization=Bearer Lv0Ps3n1nkNuSjvIolRnRhCC1UMnasT4njYp4gVJ&orderBy="gpIdNumber"&equalTo="0987654321"';
 
@@ -33,6 +39,7 @@ function AddPatient() {
   });
   
   const [severity, setSeverity] = useState('');
+  var gender;
 
   // Initialize second instance of firebase app
   const secondaryApp = initializeApp(firebaseConfig, "Secondary");
@@ -202,7 +209,7 @@ function AddPatient() {
           address: "",
           verified: false,
           subscribed: false,
-          gender: inputValues.gender.toUpperCase(),
+          gender: inputValues.gender,
           medicalRecords: "",
           testHistory: "",
           insuranceProvider: "",
@@ -404,33 +411,41 @@ function AddPatient() {
             {/** Sign Up Button */}
           </div>
           <div style={columnStyle}>
-          <TextField
-              label="Gender"
-              variant="filled"
-              style={inputStyle}
-              required
-              InputProps={{ disableUnderline: true }}
-              value={inputValues.gender}
-              onChange={handleInputChange('gender')}
-              error={inputError['gender']}
-              helperText={
-                inputError['gender'] ? 'gender cannot be blank' : ''
-              }
-            />
-            <TextField
-              label="Age"
-              variant="filled"
-              style={inputStyle}
-              required
-              InputProps={{ disableUnderline: true }}
-              value={inputValues.Age}
-              onChange={handleInputChange('Age')}
-              error={inputError['Age']}
-              helperText={
-                inputError['Age'] ? 'Age cannot be blank' : ''
-              }
-            />
-            </div>
+  <Select
+    labelId="select-gender"
+    label="Gender"
+    value={inputValues.gender}
+    onChange={handleInputChange('gender')}
+    variant="filled"
+    required
+    InputProps={{
+      disableUnderline: true,
+      sx: {
+        height: '60px',
+        width: '1000px',
+        borderRadius: '11px',
+        background: 'linear-gradient(93deg, rgba(217, 217, 217, 0.40) 17.46%, rgba(217, 217, 217, 0.10) 82.78%)',
+        boxShadow: '2px 2px 4px 0px rgba(0, 0, 0, 0.10)',
+        backdropFilter: 'blur(1.5px)',
+        padding: '12px', // Adjust the padding as needed
+      },
+    }}
+  >
+    <MenuItem value={'M'}>Male</MenuItem>
+    <MenuItem value={'F'}>Female</MenuItem>
+  </Select>
+  <TextField
+    label="Age"
+    variant="filled"
+    style={{ ...inputStyle, padding: '0px' }} // Adjust the padding as needed
+    required
+    InputProps={{ disableUnderline: true }}
+    value={inputValues.Age}
+    onChange={handleInputChange('Age')}
+    error={inputError['Age']}
+    helperText={inputError['Age'] ? 'Age cannot be blank' : ''}
+  />
+</div>
             
         </Stack>
         <div style={buttonContainerStyle}>
